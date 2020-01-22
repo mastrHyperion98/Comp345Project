@@ -97,5 +97,18 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
 
 # Workflow
 # Tools and Libraries
-The project uses the following tools and libraries:
-* CMake
+<table>
+    <caption> Project Tools and Libraries </caption>
+    <tr>
+        <th>Name</th>
+        <th>Version</th>
+    </tr>
+    <tr>
+        <td>GCC</td>
+        <td>9.20</td>
+    </tr>
+    <tr>
+     <td>CMake</td>
+     <td>3.15.3</td>
+    </tr>
+</table>
