@@ -111,4 +111,8 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
      <td>CMake</td>
      <td>3.15.3</td>
     </tr>
+ <tr>
+  <td>Boost</td>
+  <td>1.71.0-4</td>
+ </tr>
 </table>
