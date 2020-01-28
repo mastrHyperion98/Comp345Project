@@ -156,9 +156,15 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
  <li>
   You simply need to add it onto your CMake command line as <code>-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake </code>.
  </li>
- <li>In CLion it is located in <code> File/Settings/Build,Execution, Deployement/CMake </code> add the noted down directory in CMake Options
+ <li>In <strong>CLion</strong> it is located in <code> File/Settings/Build,Execution, Deployement/CMake </code> add the noted down directory in CMake Options
  </li> 
+ <li>
+  In <strong>Visual Studio</strong> it is set in the CMakeSettings.json file under CMake Toolchain File. In VS you can use file explorer to locate the file. You do not need to copy paste its location, although you can. <strong>Also set the toolset settings to msvc_x86_x64</strong>. </li>
  </ul>
+ 
+ <h4>Note:</h4>
+ On a Unix system make sure to have GCC and CMake installed on your device. If you are using Linux please check in your distribution repository. For Visual Studio please make sure to have the CMake for Windows module installed. This can be done through the Visual Studio Installer / Modify / Individual Component and selecting CMake tools for Windows.
+<br><img src="https://docs.microsoft.com/en-us/cpp/build/media/cmake-install-2019.png?view=vs-2019"  alt="dashboard image not found" style="width: auto; height: auto;"><br>
  </p>
  
  <p id="TL"></p>
