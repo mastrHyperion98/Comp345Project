@@ -3,6 +3,8 @@ project(NewHaven)
 
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
 if(WIN32)
     #Execute Windows only command
     endif(WIN32)
@@ -11,3 +13,5 @@ if(UNIX)
     endif(UNIX)
 
 add_executable(NewHaven main.cpp)
+
+target_link_libraries (NewHaven ${Boost_LIBRARIES})
