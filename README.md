@@ -2,7 +2,31 @@
 Concordia Winter 2020 Comp 345-S -- Advanced C++ Programming Course Project
 Team 16         
 
+# Table of Content
+<ul>
+ <li><a href="#PD">Project Description</a>
+     <ul>
+     <li><a href="#GC">
+      Game Component</a>
+     </li>
+      <li>
+       <a href="#FP">
+        Features and Parts of the Game</a>
+      </li>
+      <li><a href="#GP"> Game Phases </a>
+      </li>
+     </ul>
+ </li>
+ <li>
+  <a href="#CS">Contribution and Setup</a>
+ </li>
+ <li>
+  <a href="#TL"> Tools and Libraries </a>
+ </li>
+ </ul>
+ 
 # Project Description
+<p id="PD"></p>
 The project is about writing a C++ computer game that allows the user to play a reasonable version of the New Havengame. The New Haven is a “tactical” game, the gaming rules are given in [1]. The three assignments will be about the development of different parts of a project. Thus, every assignment will build upon code developed in the previous assignments. You are expected to work in teams of 4 for every assignment. Individual work will be accepted, but will be graded in the same terms as team work.
 
 New Havengame is a multiplayer board game (2 to 4players). The developed program will have to be compatible with the rules, componentsand the play of the game. The New Havengame consists of 
@@ -19,6 +43,7 @@ Each player attempts to build a village in New England that will attract the mos
 
 
 <h2>Game Components</h2>
+<p id="GC"></p>
  * Game Board two sides (A and B)
  * 4 Village Game Boards
  * 4 Pond Tiles (use only with side B game board)
@@ -28,7 +53,7 @@ Each player attempts to build a village in New England that will attract the mos
  * 4 Resource Markers
 
 <h2>Features and Parts of the game</h2>
-
+<p id="FP"></p>
 Map: The game consistsof 
 * one Game Board and 
 * 4 player Village Boardsgame. 
@@ -38,6 +63,7 @@ The Game Board is considered as a map, that is a <em> connected graph</em> where
 The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Village Game board are marked with numbers to show the cost to play on that space. The figures at the side and bottom show colonists (and therefore score) that will be gained by completing a row or column. Each player owns one Village Game.
 
 <h2> Game Phases </h2>
+<p id="GP"></p>
     <h3>Setup phase</h3>
     <ol>
     <li> The board map (A or B)</li>
@@ -95,8 +121,10 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
       </li>
     </ul>
 
-# Workflow
+# Contribution and Setup
+<p id="CS"></p>
 # Tools and Libraries
+<p id="TL"></p>
 <table>
     <caption> Project Tools and Libraries </caption>
     <tr>
