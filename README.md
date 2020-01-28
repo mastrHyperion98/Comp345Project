@@ -54,7 +54,7 @@ Each player attempts to build a village in New England that will attract the mos
  * 4 Player Screens
  * 4 Resource Markers
 
-<h2 id="FP">>Features and Parts of the game</h2>
+<h2 id="FP">Features and Parts of the game</h2>
 Map: The game consistsof 
 * one Game Board and 
 * 4 player Village Boardsgame. 
@@ -125,8 +125,44 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
 
 # Contribution and Setup
 
-<p id="TL"></p>
 
+
+<h2> Install VCPKG </h2>
+<p> VCPKG is a package/library manager for C++ that is compatible with Windows, MacOS and Linux and supports Visual Studio and CMake environments. 
+<ol>
+ <li> Clone or Download the <a href="https://github.com/Microsoft/vcpkg">vcpkg github repository</a>. 
+ </li>
+ <li> Unzip folder in desired installation location. 
+ </li>
+ <li> Using the Windows or Unix command prompt CD into the vcpkg directory.
+ </li>
+ <li> If you are on <strong>Windows</strong> run the <code>.\bootstrap-vcpkg.bat</code> command. <br> If on <strong>Unix</strong> run the <code>./bootstrap-vcpkg.sh</code> command. 
+ </li>
+ </ol>
+ 
+ <h2> Install Dependencies</h2>
+ <ol>
+ <li> CD into your vcpkg-master directory.
+ </li>
+ <li> Using the command prompt / terminal execute the dependencies.bat (<strong>Windows</strong>) <em>or</em> dependencies.sh (<strong>Unix</strong>). <br><h4>NOTE:</h4> We are installing the entire Boost package. However, time and space can be saved by modifying the scripts to only install the graph component of Boost. 
+ </li>
+ <li>
+  The script should print out a result of its execution. Note the result of <code> CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=/folder_location/vcpkg-master/scripts/buildsystems/vcpkg.cmake"</code>
+ </li>
+</ol>
+ 
+ <h2> Configuring CMake Toolchain </h2>
+ <ul>
+ <li>
+  You simply need to add it onto your CMake command line as <code>-DCMAKE_TOOLCHAIN_FILE=[vcpkg root]\scripts\buildsystems\vcpkg.cmake </code>.
+ </li>
+ <li>In CLion it is located in <code> File/Settings/Build,Execution, Deployement/CMake </code> add the noted down directory in CMake Options
+ </li> 
+ </ul>
+ </p>
+ 
+ <p id="TL"></p>
+ 
 # Tools and Libraries
 
 <table>
