@@ -144,7 +144,7 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
  <ol>
  <li> CD into your vcpkg-master directory.
  </li>
- <li> Using the command prompt / terminal execute the dependencies.bat (<strong>Windows</strong>) <em>or</em> dependencies.sh (<strong>Unix</strong>)
+ <li> Using the command prompt / terminal execute the dependencies.bat (<strong>Windows</strong>) <em>or</em> dependencies.sh (<strong>Unix</strong>). <br><h4>NOTE:</h4> We are installing the entire Boost package. However, time and space can be saved by modifying the scripts to only install the graph component of Boost. 
  </li>
  <li>
   The script should print out a result of its execution. Note the result of <code> CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=/folder_location/vcpkg-master/scripts/buildsystems/vcpkg.cmake"</code>
