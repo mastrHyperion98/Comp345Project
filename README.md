@@ -122,9 +122,11 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
     </ul>
 
 <p id="CS"></p>
+
 # Contribution and Setup
 
 <p id="TL"></p>
+
 # Tools and Libraries
 
 <table>
