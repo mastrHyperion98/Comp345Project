@@ -115,4 +115,6 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
   <td>Boost</td>
   <td>1.71.0-4</td>
  </tr>
+ <td>vcpkg</td>
+ <td>2019.12</td>
 </table>
