@@ -159,7 +159,8 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
  <li>In <strong>CLion</strong> it is located in <code> File/Settings/Build,Execution, Deployement/CMake </code> add the noted down directory in CMake Options
  </li> 
  <li>
-  In <strong>Visual Studio</strong> it is set in the CMakeSettings.json file under CMake Toolchain File. In VS you can use file explorer to locate the file. You do not need to copy paste its location, although you can. <strong>Also set the toolset settings to msvc_x86_x64</strong>. </li>
+  In <strong>Visual Studio</strong> it is set in the CMakeSettings.json file under CMake Toolchain File. In VS you can use file explorer to locate the file. You do not need to copy paste its location, although you can.
+ </li>
  </ul>
  
  <h4>Note:</h4>
