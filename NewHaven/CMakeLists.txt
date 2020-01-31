@@ -12,6 +12,6 @@ if(UNIX)
     #Execute Unix only command
     endif(UNIX)
 
-add_executable(NewHaven main.cpp)
+add_executable(NewHaven main.cpp "source/ GBMap.cpp" "source/ GBMap.h")
 
 target_link_libraries (NewHaven ${Boost_LIBRARIES})
