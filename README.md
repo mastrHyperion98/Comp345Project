@@ -144,7 +144,7 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
  <ol>
  <li> CD into your vcpkg-master directory.
  </li>
- <li> Using the command prompt / terminal execute the dependencies.bat (<strong>Windows</strong>) <em>or</em> dependencies.sh (<strong>Unix</strong>). <br><h4>NOTE:</h4> We are installing the entire Boost package. However, time and space can be saved by modifying the scripts to only install the graph component of Boost. 
+ <li> Using the command prompt / terminal execute the dependencies.bat (<strong>Windows</strong>) <em>or</em> dependencies.sh (<strong>Unix</strong>). The dependencies scripts are in the project folder. They need to be executed from within the vcpkg-master directory. Either copy and paste the file into that folder or copy the files full address and paste it into the command line. <br><h4>NOTE:</h4> We are installing the entire Boost package. However, time and space can be saved by modifying the scripts to only install the graph component of Boost. 
  </li>
  <li>
   The script should print out a result of its execution. Note the result of <code> CMake projects should use: "-DCMAKE_TOOLCHAIN_FILE=/folder_location/vcpkg-master/scripts/buildsystems/vcpkg.cmake"</code>
@@ -159,7 +159,8 @@ The Village Game board is a 5 by 6 map of circular spaces. The spaces on the Vil
  <li>In <strong>CLion</strong> it is located in <code> File/Settings/Build,Execution, Deployement/CMake </code> add the noted down directory in CMake Options
  </li> 
  <li>
-  In <strong>Visual Studio</strong> it is set in the CMakeSettings.json file under CMake Toolchain File. In VS you can use file explorer to locate the file. You do not need to copy paste its location, although you can. <strong>Also set the toolset settings to msvc_x86_x64</strong>. </li>
+  In <strong>Visual Studio</strong> it is set in the CMakeSettings.json file under CMake Toolchain File. In VS you can use file explorer to locate the file. You do not need to copy paste its location, although you can.
+ </li>
  </ul>
  
  <h4>Note:</h4>
