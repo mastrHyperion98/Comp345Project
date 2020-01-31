@@ -18,7 +18,7 @@ using namespace boost;
 
 // create a structure for the game map vertex data
 
-private struct VertexData
+ struct VertexData
 {
     string *tile_type;
     int *id;
