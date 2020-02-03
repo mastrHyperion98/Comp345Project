@@ -17,14 +17,39 @@
 using namespace std;
 using namespace boost;
 
-// create a structure for the game map vertex data
-
-GB_Tile * VertexData::GetTile() {
-    return VertexData::tile;
+// Define the function to return a game board tile held by the square
+GB_Tile * Square::GetTile() {
+    return Square::tile;
+}
+// Define and returns the position of the square on the gameboard
+int* Square::GetPosition() {
+    return Square::position;
+}
+// Define and Accepts a pointer to a GB_Tile object and assigns it to the square
+void Square::SetTile(GB_Tile *tile) {
+    Square::tile = tile;
+}
+// Define and accept and integer that is assigned as the squares position on the board.
+void Square::SetPosition(int position) {
+    Square::position = &position;
 }
 
-int* VertexData::GetPosition() {
-    return VertexData::position;
+// Define the constructor for the GameBoard Map
+GBMap::GBMap() {
+
 }
+// Define the deconstructor of the GameBoard Map
+GBMap::~GBMap() = default;
+
+// return the pointer to the board configuration
+int* GBMap::GetBoardConfig() {
+    return GBMap::board_configuration;
+}
+// Define the function to set the board configuration
+void GBMap::SetBoardConfig(int config) {
+    // assign the value of config to our int pointer board_configuration
+    GBMap::board_configuration = &config;
+}
+
 
 
