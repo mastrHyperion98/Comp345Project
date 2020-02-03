@@ -10,6 +10,7 @@
 #include <iostream>
 // include the string library
 #include <string>
+#include "GB_Tile.h"
 // include GBMap header for functions calls etc.
 #include "GBMap.h"
 // we will be using the boost and std namespace
@@ -20,8 +21,17 @@ using namespace boost;
 
  struct VertexData
 {
-    string *tile_type;
-    int *id;
+private:
+    GB_Tile *tile;
+    int *position;
+
+    GB_Tile* GetTile(){
+        return tile;
+    }
+    
+    int* GetPosition(){
+        return position;
+    }
 };
 
 
