@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
+
 if(WIN32)
     #Execute Windows only command
     endif(WIN32)
@@ -14,4 +15,4 @@ if(UNIX)
 
 add_executable(NewHaven main.cpp "source/GBMap.cpp" "source/GBMap.h")
 
-target_link_libraries (NewHaven ${Boost_LIBRARIES})
+target_link_libraries (NewHaven ${Boost_LIBRARIES} "source/GB_Tile.h")
