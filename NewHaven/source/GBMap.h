@@ -7,7 +7,7 @@
 #endif //NEWHAVEN_GBMAP_H
 #import "boost/graph/adjacency_list.hpp";
 // define a new type.... should probably be in its own header file to avoid having to add the map to everything
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS> Graph;
+
 struct Square
 {
 private:
@@ -20,8 +20,7 @@ public:
     void SetTile(GB_Tile *tile);
     void SetPosition(int position);
 };
-
-
+typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> Graph;
 class GBMap{
     // declaring public methods and parameters
 public:
