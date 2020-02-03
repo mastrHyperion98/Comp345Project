@@ -50,6 +50,10 @@ void GBMap::SetBoardConfig(int config) {
     // assign the value of config to our int pointer board_configuration
     GBMap::board_configuration = &config;
 }
+// Function that goes and fetches the graph
+Graph* GBMap::GetGameBoard() {
+    return GBMap::game_board;
+}
 
 
 
