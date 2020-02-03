@@ -6,3 +6,20 @@
 #define NEWHAVEN_GBMAP_H
 
 #endif //NEWHAVEN_GBMAP_H
+
+struct VertexData
+{
+private:
+    GB_Tile *tile;
+    int *position;
+
+public:
+    GB_Tile* GetTile();
+
+    int* GetPosition();
+};
+
+
+class GBMap{
+
+};

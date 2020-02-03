@@ -19,19 +19,12 @@ using namespace boost;
 
 // create a structure for the game map vertex data
 
- struct VertexData
-{
-private:
-    GB_Tile *tile;
-    int *position;
+GB_Tile * VertexData::GetTile() {
+    return VertexData::tile;
+}
 
-    GB_Tile* GetTile(){
-        return tile;
-    }
-    
-    int* GetPosition(){
-        return position;
-    }
-};
+int* VertexData::GetPosition() {
+    return VertexData::position;
+}
 
 
