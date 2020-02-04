@@ -10,29 +10,11 @@
 #include <iostream>
 // include the string library
 #include <string>
-#include "GB_Tile.h"
 // include GBMap header for functions calls etc.
 #include "GBMap.h"
 // we will be using the boost and std namespace
 using namespace std;
 using namespace boost;
-
-// Define the function to return a game board tile held by the square
-GB_Tile * Square::GetTile() {
-    return Square::tile;
-}
-// Define and returns the position of the square on the gameboard
-int* Square::GetPosition() {
-    return Square::position;
-}
-// Define and Accepts a pointer to a GB_Tile object and assigns it to the square
-void Square::SetTile(GB_Tile *tile) {
-    Square::tile = tile;
-}
-// Define and accept and integer that is assigned as the squares position on the board.
-void Square::SetPosition(int position) {
-    Square::position = &position;
-}
 
 // Define the constructor for the GameBoard Map
 GBMap::GBMap() {
@@ -54,6 +36,14 @@ void GBMap::SetBoardConfig(int config) {
 Graph* GBMap::GetGameBoard() {
     return GBMap::game_board;
 }
-
+// generate the graph
+void GBMap::GenerateGraph() {
+    // create the centre 25 nodes
+    if(*GBMap::GetBoardConfig() == 0){
+            vertex_t v1 = add_vertex(*game_board);
+        (*game_board)[v1].position = new int(10);
+        cout << "vertex name " << *(*game_board)[v1].position << std::endl;
+    }
+}
 
 

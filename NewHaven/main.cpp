@@ -1,8 +1,9 @@
 #include <iostream>
-
+#include "source/GBMap.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
-
+    GBMap *map = new GBMap();
+    map->SetBoardConfig(0);
+    map->GenerateGraph();
     return 0;
 }
