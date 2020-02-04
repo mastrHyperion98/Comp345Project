@@ -28,6 +28,7 @@ public:
     Graph* GetGameBoard();
     void GenerateGraph();
     void CreateCenterField();
+    void PrintGraph();
     const int *number_centre_squares = new int(25);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board

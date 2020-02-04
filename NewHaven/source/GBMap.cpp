@@ -69,6 +69,8 @@ void GBMap::CreateCenterField() {
     for (int position = 0; position < 20; position++) {
         add_edge(position, position + 5, *game_board);
     }
+}
+void GBMap::PrintGraph() {
     boost::print_graph(*game_board);
 }
 
