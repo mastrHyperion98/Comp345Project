@@ -6,6 +6,7 @@
 
 // include boost adjacency_list
 #include "boost/graph/adjacency_list.hpp"
+#include <boost/graph/graph_utility.hpp>
 // include the io stream library
 #include <iostream>
 // include the string library
@@ -37,13 +38,39 @@ Graph* GBMap::GetGameBoard() {
     return GBMap::game_board;
 }
 // generate the graph
+/*
+The gameboard will be initiated in parts, based on the configuration of the board (aka # of players)
+Each vertex (Square) will be labeled with a number. That number will be indentical to its index in the graph
+and will start at 0 at the upper left most corner of the 2 player field. From there, the vertices will be created row by row.
+It will be created in a similar way as a 2D Matrix. 
+*/
 void GBMap::GenerateGraph() {
-    // create the centre 25 nodes
+    // Is it a 2 player game, if so initialize center board only. 
     if(*GBMap::GetBoardConfig() == 0){
-            vertex_t v1 = add_vertex(*game_board);
-        (*game_board)[v1].position = new int(10);
-        cout << "vertex name " << *(*game_board)[v1].position << std::endl;
+        // Create the Center Field
+        CreateCenterField();
+    }
+    else {
+        cerr << "This FEATURE IS NOT YET IMPLEMENTED";
     }
 }
+
+// create the center 5x5 field area
+void GBMap::CreateCenterField() {
+ 
+    for (int position = 0; position < 25; position++) {
+       add_vertex(*game_board);
+       // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
+       if (position > 0 && position % 5 != 0)
+           add_edge(position, position - 1, *game_board);
+        (*game_board)[position].position = new int(position);
+    }
+
+    for (int position = 0; position < 20; position++) {
+        add_edge(position, position + 5, *game_board);
+    }
+    boost::print_graph(*game_board);
+}
+
 
 

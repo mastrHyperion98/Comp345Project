@@ -12,7 +12,7 @@
 struct Square
 {
 public:
-    GB_Tile *tile;
+    //GB_Tile *tile;
     int *position;
 };
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> Graph;
@@ -27,6 +27,7 @@ public:
     void SetBoardConfig(int config);
     Graph* GetGameBoard();
     void GenerateGraph();
+    void CreateCenterField();
     const int *number_centre_squares = new int(25);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board
