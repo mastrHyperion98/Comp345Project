@@ -19,7 +19,6 @@ using namespace boost;
 
 // Define the constructor for the GameBoard Map
 GBMap::GBMap() {
-
 }
 // Define the deconstructor of the GameBoard Map
 GBMap::~GBMap() = default;
@@ -88,6 +87,31 @@ void GBMap::CreateUpperLowerField() {
     }
     for(int position = 20; position < 25; position++){
         add_edge(position, position + 10, *game_board);
+    }
+}
+/*
+ * Creates the left and right playing area for a 4 player configuration.
+ * Identification will start from 35 to 44 and will start on the top left
+ * -  25 26 27 28 29 --
+ * 35 00 01 02 03 04 40
+ * 36 05 06 07 08 09 41
+ * 37 10 11 12 13 14 42
+ * 38 15 16 17 18 19 43
+ * 39 20 21 22 23 24 44
+ * -  30 31 32 33 34 -
+ */
+void GBMap::CreateLeftRightField(){
+    for(int position = 35; position < 45; position++){
+        add_vertex(*game_board);
+        if(position > 35)
+            add_edge(position, position - 1, *game_board);
+        (*game_board)[position].position = new int(position);
+    }
+    // we need to add the edges -- is there some sort of rule.... we might need to add them by hand :(
+    for(int position = 35, target = 0;position < 45; target += 5, position++){
+        add_edge(position, target, *game_board);
+        if(position == 39)
+            target = -01;
     }
 }
 Square GBMap::GetSquare(int position) {

@@ -29,6 +29,7 @@ public:
     void GenerateGraph();
     void CreateCenterField();
     void CreateUpperLowerField();
+    void CreateLeftRightField();
     Square GetSquare(int position);
     void PrintGraph();
     const int *number_centre_squares = new int(25);
