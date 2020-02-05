@@ -6,6 +6,8 @@ int main() {
     map->SetBoardConfig(0);
     map->GenerateGraph();
     map->CreateUpperLowerField();
+    map->CreateLeftRightField();
     map->PrintGraph();
+
     return 0;
 }
