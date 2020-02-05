@@ -54,7 +54,6 @@ void GBMap::GenerateGraph() {
         cerr << "This FEATURE IS NOT YET IMPLEMENTED";
     }
 }
-
 // create the center 5x5 field area
 void GBMap::CreateCenterField() {
  
@@ -69,6 +68,34 @@ void GBMap::CreateCenterField() {
     for (int position = 0; position < 20; position++) {
         add_edge(position, position + 5, *game_board);
     }
+}
+/*
+ * Creates the upper and lower playing area for a 3 player map.
+ *  Identification will start from 25 to 35 starting from the top row.
+ */
+void GBMap::CreateUpperLowerField() {
+    // first check that the center field has been created
+    for (int position = 25; position < 35; position++) {
+        add_vertex(*game_board);
+        // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
+        if (position % 5 != 0)
+            add_edge(position, position - 1, *game_board);
+        (*game_board)[position].position = new int(position);
+    }
+    // add edges for the first and last row going down
+    for(int position = 0; position < 5; position++){
+        add_edge(position, position + 25, *game_board);
+    }
+    for(int position = 20; position < 25; position++){
+        add_edge(position, position + 10, *game_board);
+    }
+}
+Square GBMap::GetSquare(int position) {
+    /*TO-DO
+     * Verify position is within the appropriate ranged based on the board configuration
+     * return an error otherwise.
+     */
+    return (*game_board)[position];
 }
 void GBMap::PrintGraph() {
     boost::print_graph(*game_board);
