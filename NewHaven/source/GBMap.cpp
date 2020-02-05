@@ -6,7 +6,8 @@
 
 // include boost adjacency_list
 #include "boost/graph/adjacency_list.hpp"
-#include <boost/graph/graph_utility.hpp>
+#include "boost/graph/graph_utility.hpp"
+#include "boost/graph/connected_components.hpp"
 // include the io stream library
 #include <iostream>
 // include the string library
@@ -74,7 +75,7 @@ void GBMap::CreateCenterField() {
  */
 void GBMap::CreateUpperLowerField() {
     // first check that the center field has been created
-    for (int position = 25; position < 35; position++) {
+    for (int position = *GBMap().number_centre_squares; position < 35; position++) {
         add_vertex(*game_board);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (position % 5 != 0)
@@ -83,7 +84,7 @@ void GBMap::CreateUpperLowerField() {
     }
     // add edges for the first and last row going down
     for(int position = 0; position < 5; position++){
-        add_edge(position, position + 25, *game_board);
+        add_edge(position, position + *GBMap().number_centre_squares, *game_board);
     }
     for(int position = 20; position < 25; position++){
         add_edge(position, position + 10, *game_board);
@@ -125,5 +126,22 @@ void GBMap::PrintGraph() {
     boost::print_graph(*game_board);
 }
 
+// Taken from the Boost Connected Graph Example
+//https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
+// Prints the number of Connected Components and which vertex belongs to which component
+// A component is a set of one or more nodes in which a path exists.
+// In other words, if the graph is connected than there is only 1 component.
+// If component 2 exists then there does not exists a path linking nodes from Component 1 and 2. 
+void GBMap::PrintConnectedGraph() {
+
+    std::vector<int> component(num_vertices(*game_board));
+    int num = connected_components(*game_board, &component[0]);
+
+    std::vector<int>::size_type i;
+    cout << "Total number of components: " << num << endl;
+    for (i = 0; i != component.size(); ++i)
+        cout << "Square " << i <<" is in component " << component[i] << endl;
+    cout << endl;
+}
 
 

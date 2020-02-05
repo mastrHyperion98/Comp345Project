@@ -32,6 +32,7 @@ public:
     void CreateLeftRightField();
     Square GetSquare(int position);
     void PrintGraph();
+    void PrintConnectedGraph();
     const int *number_centre_squares = new int(25);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board
