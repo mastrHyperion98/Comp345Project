@@ -5,6 +5,7 @@ int main() {
     GBMap *map = new GBMap();
     map->SetBoardConfig(0);
     map->GenerateGraph();
+    map->CreateUpperLowerField();
     map->PrintGraph();
     return 0;
 }
