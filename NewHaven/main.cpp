@@ -8,6 +8,7 @@ int main() {
     map->CreateUpperLowerField();
     map->CreateLeftRightField();
     map->PrintGraph();
-
+    std::cout << "Print Connected Components";
+    map->PrintConnectedGraph();
     return 0;
 }
