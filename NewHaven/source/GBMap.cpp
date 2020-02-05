@@ -50,8 +50,17 @@ void GBMap::GenerateGraph() {
         // Create the Center Field
         CreateCenterField();
     }
-    else {
-        cerr << "This FEATURE IS NOT YET IMPLEMENTED";
+    else if(*GBMap::GetBoardConfig() == 1){
+        CreateCenterField();
+        CreateUpperLowerField();
+    }
+    else if(*GBMap::GetBoardConfig() == 2){
+        CreateCenterField();
+        CreateUpperLowerField();
+        CreateLeftRightField();
+    }
+    else{
+        cerr << "ERROR: Board configuration :" << *GBMap::GetBoardConfig() << " is not a valid configuration" << endl;
     }
 }
 // create the center 5x5 field area
@@ -131,7 +140,7 @@ void GBMap::PrintGraph() {
 // Prints the number of Connected Components and which vertex belongs to which component
 // A component is a set of one or more nodes in which a path exists.
 // In other words, if the graph is connected than there is only 1 component.
-// If component 2 exists then there does not exists a path linking nodes from Component 1 and 2. 
+// If component 2 exists then there does not exists a path linking nodes from Component 1 and 2.
 void GBMap::PrintConnectedGraph() {
 
     std::vector<int> component(num_vertices(*game_board));

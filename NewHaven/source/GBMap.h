@@ -27,9 +27,6 @@ public:
     void SetBoardConfig(int config);
     Graph* GetGameBoard();
     void GenerateGraph();
-    void CreateCenterField();
-    void CreateUpperLowerField();
-    void CreateLeftRightField();
     Square GetSquare(int position);
     void PrintGraph();
     void PrintConnectedGraph();
@@ -38,6 +35,9 @@ private:
     // an int value in the range [0,2] denotes the initial configuration of the board
     // 0 = 2 players, 1 = 3 players, 2 = 4 players;
     int *board_configuration;
+    void CreateCenterField();
+    void CreateUpperLowerField();
+    void CreateLeftRightField();
     Graph *game_board = new Graph;
 
 };
