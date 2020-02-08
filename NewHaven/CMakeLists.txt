@@ -13,6 +13,7 @@ if(UNIX)
     #Execute Unix only command
     endif(UNIX)
 
-add_executable(NewHaven GBMapDriver.cpp "source/GBMap.cpp")
+add_executable(NewHaven GBMapDriver.cpp "source/GBMap.cpp" source/VGMap.cpp)
+add_executable(VGMap VGMapDriver.cpp source/VGMap.cpp)
 
 target_link_libraries (NewHaven ${Boost_LIBRARIES})
