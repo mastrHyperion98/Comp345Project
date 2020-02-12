@@ -13,6 +13,6 @@ if(UNIX)
     endif(UNIX)
 
 add_executable(NewHaven main.cpp)
-add_executable(ResourcesTest test/ResourcesDriver.cpp)
+add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
 
 target_link_libraries (NewHaven ${Boost_LIBRARIES})
