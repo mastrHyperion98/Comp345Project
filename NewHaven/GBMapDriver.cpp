@@ -11,8 +11,9 @@ int main() {
     cout << "\n***Generate Graph***\n" << endl;
     map->generateGraph();
     cout << "\n***PRINT GRAPH***\n" << endl;
-    map->printGraph();
+   // map->printGraph();
     cout << "\n***Print Connected Components***\n" << endl;
-    map->printConnectedGraph();
+   // map->printConnectedGraph();
+   map->getConnectedGraph(0);
     return 0;
 }

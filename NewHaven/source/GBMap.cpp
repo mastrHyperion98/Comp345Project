@@ -12,6 +12,7 @@
 #include <iostream>
 // include the string library
 #include <string>
+#include <deque>
 // include GBMap header for functions calls etc.
 #include "GBMap.h"
 // we will be using the boost and std namespace
@@ -49,15 +50,18 @@ void GBMap::generateGraph() {
     if(*GBMap::getBoardConfig() == 0){
         // Create the Center Field
         createCenterField();
+        SIZE = new const int(25);
     }
     else if(*GBMap::getBoardConfig() == 1){
         createCenterField();
         createUpperLowerField();
+        SIZE = new const int(35);
     }
     else if(*GBMap::getBoardConfig() == 2){
         createCenterField();
         createUpperLowerField();
         createLeftRightField();
+        SIZE = new const int(45);
     }
     else{
         cerr << "ERROR: Board configuration :" << *GBMap::getBoardConfig() << " is not a valid configuration" << endl;
@@ -152,13 +156,55 @@ void GBMap::printConnectedGraph() {
         cout << "Square " << i <<" is in component " << component[i] << endl;
     cout << endl;
 }
+/*
+ * From a given origin compute a graph of connected played tiles
+ */
+Graph GBMap::getConnectedGraph(int const position){
+        ResourceTrails connectedGraph;
+        auto vertices = (*game_board).vertex_set();
+        vertex_t root = vertices[position];
+        deque<vertex_t> queue;
+        queue.push_back(root);
+        // while the queue is non empty keep traversing
+        while(!queue.empty()) {
+            Graph::adjacency_iterator neighbourIt, neighbourEnd;
+            // origin of the current search
+            vertex_t origin = queue.front();
+            tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *game_board);
+            for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+                *(*game_board)[origin].isVisited = true;
+                vertex_t next_element = vertices[*neighbourIt];
+                // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
+                // search its neighbours
+                if (!*(*game_board)[next_element].isVisited
+                && *(*game_board)[next_element].isPlayed
+                && !vertexContainedInQueue(queue, next_element)){
+                    queue.push_back(next_element);
+                    // print the element
+                    cout << next_element << endl;
+                } // end of scope of if statement
+            } // end of for loop
+            // remove the top of the queue
+            queue.pop_front();
+        } // end of while loop
 
-Graph GBMap::getConnectedGraph(int position) {
-    Graph::adjacency_iterator neighbourIt, neighbourEnd;
-        tie(neighbourIt, neighbourEnd) = adjacent_vertices((*game_board).vertex_set()[position], *game_board);
-        for (; neighbourIt != neighbourEnd; ++neighbourIt)
-            cout << position << " is connected with " << *neighbourIt << " " << endl;
-    return NULL;
+        // reset all the vertices isVisited to false;
+        resetVerticesVisited();
+    return connectedGraph;
 }
-
-
+/*
+ * The function resetVerticesVisited traverses the graph and sets all the square isVisited data to false
+ */
+void GBMap::resetVerticesVisited() {
+    for(int i = 0; i < *SIZE; i++){
+        *(*game_board)[i].isVisited = false;
+    }
+}
+bool GBMap::vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) {
+    auto it = find(queue.begin(),queue.end(),element);
+    if(it != queue.end())
+    {
+       return true;
+    }
+    return false;
+}
