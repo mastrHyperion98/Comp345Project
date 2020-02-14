@@ -13,7 +13,8 @@ if(UNIX)
     #Execute Unix only command
     endif(UNIX)
 
+add_executable(NewHaven GBMapDriver.cpp)
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
-add_executable(NewHaven main.cpp)
+
 
 target_link_libraries (NewHaven ${Boost_LIBRARIES})

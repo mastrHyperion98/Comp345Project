@@ -1,5 +1,5 @@
 #include <iostream>
-#include "source/GBMap.h"
+#include "src/GBMap.h"
 
 using namespace std;
 int main() {
