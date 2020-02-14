@@ -34,7 +34,7 @@ public:
     void printGraph();
     void printConnectedGraph();
     const int *number_centre_squares = new int(25);
-    Graph getConnectedGraph(int position);
+    ResourceTrails getConnectedGraph(int position);
     int const *SIZE;
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board

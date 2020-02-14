@@ -159,7 +159,7 @@ void GBMap::printConnectedGraph() {
 /*
  * From a given origin compute a graph of connected played tiles
  */
-Graph GBMap::getConnectedGraph(int const position){
+ResourceTrails GBMap::getConnectedGraph(int const position){
         ResourceTrails connectedGraph;
         auto vertices = (*game_board).vertex_set();
         vertex_t root = vertices[position];
