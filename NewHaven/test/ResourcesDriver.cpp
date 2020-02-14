@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main()
-{
+{/*
     HarvestDeck deck;
     HarvestTile* tile;
     ResourceTypes* content;
@@ -35,7 +35,13 @@ int main()
     
     delete content;
     delete[] position;
-    }
+    }*/
+
+    const ResourceTypes* const ptr{ static_cast<ResourceTypes*>(malloc(sizeof(ResourceTypes))) };
+
+    std::cout << *ptr;
+
+    *ptr = ResourceTypes::WOOD;
 
     return 0;
 }

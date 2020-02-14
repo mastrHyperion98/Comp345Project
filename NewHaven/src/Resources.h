@@ -41,25 +41,30 @@ public:
 struct BuildingDeck
 {
 private:
-	
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
+	std::uint_least8_t* const deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) };
+	Building* const deckContent{ new Building[*MAX_DECK_SIZE] };
 	
 public:
 	BuildingDeck();
+	~BuildingDeck();
 
-	void draw();
+	std::uint_least8_t getDeckSize();
+	Building* draw();
 };
-*/
-/*
+
 struct Building
 {
 private:
-
+	const ResourceTypes* const buildingType{ new ResourceTypes() };
+	//const std::uint_least8_t* const buildingNumber;
+	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
 
 public:
 	Building();
 
-};
-
+};*/
+/*
 struct Hand
 {
 private:

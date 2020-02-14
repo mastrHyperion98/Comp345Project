@@ -179,3 +179,37 @@ HarvestTile* HarvestDeck::draw()
 		return nullptr;
 	}
 }
+/*
+BuildingDeck::BuildingDeck()
+{
+}
+
+BuildingDeck::~BuildingDeck()
+{
+	delete this->MAX_DECK_SIZE;
+	delete this->deckSize;
+	delete[] this->deckContent;
+}
+
+std::uint_least8_t BuildingDeck::getDeckSize()
+{
+	return *this->deckSize;
+}
+
+Building* BuildingDeck::draw()
+{
+	if (this->deckSize > 0)
+	{
+		(*this->deckSize)--;
+		return &this->deckContent[*this->deckSize];
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Building::Building()
+{
+}
+*/
