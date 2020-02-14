@@ -7,12 +7,12 @@ int main() {
     int configuration = 0;
     cout << "Enter the board configuration (0 = 2 players, 1 = 3 players, 2 = 4 players): ";
     cin >> configuration;
-    map->SetBoardConfig(configuration);
+    map->setBoardConfig(configuration);
     cout << "\n***Generate Graph***\n" << endl;
-    map->GenerateGraph();
+    map->generateGraph();
     cout << "\n***PRINT GRAPH***\n" << endl;
-    map->PrintGraph();
+    map->printGraph();
     cout << "\n***Print Connected Components***\n" << endl;
-    map->PrintConnectedGraph();
+    map->printConnectedGraph();
     return 0;
 }
