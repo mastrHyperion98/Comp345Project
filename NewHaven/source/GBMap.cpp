@@ -153,4 +153,12 @@ void GBMap::printConnectedGraph() {
     cout << endl;
 }
 
+Graph GBMap::getConnectedGraph(int position) {
+    Graph::adjacency_iterator neighbourIt, neighbourEnd;
+        tie(neighbourIt, neighbourEnd) = adjacent_vertices((*game_board).vertex_set()[position], *game_board);
+        for (; neighbourIt != neighbourEnd; ++neighbourIt)
+            cout << position << " is connected with " << *neighbourIt << " " << endl;
+    return NULL;
+}
+
 

@@ -31,6 +31,7 @@ public:
     void printGraph();
     void printConnectedGraph();
     const int *number_centre_squares = new int(25);
+    Graph getConnectedGraph(int position);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board
     // 0 = 2 players, 1 = 3 players, 2 = 4 players;
