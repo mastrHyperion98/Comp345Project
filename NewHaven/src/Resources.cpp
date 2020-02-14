@@ -1,5 +1,28 @@
 #include "Resources.h"
 #include <cstdlib>
+#include <time.h>
+
+std::ostream& operator<<(std::ostream& output, const resourceTypes resource)
+{
+	switch (resource)
+	{
+	case resourceTypes::SHEEP:
+		output << "Sheep";
+		return output;
+	case resourceTypes::STONE:
+		output << "Stone";
+		return output;
+	case resourceTypes::WHEAT:
+		output << "Wheat";
+		return output;
+	case resourceTypes::WOOD:
+		output << "Wood";
+		return output;
+	default:
+		output << "Resource Type Error";
+		return output;
+	}
+}
 
 HarvestTile::HarvestTile()
 {
@@ -15,6 +38,7 @@ HarvestTile::~HarvestTile()
 void HarvestTile::generateResources()
 {
 	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };
+	std::srand(time(NULL));
 
 	for (std::uint_least8_t i = 0; i < 4; i++)
 	{
@@ -76,6 +100,30 @@ void HarvestTile::generateResources()
 	}
 }
 
+void HarvestTile::rotateTileClockwise()
+{
+	resourceTypes _temp{ this->tileContent[3] };
+	
+	for (std::uint_fast8_t i = 0; i < 3; i++)
+	{
+		this->tileContent[3-i] = this->tileContent[2-i];
+	}
+	
+	this->tileContent[0] = _temp;
+}
+
+void HarvestTile::rotateTileCounterClockwise()
+{
+	resourceTypes _temp{ this->tileContent[0] };
+
+	for (std::uint_fast8_t i = 0; i < 3; i++)
+	{
+		this->tileContent[i] = this->tileContent[i+1];
+	}
+
+	this->tileContent[3] = _temp;
+}
+
 resourceTypes* HarvestTile::getTileContent()
 {
 	resourceTypes* content{ new resourceTypes[4] };
@@ -111,27 +159,20 @@ HarvestDeck::~HarvestDeck()
 	delete[] this->deckContent;
 }
 
+std::uint_least8_t HarvestDeck::getDeckSize()
+{
+	return *this->deckSize;
+}
+
 HarvestTile* HarvestDeck::draw()
 {
 	if (this->deckSize > 0)
 	{
 		(*this->deckSize)--;
-		return new HarvestTile();
+		return &this->deckContent[*this->deckSize];
 	}
 	else
 	{
 		return nullptr;
 	}
 }
-/*
-void HarvestDeck::generateHarvestTiles()
-{
-	constexpr HarvestTile deckContent[60];
-	this->deckContent{ &deckContent };
-
-	for (std::uint_least8_t i = 0; i < 60; i++)
-	{
-		deckContent[i]{ new HarvestTile() };
-	}
-}
-*/
