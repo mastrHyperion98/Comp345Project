@@ -2,14 +2,14 @@
 #include<ostream>
 #include <cstdint>
 
-enum struct resourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };
+enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };
 
-std::ostream& operator<<(std::ostream& output, const resourceTypes resource);
+std::ostream& operator<<(std::ostream& output, const ResourceTypes resource);
 
 struct HarvestTile
 {
 private:
-	resourceTypes* const tileContent{ new resourceTypes[4] };
+	ResourceTypes* const tileContent{ new ResourceTypes[4] };
 	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
 
 	void generateResources();
@@ -17,7 +17,7 @@ public:
 	HarvestTile();
 	~HarvestTile();
 
-	resourceTypes* getTileContent();
+	ResourceTypes* getTileContent();
 	std::uint_least8_t* getPosition();
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();

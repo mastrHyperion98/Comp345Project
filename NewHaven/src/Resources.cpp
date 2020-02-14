@@ -2,20 +2,20 @@
 #include <cstdlib>
 #include <time.h>
 
-std::ostream& operator<<(std::ostream& output, const resourceTypes resource)
+std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 {
 	switch (resource)
 	{
-	case resourceTypes::SHEEP:
+	case ResourceTypes::SHEEP:
 		output << "Sheep";
 		return output;
-	case resourceTypes::STONE:
+	case ResourceTypes::STONE:
 		output << "Stone";
 		return output;
-	case resourceTypes::WHEAT:
+	case ResourceTypes::WHEAT:
 		output << "Wheat";
 		return output;
-	case resourceTypes::WOOD:
+	case ResourceTypes::WOOD:
 		output << "Wood";
 		return output;
 	default:
@@ -38,7 +38,7 @@ HarvestTile::~HarvestTile()
 void HarvestTile::generateResources()
 {
 	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };
-	std::srand(time(NULL));
+	std::srand(time(NULL) + std::rand());
 
 	for (std::uint_least8_t i = 0; i < 4; i++)
 	{
@@ -49,7 +49,7 @@ void HarvestTile::generateResources()
 
 			if (sheepCount <= 3)
 			{
-				*(this->tileContent + i) = resourceTypes::SHEEP;
+				*(this->tileContent + i) = ResourceTypes::SHEEP;
 			}
 			else
 			{
@@ -62,7 +62,7 @@ void HarvestTile::generateResources()
 
 			if (stoneCount <= 3)
 			{
-				*(this->tileContent + i) = resourceTypes::STONE;
+				*(this->tileContent + i) = ResourceTypes::STONE;
 			}
 			else
 			{
@@ -75,7 +75,7 @@ void HarvestTile::generateResources()
 
 			if (wheatCount <= 3)
 			{
-				*(this->tileContent + i) = resourceTypes::WHEAT;
+				*(this->tileContent + i) = ResourceTypes::WHEAT;
 			}
 			else
 			{
@@ -88,7 +88,7 @@ void HarvestTile::generateResources()
 
 			if (woodCount <= 3)
 			{
-				*(this->tileContent + i) = resourceTypes::WOOD;
+				*(this->tileContent + i) = ResourceTypes::WOOD;
 			}
 			else
 			{
@@ -96,13 +96,16 @@ void HarvestTile::generateResources()
 			}
 
 			break;
+		default:
+			i--;
+			break;
 		}
 	}
 }
 
 void HarvestTile::rotateTileClockwise()
 {
-	resourceTypes _temp{ this->tileContent[3] };
+	ResourceTypes _temp{ this->tileContent[3] };
 	
 	for (std::uint_fast8_t i = 0; i < 3; i++)
 	{
@@ -114,7 +117,7 @@ void HarvestTile::rotateTileClockwise()
 
 void HarvestTile::rotateTileCounterClockwise()
 {
-	resourceTypes _temp{ this->tileContent[0] };
+	ResourceTypes _temp{ this->tileContent[0] };
 
 	for (std::uint_fast8_t i = 0; i < 3; i++)
 	{
@@ -124,9 +127,9 @@ void HarvestTile::rotateTileCounterClockwise()
 	this->tileContent[3] = _temp;
 }
 
-resourceTypes* HarvestTile::getTileContent()
+ResourceTypes* HarvestTile::getTileContent()
 {
-	resourceTypes* content{ new resourceTypes[4] };
+	ResourceTypes* content{ new ResourceTypes[4] };
 
 	for (std::int_fast8_t i = 0; i < 4; i++)
 	{

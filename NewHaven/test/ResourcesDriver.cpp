@@ -5,7 +5,7 @@ int main()
 {
     HarvestDeck deck;
     HarvestTile* tile;
-    resourceTypes* content;
+    ResourceTypes* content;
     std::uint_least8_t deckSize;
     std::uint_least8_t* position;
 
@@ -20,7 +20,7 @@ int main()
         << static_cast<int>(position[0]) << ", " << static_cast<int>(position[1]) << '\n';
 
     std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
-
+    /*
     tile->rotateTileClockwise();
     delete content;
     content = tile->getTileContent();
@@ -32,7 +32,7 @@ int main()
     content = tile->getTileContent();
 
     std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
-    
+    */
     delete content;
     delete[] position;
     }
