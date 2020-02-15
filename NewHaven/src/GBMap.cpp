@@ -15,6 +15,7 @@
 #include <deque>
 // include GBMap header for functions calls etc.
 #include "GBMap.h"
+#include "Square.h"
 #include <boost/graph/copy.hpp>
 // we will be using the boost and std namespace
 using namespace std;
@@ -24,8 +25,7 @@ using namespace boost;
 GBMap::GBMap() {
 }
 // Define the deconstructor of the GameBoard Map
-GBMap::~GBMap() = default;
-
+GBMap::~GBMap()=default;
 // return the pointer to the board configuration
 int* GBMap::getBoardConfig() {
     return GBMap::board_configuration;
@@ -76,7 +76,7 @@ void GBMap::createCenterField() {
        // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
        if (position > 0 && position % 5 != 0)
            add_edge(position, position - 1, *game_board);
-        (*game_board)[position].position = new int(position);
+        (*game_board)[position].setPosition(new int(position));
     }
 
     for (int position = 0; position < 20; position++) {
@@ -89,16 +89,16 @@ void GBMap::createCenterField() {
  */
 void GBMap::createUpperLowerField() {
     // first check that the center field has been created
-    for (int position = *GBMap().number_centre_squares; position < 35; position++) {
+    for (int position = *GBMap().NUM_C_SQ; position < 35; position++) {
         add_vertex(*game_board);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (position % 5 != 0)
             add_edge(position, position - 1, *game_board);
-        (*game_board)[position].position = new int(position);
+        (*game_board)[position].setPosition(new int(position));
     }
     // add edges for the first and last row going down
     for(int position = 0; position < 5; position++){
-        add_edge(position, position + *GBMap().number_centre_squares, *game_board);
+        add_edge(position, position + *GBMap().NUM_C_SQ, *game_board);
     }
     for(int position = 20; position < 25; position++){
         add_edge(position, position + 10, *game_board);
@@ -120,7 +120,7 @@ void GBMap::createLeftRightField(){
         add_vertex(*game_board);
         if(position > 35)
             add_edge(position, position - 1, *game_board);
-        (*game_board)[position].position = new int(position);
+        (*game_board)[position].setPosition(new int(position));
     }
     // we need to add the edges -- is there some sort of rule.... we might need to add them by hand :(
     for(int position = 35, target = 0;position < 45; target += 5, position++){
@@ -129,12 +129,12 @@ void GBMap::createLeftRightField(){
             target = -01;
     }
 }
-Square GBMap::getSquare(int position) {
+Square* GBMap::getSquare(int position) {
     /*TO-DO
      * Verify position is within the appropriate ranged based on the board configuration
      * return an error otherwise.
      */
-    return (*game_board)[position];
+    return &(*game_board)[position];
 }
 void GBMap::printGraph() {
     boost::print_graph(*game_board);
@@ -184,10 +184,10 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
                 vertex_t next_element = vertices[*neighbourIt];
                 // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
                 // search its neighbours
-                if (!*(*game_board)[next_element].isVisited && *(*game_board)[next_element].isPlayed){
+                if (!*(*game_board)[next_element].isVisited && (*game_board)[next_element].getTile()!= NULL){
                     if( !vertexContainedInQueue(queue, next_element))
                          queue.push_back(next_element);
-                    if(!graphContainsPosition(connectedGraph, *(*game_board)[next_element].position)){
+                    if(!graphContainsPosition(connectedGraph, (*game_board)[next_element].getPosition())){
                         vertex_t vertex1 = add_vertex(connectedGraph);
                         connectedGraph[vertex1] = (*game_board)[next_element];
                         root_queue.push_back(vertex1);
@@ -195,7 +195,7 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
                     }
                     // we need to go fetch the vertexID for the element with the required position to complete our trail
                     else{
-                        int v_position = getVertexPosition(connectedGraph, *(*game_board)[next_element].position);
+                        int v_position = getVertexPosition(connectedGraph, (*game_board)[next_element].getPosition());
                         add_edge(root, connectedGraph.vertex_set()[v_position], connectedGraph);
                     }
                 }
@@ -220,17 +220,16 @@ bool GBMap::vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) cons
     auto it = find(queue.begin(),queue.end(),element);
     return it != queue.end();
 }
-
 bool GBMap::graphContainsPosition(ResourceTrails graph, int position) const{
    for(int i = 0; i < num_vertices(graph); i++){
-      if(*graph[i].position == position){
+      if(graph[i].getPosition() == position){
             return true;
       }
    }return false;
 }
 int GBMap::getVertexPosition(ResourceTrails graph, int position) const{
     for(int i = 0; i < num_vertices(graph); i++){
-        if(*graph[i].position == position){
+        if(graph[i].getPosition() == position){
             return i;
         }
     }

@@ -7,16 +7,11 @@
 #endif //NEWHAVEN_GBMAP_H
 #include "boost/graph/adjacency_list.hpp"
 #include <deque>
+#include "Resources.h"
+#include "Square.h"
 // define a new type.... should probably be in its own header file to avoid having to add the map to everything
 using namespace std;
-struct Square
-{
-public:
-    //GB_Tile *tile;
-    bool *isPlayed = new bool(true);
-    int *position = 0;
-    bool *isVisited = new bool(false);
-};
+
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> Graph;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Square> ResourceTrails;
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
@@ -30,10 +25,11 @@ public:
     void setBoardConfig(int config);
     Graph* getGameBoard();
     void generateGraph();
-    Square getSquare(int position);
+    Square* getSquare(int position);
     void printGraph();
     void printConnectedGraph();
-    const int *number_centre_squares = new int(25);
+    // number of center squares
+    const int *NUM_C_SQ = new int(25);
     ResourceTrails getConnectedGraph(int position);
     int const *SIZE;
 private:
