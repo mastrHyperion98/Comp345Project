@@ -184,13 +184,20 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
                 vertex_t next_element = vertices[*neighbourIt];
                 // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
                 // search its neighbours
-                if (!*(*game_board)[next_element].isVisited && *(*game_board)[next_element].isPlayed
-                      && !vertexContainedInQueue(queue, next_element)){
-                    queue.push_back(next_element);
-                    vertex_t vertex1 = add_vertex(connectedGraph);
-                    connectedGraph[vertex1] = (*game_board)[next_element];
-                    root_queue.push_back(vertex1);
-                    add_edge(root, vertex1, connectedGraph);
+                if (!*(*game_board)[next_element].isVisited && *(*game_board)[next_element].isPlayed){
+                    if( !vertexContainedInQueue(queue, next_element))
+                         queue.push_back(next_element);
+                    if(!graphContainsPosition(connectedGraph, *(*game_board)[next_element].position)){
+                        vertex_t vertex1 = add_vertex(connectedGraph);
+                        connectedGraph[vertex1] = (*game_board)[next_element];
+                        root_queue.push_back(vertex1);
+                        add_edge(root, vertex1, connectedGraph);
+                    }
+                    // we need to go fetch the vertexID for the element with the required position to complete our trail
+                    else{
+                        int v_position = getVertexPosition(connectedGraph, *(*game_board)[next_element].position);
+                        add_edge(root, connectedGraph.vertex_set()[v_position], connectedGraph);
+                    }
                 }
             }
             // remove the top of the queue
@@ -209,11 +216,25 @@ void GBMap::resetVerticesVisited() {
         *(*game_board)[i].isVisited = false;
     }
 }
-bool GBMap::vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) {
+bool GBMap::vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) const{
     auto it = find(queue.begin(),queue.end(),element);
-    if(it != queue.end())
-    {
-       return true;
-    }
-    return false;
+    return it != queue.end();
 }
+
+bool GBMap::graphContainsPosition(ResourceTrails graph, int position) const{
+   for(int i = 0; i < num_vertices(graph); i++){
+      if(*graph[i].position == position){
+            return true;
+      }
+   }return false;
+}
+int GBMap::getVertexPosition(ResourceTrails graph, int position) const{
+    for(int i = 0; i < num_vertices(graph); i++){
+        if(*graph[i].position == position){
+            return i;
+        }
+    }
+    cerr << "ERROR: position not in Graph" << endl;
+    return 1;
+}
+

@@ -45,6 +45,7 @@ private:
     void createLeftRightField();
     Graph *game_board = new Graph;
     void resetVerticesVisited();
-    bool vertexContainedInQueue(deque<vertex_t> queue, vertex_t element);
-
+    bool vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) const;
+    bool graphContainsPosition(ResourceTrails graph, int position) const;
+    int getVertexPosition(ResourceTrails graph, int position) const;
 };
