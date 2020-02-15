@@ -12,25 +12,21 @@ Square::Square(){
     tile = 0;
     isVisited = new bool(false);
 }
-Square::~Square(){
-    delete tile;
-    delete position;
-    delete isVisited;
+Square::~Square() = default;
+
+void Square::setPosition(int* position){
+    this->position = position;
 }
-void Square::setPosition(int position){
-    this->position = &position;
-}
-int Square::getPosition(){
+int Square::getPosition() const{
     return *position;
 }
 void Square::setTile(HarvestTile * tile){
-    if(tile == 0)
+    if(this->tile == 0)
         this->tile = tile;
-    else{
-        cerr << "ERROR: Tile " << *this->position << " already contains a tile!";
+    else {
         throw 1;
     }
 }
-HarvestTile* Square::getTile(){
+HarvestTile* Square::getTile() const{
     return tile;
 }

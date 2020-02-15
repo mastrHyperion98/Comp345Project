@@ -10,10 +10,10 @@ class Square
 public:
     Square();
     ~Square();
-    void setPosition(int position);
-    int getPosition();
+    void setPosition(int* position);
+    int getPosition() const;
     void setTile(HarvestTile * tile);
-    HarvestTile* getTile();
+    HarvestTile* getTile() const;
     bool *isVisited;
 private:
     HarvestTile* tile;
