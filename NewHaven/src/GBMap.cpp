@@ -15,6 +15,7 @@
 #include <deque>
 // include GBMap header for functions calls etc.
 #include "GBMap.h"
+#include <boost/graph/copy.hpp>
 // we will be using the boost and std namespace
 using namespace std;
 using namespace boost;
@@ -162,32 +163,40 @@ void GBMap::printConnectedGraph() {
 ResourceTrails GBMap::getConnectedGraph(int const position){
         ResourceTrails connectedGraph;
         auto vertices = (*game_board).vertex_set();
-        vertex_t root = vertices[position];
+        vertex_t first_v = vertices[position];
+        vertex_t root = add_vertex(connectedGraph);
+        connectedGraph[root] = (*game_board)[first_v];
         deque<vertex_t> queue;
-        queue.push_back(root);
-        // while the queue is non empty keep traversing
+        deque<vertex_t> root_queue;
+        queue.push_back(first_v);
+        root_queue.push_back(root);
+
         while(!queue.empty()) {
             Graph::adjacency_iterator neighbourIt, neighbourEnd;
             // origin of the current search
             vertex_t origin = queue.front();
+            root = root_queue.front();
+            // fetches references to the last vertex
             tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *game_board);
             for (; neighbourIt != neighbourEnd; ++neighbourIt) {
                 *(*game_board)[origin].isVisited = true;
+                // next_element
                 vertex_t next_element = vertices[*neighbourIt];
                 // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
                 // search its neighbours
-                if (!*(*game_board)[next_element].isVisited
-                && *(*game_board)[next_element].isPlayed
-                && !vertexContainedInQueue(queue, next_element)){
+                if (!*(*game_board)[next_element].isVisited && *(*game_board)[next_element].isPlayed
+                      && !vertexContainedInQueue(queue, next_element)){
                     queue.push_back(next_element);
-                    // print the element
-                    cout << next_element << endl;
-                } // end of scope of if statement
-            } // end of for loop
+                    vertex_t vertex1 = add_vertex(connectedGraph);
+                    connectedGraph[vertex1] = (*game_board)[next_element];
+                    root_queue.push_back(vertex1);
+                    add_edge(root, vertex1, connectedGraph);
+                }
+            }
             // remove the top of the queue
             queue.pop_front();
+            root_queue.pop_front();
         } // end of while loop
-
         // reset all the vertices isVisited to false;
         resetVerticesVisited();
     return connectedGraph;
