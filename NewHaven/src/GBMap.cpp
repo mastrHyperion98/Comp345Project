@@ -32,6 +32,8 @@ int* GBMap::getBoardConfig() {
 }
 // Define the function to set the board configuration
 void GBMap::setBoardConfig(int config) {
+    if(config > 2 || config < 0)
+        throw 3;
     // assign the value of config to our int pointer board_configuration
     GBMap::board_configuration = new int(config);
 }

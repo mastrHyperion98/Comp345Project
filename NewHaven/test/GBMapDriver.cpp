@@ -8,9 +8,18 @@ using namespace std;
 int main() {
     GBMap *map = new GBMap();
     int configuration = 0;
+
+    input_configuration:
     cout << "Enter the board configuration (0 = 2 players, 1 = 3 players, 2 = 4 players): ";
     cin >> configuration;
-    map->setBoardConfig(configuration);
+
+    try {
+        map->setBoardConfig(configuration);
+    }catch(int e){
+    cout << "ERROR: " << configuration << " is not a correct option: Please select 0, 1 or 2\n";
+    // if incorrect input jump to input_config;
+    goto input_configuration;
+}
     cout << "\n***Generate Graph***\n" << endl;
     map->generateGraph();
     cout << "\n***PRINT GRAPH***\n" << endl;
