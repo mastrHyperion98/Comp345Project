@@ -1,7 +1,7 @@
 #include <iostream>
 #include <boost/graph/graph_utility.hpp>
-#include "src/GBMap.h"
-#include "src/Resources.h"
+#include "../src/GBMap.h"
+#include "../src/Resources.h"
 
 using namespace std;
 
