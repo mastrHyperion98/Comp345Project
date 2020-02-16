@@ -32,6 +32,7 @@ int main() {
     cout << "TESTING HARVEST TRAILS AND PLAYER OWNED RESOURCES FOR A TURN: ALL SQUARES ARE CURRENTLY EMPTY\n";
     cout << "\n4 player board layout:\n -  25 26 27 28 29 --\n35 00 01 02 03 04 40\n36 05 06 07 08 09 41\n37 10 11 12 13 14 42\n"<<
             "38 15 16 17 18 19 43\n39 20 21 22 23 24 44\n-  30 31 32 33 34 -" << endl;
+
     for(int i = 0; i < 5; i++) {
         int position;
         cout << "PLAY A HARVEST TILE AT SQUARE #: ";
