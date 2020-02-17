@@ -7,12 +7,20 @@
 
 using namespace std;
 int main() {
-    VGMap *vMap = new VGMap();
-    cout << "\n***Generate Graph***\n" << endl;
-    vMap->GenerateGraph();
-    cout << "\n***PRINT GRAPH***\n" << endl;
-    vMap->PrintGraph();
-    cout << "\n***Print Connected Components***\n" << endl;
-    vMap->PrintConnectedGraph();
+    int playerNum;
+    cin >> playerNum;
+    VGMap* vgMaps = NULL;
+    vgMaps = new VGMap[playerNum];
+
+    for(int i=0; i<=playerNum;++i){
+        cout << "\n***Generate Graph***\n" << endl;
+        vgMaps[i].GenerateGraph();
+        cout << "\n***PRINT GRAPH***\n" << endl;
+        vgMaps[i].PrintGraph();
+        cout << "\n***Print Connected Components***\n" << endl;
+        vgMaps[i].PrintConnectedGraph();
+
+    }
+    delete []vgMaps;
     return 0;
 }

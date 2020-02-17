@@ -10,9 +10,10 @@
 #include <iostream>
 // include the string library
 #include <string>
-// include GBMap header for functions calls etc.
+
 using namespace std;
 using namespace boost;
+
 
 VGMap::VGMap() {
 
@@ -44,25 +45,19 @@ void VGMap::CreateVillageField() {
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (position > 0 && position % 5 != 0)
             add_edge(position, position - 1, *village_board);
-//        (*village_board)[position].position = new int(position);
+        (*village_board)[position].position = new int(position);
+
     }
+    
+
 
     for (int position = 0; position < 25; position++) {
         add_edge(position, position + 5, *village_board);
     }
+
+
 }
 
-/*
- * Creates the left and right playing area for a 4 player configuration.
- * Identification will start from 35 to 44 and will start on the top left
- * -  25 26 27 28 29 --
- * 35 00 01 02 03 04 40
- * 36 05 06 07 08 09 41
- * 37 10 11 12 13 14 42
- * 38 15 16 17 18 19 43
- * 39 20 21 22 23 24 44
- * -  30 31 32 33 34 -
- */
 
 void VGMap::PrintGraph() {
     boost::print_graph(*village_board);
@@ -82,6 +77,6 @@ void VGMap::PrintConnectedGraph() {
     std::vector<int>::size_type i;
     cout << "Total number of components: " << num << endl;
     for (i = 0; i != component.size(); ++i)
-        cout << "Square " << i <<" is in component " << component[i] << endl;
+        cout << "Circle " << i <<" is in component " << component[i] << endl;
     cout << endl;
 }
