@@ -38,8 +38,8 @@ void GBMap::setBoardConfig(int config) {
     GBMap::board_configuration = new int(config);
 }
 // Function that goes and fetches the graph
-Graph* GBMap::getGameBoard() {
-    return GBMap::game_board;
+Graph GBMap::getGameBoard() {
+    return *GBMap::game_board;
 }
 // generate the graph
 /*
@@ -131,12 +131,12 @@ void GBMap::createLeftRightField(){
             target = -01;
     }
 }
-Square* GBMap::getSquare(int position) {
+Square GBMap::getSquare(int position) {
     /*TO-DO
      * Verify position is within the appropriate ranged based on the board configuration
      * return an error otherwise.
      */
-    return &(*game_board)[position];
+    return (*game_board)[position];
 }
 void GBMap::printGraph() {
     boost::print_graph(*game_board);
@@ -186,7 +186,7 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
                 vertex_t next_element = vertices[*neighbourIt];
                 // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
                 // search its neighbours
-                if (!*(*game_board)[next_element].isVisited && (*game_board)[next_element].getTile()!= NULL){
+                if (!*(*game_board)[next_element].isVisited && (*game_board)[next_element].getIsPlayed()){
                     if( !vertexContainedInQueue(queue, next_element))
                          queue.push_back(next_element);
                     if(!graphContainsPosition(connectedGraph, (*game_board)[next_element].getPosition())){

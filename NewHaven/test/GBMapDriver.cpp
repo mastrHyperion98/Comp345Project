@@ -1,3 +1,7 @@
+//
+// Created by Steven Smith
+// Concordia W 2020 Comp 345
+//
 #include <iostream>
 #include <boost/graph/graph_utility.hpp>
 #include "../src/GBMap.h"
@@ -10,9 +14,12 @@ int main() {
     int configuration = 0;
 
     input_configuration:
-    cout << "Enter the board configuration (0 = 2 players, 1 = 3 players, 2 = 4 players): ";
-    cin >> configuration;
-
+    //executes loop if the input fails (e.g., no characters were read)
+    while (cout << "Enter the board configuration (0 = 2 players, 1 = 3 players, 2 = 4 players): " && !(cin >> configuration)) {
+        std::cin.clear(); //clear bad input flag
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
+        std::cout << "Invalid input; please re-enter.\n";
+    }
     try {
         map->setBoardConfig(configuration);
     }catch(int e){
@@ -41,7 +48,7 @@ int main() {
         if(position >= *map->SIZE || position < 0) {
             throw 2;
         }
-            (*map).getSquare(position)->setTile(&tile[i]);
+            (*map).getSquare(position).setTile(&tile[i]);
             ResourceTrails trail = map->getConnectedGraph(position);
             ResourceTrails::vertex_iterator vertexIt, vertexEnd;
             ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
