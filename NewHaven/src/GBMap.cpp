@@ -27,6 +27,9 @@ GBMap::GBMap() {
 // Define the deconstructor of the GameBoard Map
 GBMap::~GBMap()=default;
 // return the pointer to the board configuration
+int* GBMap::getBoardConfig() {
+    return GBMap::board_configuration;
+}
 // Define the function to set the board configuration
 void GBMap::setBoardConfig(int config) {
     if(config > 2 || config < 0)
@@ -35,9 +38,6 @@ void GBMap::setBoardConfig(int config) {
     GBMap::board_configuration = new int(config);
 }
 // Function that goes and fetches the graph
-Graph GBMap::getGameBoard() {
-    return *GBMap::game_board;
-}
 // generate the graph
 /*
 The gameboard will be initiated in parts, based on the configuration of the board (aka # of players)
