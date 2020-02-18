@@ -34,7 +34,6 @@ public:
     // number of center squares
     Square getSquare(int position);
     ResourceTrails getConnectedGraph(int position);
-    Graph getGameBoard();
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board
     // 0 = 2 players, 1 = 3 players, 2 = 4 players;

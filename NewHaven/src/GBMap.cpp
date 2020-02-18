@@ -27,9 +27,6 @@ GBMap::GBMap() {
 // Define the deconstructor of the GameBoard Map
 GBMap::~GBMap()=default;
 // return the pointer to the board configuration
-int* GBMap::getBoardConfig() {
-    return GBMap::board_configuration;
-}
 // Define the function to set the board configuration
 void GBMap::setBoardConfig(int config) {
     if(config > 2 || config < 0)
