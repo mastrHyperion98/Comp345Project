@@ -22,7 +22,7 @@ int Square::getPosition() const{
     return *position;
 }
 void Square::setTile(HarvestTile * tile){
-    if(this->tile == 0) {
+    if(!*isPlayed) {
         this->tile = tile;
         *isPlayed = true;
     }
