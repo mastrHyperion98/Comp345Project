@@ -40,21 +40,48 @@ void VGMap::GenerateGraph() {
 // create the center 5x5 field area
 void VGMap::CreateVillageField() {
 
-    for (int position = 0; position < 30; position++) {
+    for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
-        if (position > 0 && position % 5 != 0)
-            add_edge(position, position - 1, *village_board);
-        (*village_board)[position].position = new int(position);
+        if (vPosition > 0 && vPosition % 5 != 0)
+            add_edge(vPosition, vPosition - 1, *village_board);
+        (*village_board)[vPosition].vPosition = new int(vPosition);
 
+        if (vPosition>=0 && vPosition<5)
+            (*village_board)[vPosition].vCost= new int(6);
+
+        if (vPosition>=5 && vPosition<10)
+            (*village_board)[vPosition].vCost= new int(5);
+
+        if (vPosition>=10 && vPosition<15)
+            (*village_board)[vPosition].vCost= new int(4);
+
+        if (vPosition>=15 && vPosition<20)
+            (*village_board)[vPosition].vCost= new int(3);
+
+        if (vPosition>=20 && vPosition<25)
+            (*village_board)[vPosition].vCost= new int(2);
+
+        if (vPosition>=25 && vPosition<30)
+            (*village_board)[vPosition].vCost= new int(1);
+
+        (*village_board)[vPosition].none;
     }
-    
 
 
-    for (int position = 0; position < 25; position++) {
-        add_edge(position, position + 5, *village_board);
+    for (int vPosition = 0; vPosition < 25; vPosition++) {
+        add_edge(vPosition, vPosition + 5, *village_board);
     }
 
+//    int **rowP = new int*[6];
+//    for(int i = 0; i < 6; ++i) {
+//        rowP[i] = new int[5];
+//        *rowP[i] = 6;
+//    }
+//
+//    int **colP = new int*[5];
+//    for(int i = 0; i < 5; ++i)
+//        colP[i] = new int[6];
 
 }
 
@@ -79,4 +106,8 @@ void VGMap::PrintConnectedGraph() {
     for (i = 0; i != component.size(); ++i)
         cout << "Circle " << i <<" is in component " << component[i] << endl;
     cout << endl;
+}
+
+void VGMap::CalcScore(){
+
 }

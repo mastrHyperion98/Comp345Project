@@ -11,7 +11,9 @@
 
 struct Circle{
 public:
-    int *position;
+    int *vPosition;
+    int *vCost;
+    enum face {up, down, none};
 };
 
 
@@ -27,8 +29,7 @@ public:
     void GenerateGraph();
     void PrintGraph();
     void PrintConnectedGraph();
-    const int *number_cirles = new int(25);
-
+    void CalcScore();
 private:
     void CreateVillageField();
     Graph *village_board = new Graph;
