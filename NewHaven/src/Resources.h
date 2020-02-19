@@ -9,16 +9,16 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource);
 struct HarvestTile
 {
 private:
-	ResourceTypes* const tileContent{ new ResourceTypes[4] };
-	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
+	ResourceTypes* tileContent;
+	std::uint_least8_t* position;
 
 	void generateResources();
 public:
 	HarvestTile();
 	~HarvestTile();
 
-	ResourceTypes* getTileContent();
-	std::uint_least8_t* getPosition();
+	ResourceTypes* getTileContent() const;
+	std::uint_least8_t* getPosition() const;
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();
 };
@@ -26,16 +26,16 @@ public:
 struct HarvestDeck
 {
 private:
-	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
-	std::uint_least8_t* const deckSize{new std::uint_least8_t(*MAX_DECK_SIZE)};
-	HarvestTile* const deckContent { new HarvestTile[*MAX_DECK_SIZE] };
+	const std::uint_least8_t* MAX_DECK_SIZE;
+	std::uint_least8_t* deckSize;
+	HarvestTile* deckContent;
 	
 public:
-	HarvestDeck();
+	HarvestDeck(std::uint_least8_t deckSize = 60);
 	~HarvestDeck();
 
-	std::uint_least8_t getDeckSize();
-	HarvestTile* draw();
+	std::uint_least8_t getDeckSize() const;
+	HarvestTile* draw() const;
 };
 /*
 struct BuildingDeck
