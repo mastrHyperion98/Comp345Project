@@ -169,7 +169,7 @@ std::uint_least8_t HarvestDeck::getDeckSize()
 
 HarvestTile* HarvestDeck::draw()
 {
-	if (this->deckSize > 0)
+	if (*this->deckSize > 0)
 	{
 		(*this->deckSize)--;
 		return &this->deckContent[*this->deckSize];
