@@ -1,7 +1,6 @@
 #include "Resources.h"
 #include <cstdlib>
 #include <time.h>
-#include <iostream>
 
 std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 {
@@ -48,7 +47,7 @@ void HarvestTile::generateResources()
 		case 1:
 			sheepCount++;
 
-			if (sheepCount <= 3)
+			if ((i < 3 && sheepCount <= 3) || !(stoneCount && wheatCount && woodCount))
 			{
 				tileContent[i] = ResourceTypes::SHEEP;
 			}
@@ -61,7 +60,7 @@ void HarvestTile::generateResources()
 		case 2:
 			stoneCount++;
 
-			if (stoneCount <= 3)
+			if ((i < 3 && stoneCount <= 3) || !(sheepCount && wheatCount && woodCount))
 			{
 				tileContent[i] = ResourceTypes::STONE;
 			}
@@ -74,7 +73,7 @@ void HarvestTile::generateResources()
 		case 3:
 			wheatCount++;
 
-			if (wheatCount <= 3)
+			if ((i < 3 && wheatCount <= 3) || !(sheepCount && stoneCount && woodCount))
 			{
 				tileContent[i] = ResourceTypes::WHEAT;
 			}
@@ -87,7 +86,7 @@ void HarvestTile::generateResources()
 		case 4:
 			woodCount++;
 
-			if (woodCount <= 3)
+			if ((i < 3 && woodCount <= 3) || !(sheepCount && stoneCount && wheatCount))
 			{
 				tileContent[i] = ResourceTypes::WOOD;
 			}
