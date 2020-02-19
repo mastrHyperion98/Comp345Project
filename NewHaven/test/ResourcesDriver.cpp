@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main()
-{
+{/*
     HarvestDeck deck;
     HarvestTile* tile;
     ResourceTypes* content;
@@ -35,7 +35,7 @@ int main()
     
     delete content;
     delete[] position;
-    }
+    }*/
 
     return 0;
 }

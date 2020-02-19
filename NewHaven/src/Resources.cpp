@@ -47,7 +47,7 @@ void HarvestTile::generateResources()
 		case 1:
 			sheepCount++;
 
-			if ((i < 3 && sheepCount <= 3) || !(stoneCount && wheatCount && woodCount))
+			if (((i < 3) || !(stoneCount && wheatCount && woodCount)) && sheepCount <= 3)
 			{
 				tileContent[i] = ResourceTypes::SHEEP;
 			}
@@ -60,7 +60,7 @@ void HarvestTile::generateResources()
 		case 2:
 			stoneCount++;
 
-			if ((i < 3 && stoneCount <= 3) || !(sheepCount && wheatCount && woodCount))
+			if (((i < 3) || !(sheepCount && wheatCount && woodCount)) && stoneCount <= 3)
 			{
 				tileContent[i] = ResourceTypes::STONE;
 			}
@@ -73,7 +73,7 @@ void HarvestTile::generateResources()
 		case 3:
 			wheatCount++;
 
-			if ((i < 3 && wheatCount <= 3) || !(sheepCount && stoneCount && woodCount))
+			if (((i < 3) || !(sheepCount && stoneCount && woodCount)) && wheatCount <= 3)
 			{
 				tileContent[i] = ResourceTypes::WHEAT;
 			}
@@ -81,12 +81,12 @@ void HarvestTile::generateResources()
 			{
 				i--;
 			}
-
+			
 			break;
 		case 4:
 			woodCount++;
 
-			if ((i < 3 && woodCount <= 3) || !(sheepCount && stoneCount && wheatCount))
+			if (((i < 3) || !(sheepCount && stoneCount && wheatCount)) && woodCount <= 3)
 			{
 				tileContent[i] = ResourceTypes::WOOD;
 			}
