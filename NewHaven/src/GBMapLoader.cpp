@@ -30,7 +30,16 @@ bool GBMapLoader::loadConfig(std::string filepath) {
             cerr << "ERROR: This file is not a valid configuration";
             return false;
         }
-        cout << header;
+
+        string config=line.substr(position+1);
+        int board_config;
+        istringstream(config) >> board_config;
+
+        if(board_config >= 0 && board_config < 3){
+            this->game_board_configuration = board_config;
+            return true;
+        }
+            return false;
     }
     else {
         cerr << "ERROR: File either does not exist or cannot open file";

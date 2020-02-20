@@ -10,7 +10,7 @@
 class GBMapLoader {
 public:
     bool loadConfig(std::string filepath);
-    inline GBMap generateMap();
+    inline GBMap generateMap(int config);
 
 private:
     int game_board_configuration = -1;
