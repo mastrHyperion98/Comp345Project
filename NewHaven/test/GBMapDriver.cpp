@@ -39,9 +39,7 @@ int main() {
     // loop and create a trail of 5 resources that the user can place
     HarvestTile* tile = {new HarvestTile[5]};
     cout << "TESTING HARVEST TRAILS AND PLAYER OWNED RESOURCES FOR A TURN: ALL SQUARES ARE CURRENTLY EMPTY\n";
-    cout << "BOARD LAYOUT FOR 4 Players" << "\n" <<" -  00 01 02 03 04--" <<"\n 05 06 07 08 09 10 11-"
-    << "\n 12 13 14 15 16 17 18-" << "\n 19 20 21 22 23 24 25-" << "\n 26 27 28 29 30 31 32-" << "\n 33 34 35 36 37 38 39 "
-    << "\n -  40 41 42 43 44 -" << endl;
+    map->printIndexConfiguration();
 
     for(int i = 0; i < 5; i++) {
         int position;

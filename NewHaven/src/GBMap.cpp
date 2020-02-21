@@ -264,4 +264,29 @@ int GBMap::getVertexPosition(ResourceTrails graph, int position) const{
     cerr << "ERROR: position not in Graph" << endl;
     return 1;
 }
+void GBMap::printIndexConfiguration() {
+    if(*board_configuration == 2){
+        cout << "BOARD LAYOUT FOR 4 Players" << "\n" <<" -  00 01 02 03 04--" <<"\n 05 06 07 08 09 10 11-"
+             << "\n 12 13 14 15 16 17 18-" << "\n 19 20 21 22 23 24 25-" << "\n 26 27 28 29 30 31 32-" << "\n 33 34 35 36 37 38 39 "
+             << "\n -  40 41 42 43 44 -" << endl;
+    }
+    else if(*board_configuration == 1){
+        string config =" -  00 01 02 03 04 -\n";
+        config.append(" -  05 06 07 08 09 -\n");
+        config.append(" -  10 11 12 13 14 -\n");
+        config.append(" -  15 16 17 18 19 -\n");
+        config.append(" -  21 22 23 24 25 -\n");
+        config.append(" -  26 27 28 29 30 -\n");
+        config.append(" -  31 32 33 34 35 -\n");
+      cout << config;
+    }
+    else{
+        string config =" -  00 01 02 03 04 -\n";
+        config.append(" -  05 06 07 08 09 -\n");
+        config.append(" -  10 11 12 13 14 -\n");
+        config.append(" -  15 16 17 18 19 -\n");
+        config.append(" -  21 22 23 24 25 -\n");
+        cout << config;
+    }
+}
 
