@@ -5,7 +5,10 @@
 
 #include "GBMapLoader.h"
 #include <iostream>
+#include <boost/lexical_cast.hpp>
 #include <fstream>
+#include "../Exceptions/BoardConfigurationNotLoaded.h"
+#include "../Exceptions/InvalidConfigurationException.h"
 
 using namespace std;
 bool GBMapLoader::loadConfig(std::string filepath) {
@@ -27,17 +30,20 @@ bool GBMapLoader::loadConfig(std::string filepath) {
 
         string header = line.substr(0, position);
         if(header.compare("NEW_HAVEN_GAME_BOARD_LOADER_CONFIGURATION") != 0){
-            cerr << "ERROR: This file is not a valid configuration";
-            return false;
+            throw InvalidConfigurationException();
         }
-
-        string config=line.substr(position+1);
-        int board_config;
-        istringstream(config) >> board_config;
-
-        if(board_config >= 0 && board_config < 3){
-            this->game_board_configuration = board_config;
-            return true;
+        if(line.length() > position+1) {
+            string config = line.substr(position + 1);
+            int board_config = -1;
+            try {
+                board_config = boost::lexical_cast<int>(config);
+            } catch (std::exception e) {
+                throw InvalidConfigurationException();
+            }
+            if (board_config >= 0 && board_config < 3) {
+                this->game_board_configuration = board_config;
+                return true;
+            }
         }
             return false;
     }
@@ -46,5 +52,18 @@ bool GBMapLoader::loadConfig(std::string filepath) {
         // close the reader before returning
         reader.close();
         return false;
+    }
+}
+
+GBMap GBMapLoader::generateMap() {
+    if(game_board_configuration != -1){
+        GBMap gb_map;
+        gb_map.setBoardConfig(game_board_configuration);
+        gb_map.generateGraph();
+        return gb_map;
+    }
+    else{
+        cerr << "ERROR: No valid board configuration has been loaded" << endl;
+        throw BoardConfigurationNotLoaded();
     }
 }
