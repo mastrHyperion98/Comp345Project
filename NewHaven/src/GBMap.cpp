@@ -108,25 +108,52 @@ void GBMap::generateThreePlayerBoard(){
  * Creates the left and right playing area for a 4 player configuration.
  * Identification will start from 35 to 44 and will start on the top left
  * -  00 01 02 03 04--
- * -  05 06 07 08 09 -
- * -  10 11 12 13 14 -
- * -  15 16 17 18 19 -
- * -  20 21 22 23 24 -
- * -  25 26 27 28 29 -
- * -  30 31 32 33 34 -
+ * 05 06 07 08 09 10 11-
+ * 12 13 14 15 16 17 18-
+ * 19 20 21 22 23 24 25-
+ * 26 27 28 29 30 31 32-
+ * 33 34 35 36 37 38 39 -
+ * -  40 41 42 43 44 -
+ * // two exceptions (1st row and the last row as such do the edges them seperately
  */
 void GBMap::generateFourPlayerBoard(){
-    for(int position = 35; position < 45; position++){
+
+    for (int position = 0; position < *SIZE; position++) {
         add_vertex(*game_board);
-        if(position > 35)
-            add_edge(position, position - 1, *game_board);
         (*game_board)[position].setPosition(new int(position));
     }
-    // we need to add the edges -- is there some sort of rule.... we might need to add them by hand :(
-    for(int position = 35, target = 0;position < 45; target += 5, position++){
-        add_edge(position, target, *game_board);
-        if(position == 39)
-            target = -01;
+ // now we need to add edges to all right most element (start at 0 then add edges towards the right... handle 1st row and last row seperatly)
+ for(int i = 0; i < 4; i++){
+     vertex_t v1 = (*game_board).vertex_set()[i];
+     vertex_t v2 = (*game_board).vertex_set()[i+1];
+     // get the vertex underneath it
+     vertex_t v3 = (*game_board).vertex_set()[i+6];
+     add_edge(v1,v2, *game_board);
+     add_edge(v1,v3, *game_board);
+ }
+ // do the last row
+ for(int i = 40; i < 44; i++){
+     vertex_t v1 = (*game_board).vertex_set()[i];
+     vertex_t v2 = (*game_board).vertex_set()[i+1];
+     vertex_t v3 = (*game_board).vertex_set()[i-6];
+     add_edge(v1,v2, *game_board);
+     // add an edge to the vertex ontop of it it
+     add_edge(v1,v3, *game_board);
+ }
+ // now do the rows inbetween
+    for(int i = 5; i < 40; i++){
+        // we need to exclude the last vertex of each row
+        vertex_t v1 = (*game_board).vertex_set()[i];
+        if(i % 7 != 4) {
+            vertex_t v2 = (*game_board).vertex_set()[i + 1];
+            // undirected graph order does not matter
+            add_edge(v1, v2, *game_board);
+            // last edge does not need to add an edge down since we already did it previously
+        }
+        if(i < 33){
+            vertex_t v3 = (*game_board).vertex_set()[i+7];
+            add_edge(v1,v3, *game_board);
+        }
     }
 }
 Square GBMap::getSquare(int position) {
@@ -213,7 +240,8 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
  */
 void GBMap::resetVerticesVisited() {
     for(int i = 0; i < *SIZE; i++){
-        *(*game_board)[i].isVisited = false;
+        vertex_t vertex = (*game_board).vertex_set()[i];
+        *(*game_board)[vertex].isVisited = false;
     }
 }
 bool GBMap::vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) const{
