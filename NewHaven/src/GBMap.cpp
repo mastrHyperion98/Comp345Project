@@ -47,28 +47,27 @@ void GBMap::generateGraph() {
     // Is it a 2 player game, if so initialize center board only. 
     if(*this->board_configuration == 0){
         // Create the Center Field
-        createCenterField();
         SIZE = new const int(25);
+        generateTwoPlayerBoard();
+
     }
     else if(*this->board_configuration == 1){
-        createCenterField();
-        createUpperLowerField();
         SIZE = new const int(35);
+        generateThreePlayerBoard();
+
     }
     else if(*this->board_configuration == 2){
-        createCenterField();
-        createUpperLowerField();
-        createLeftRightField();
         SIZE = new const int(45);
+       generateFourPlayerBoard();
     }
     else{
         cerr << "ERROR: Board configuration :" << *this->board_configuration << " is not a valid configuration" << endl;
     }
 }
 // create the center 5x5 field area
-void GBMap::createCenterField() {
+void GBMap::generateTwoPlayerBoard() {
  
-    for (int position = 0; position < 25; position++) {
+    for (int position = 0; position < *SIZE; position++) {
        add_vertex(*game_board);
        // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
        if (position > 0 && position % 5 != 0)
@@ -82,37 +81,41 @@ void GBMap::createCenterField() {
 }
 /*
  * Creates the upper and lower playing area for a 3 player map.
- *  Identification will start from 25 to 35 starting from the top row.
+ *  Identification will start from 0 to 35 starting from the top row.
+ * -  00 01 02 03 04 -
+ * -  05 06 07 08 09 -
+ * -  10 11 12 13 14 -
+ * -  15 16 17 18 19 -
+ * -  21 22 23 24 25 -
+ * -  26 27 28 29 30 -
+ * -  31 32 33 34 35 -
  */
-void GBMap::createUpperLowerField() {
+void GBMap::generateThreePlayerBoard(){
     // first check that the center field has been created
-    for (int position = *this->NUM_C_SQ; position < 35; position++) {
+    for (int position = 0; position < *SIZE; position++) {
         add_vertex(*game_board);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
-        if (position % 5 != 0)
+        if (position > 0 && position % 5 != 0)
             add_edge(position, position - 1, *game_board);
         (*game_board)[position].setPosition(new int(position));
     }
-    // add edges for the first and last row going down
-    for(int position = 0; position < 5; position++){
-        add_edge(position, position + *this->NUM_C_SQ, *game_board);
-    }
-    for(int position = 20; position < 25; position++){
-        add_edge(position, position + 10, *game_board);
+
+    for (int position = 0; position < 30; position++) {
+        add_edge(position, position + 5, *game_board);
     }
 }
 /*
  * Creates the left and right playing area for a 4 player configuration.
  * Identification will start from 35 to 44 and will start on the top left
- * -  25 26 27 28 29 --
- * 35 00 01 02 03 04 40
- * 36 05 06 07 08 09 41
- * 37 10 11 12 13 14 42
- * 38 15 16 17 18 19 43
- * 39 20 21 22 23 24 44
+ * -  00 01 02 03 04--
+ * -  05 06 07 08 09 -
+ * -  10 11 12 13 14 -
+ * -  15 16 17 18 19 -
+ * -  20 21 22 23 24 -
+ * -  25 26 27 28 29 -
  * -  30 31 32 33 34 -
  */
-void GBMap::createLeftRightField(){
+void GBMap::generateFourPlayerBoard(){
     for(int position = 35; position < 45; position++){
         add_vertex(*game_board);
         if(position > 35)

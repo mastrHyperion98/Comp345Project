@@ -37,9 +37,9 @@ private:
     int *board_configuration;
     Graph *game_board = new Graph;
     void generateGraph();
-    void createCenterField();
-    void createUpperLowerField();
-    void createLeftRightField();
+    void generateTwoPlayerBoard();
+    void generateThreePlayerBoard();
+    void generateFourPlayerBoard();
     void resetVerticesVisited();
     bool vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) const;
     bool graphContainsPosition(ResourceTrails graph, int position) const;
