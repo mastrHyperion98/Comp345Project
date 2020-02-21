@@ -24,15 +24,15 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 	}
 }
 
-HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t[2] }
+HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t() }
 {
 	generateResources();
 }
 
 HarvestTile::~HarvestTile()
 {
+	delete position;
 	delete[] tileContent;
-	delete[] position;
 }
 
 void HarvestTile::generateResources()
@@ -141,13 +141,6 @@ ResourceTypes* HarvestTile::getTileContent() const
 
 std::uint_least8_t* HarvestTile::getPosition() const
 {
-	std::uint_least8_t* position{ new std::uint_least8_t[2] };
-
-	for (std::uint_fast8_t i = 0; i < 2; i++)
-	{
-		position[i] = this->position[i];
-	}
-
 	return position;
 }
 
@@ -170,6 +163,43 @@ std::uint_least8_t HarvestDeck::getDeckSize() const
 }
 
 HarvestTile* HarvestDeck::draw() const
+{
+	if (*deckSize > 0)
+	{
+		(*deckSize)--;
+		return &deckContent[*deckSize];
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position):
+	buildingType{new ResourceTypes(buildingType)},
+	buildingNumber{new std::uint_least8_t(buildingNumber)},
+	position{new std::uint_least8_t(position)}
+{}
+
+BuildingDeck::BuildingDeck(std::uint_least8_t deckSize):
+	MAX_DECK_SIZE{ new std::uint_least8_t(deckSize) },
+	deckSize{ new std::uint_least8_t(deckSize) },
+	deckContent{ new Building[deckSize] }
+{}
+
+BuildingDeck::~BuildingDeck()
+{
+	delete MAX_DECK_SIZE;
+	delete deckSize;
+	delete[] deckContent;
+}
+
+std::uint_least8_t BuildingDeck::getDeckSize() const
+{
+	return *deckSize;
+}
+
+Building* BuildingDeck::draw() const
 {
 	if (*deckSize > 0)
 	{

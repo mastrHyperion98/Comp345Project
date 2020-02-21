@@ -31,39 +31,39 @@ private:
 	HarvestTile* deckContent;
 	
 public:
-	HarvestDeck(std::uint_least8_t deckSize = 60);
+	HarvestDeck(std::uint_least8_t = 60);
 	~HarvestDeck();
 
 	std::uint_least8_t getDeckSize() const;
 	HarvestTile* draw() const;
 };
-/*
-struct BuildingDeck
-{
-private:
-	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
-	std::uint_least8_t* const deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) };
-	Building* const deckContent{ new Building[*MAX_DECK_SIZE] };
-	
-public:
-	BuildingDeck();
-	~BuildingDeck();
-
-	std::uint_least8_t getDeckSize();
-	Building* draw();
-};
 
 struct Building
 {
 private:
-	const ResourceTypes* const buildingType{ new ResourceTypes() };
-	//const std::uint_least8_t* const buildingNumber;
-	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
+	const ResourceTypes* buildingType;
+	const std::uint_least8_t* buildingNumber;
+	std::uint_least8_t* position;
 
 public:
-	Building();
+	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
+	~Building();
+};
 
-};*/
+struct BuildingDeck
+{
+private:
+	const std::uint_least8_t* MAX_DECK_SIZE;
+	std::uint_least8_t* deckSize;
+	Building* deckContent;
+	
+public:
+	BuildingDeck(std::uint_least8_t = 144);
+	~BuildingDeck();
+
+	std::uint_least8_t getDeckSize() const;
+	Building* draw() const;
+};
 /*
 struct Hand
 {

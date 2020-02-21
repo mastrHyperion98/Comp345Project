@@ -17,7 +17,7 @@ int main()
     position = tile->getPosition();
 
     std::cout << "We drew a card.\nDeck size: " << static_cast<int>(deckSize) << "\tPosition: "
-        << static_cast<int>(position[0]) << ", " << static_cast<int>(position[1]) << '\n';
+        << static_cast<int>(position) << '\n';
 
     std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
     
