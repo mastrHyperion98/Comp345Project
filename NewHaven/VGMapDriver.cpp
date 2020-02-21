@@ -4,23 +4,28 @@
 
 #include <iostream>
 #include "source/VGMap.h"
+#include "boost/graph/graph_utility.hpp"
 
 using namespace std;
 int main() {
     int playerNum;
     cin >> playerNum;
-    VGMap* vgMaps = NULL;
+    VGMap* vgMaps = nullptr;
     vgMaps = new VGMap[playerNum];
 
-    for(int i=0; i<=playerNum;++i){
+    for(int i=0; i< playerNum;++i){
         cout << "\n***Generate Graph***\n" << endl;
         vgMaps[i].GenerateGraph();
         cout << "\n***PRINT GRAPH***\n" << endl;
         vgMaps[i].PrintGraph();
         cout << "\n***Print Connected Components***\n" << endl;
         vgMaps[i].PrintConnectedGraph();
-
+        vgMaps[i].CalcScore();
     }
-    delete []vgMaps;
+    cout << endl;
+    ConnectedCircles graph = vgMaps[0].getConnectedRow(3);
+    boost::print_graph(graph);
+
+    delete[] vgMaps;
     return 0;
 }
