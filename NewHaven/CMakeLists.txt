@@ -14,7 +14,7 @@ if(UNIX)
     endif(UNIX)
 
 add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp)
-add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/GBMapLoader.cpp src/GBMap.cpp src/Square.cpp)
+add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/GBMapLoader.cpp src/GBMap.cpp src/Square.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp)
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
 
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
