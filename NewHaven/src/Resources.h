@@ -1,6 +1,7 @@
 #pragma once
-#include<ostream>
+#include <ostream>
 #include <cstdint>
+#include <vector>
 
 enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };
 
@@ -18,7 +19,7 @@ public:
 	~HarvestTile();
 
 	ResourceTypes* getTileContent() const;
-	std::uint_least8_t* getPosition() const;
+	std::uint_least8_t getPosition() const;
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();
 };
@@ -48,21 +49,25 @@ private:
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
 	~Building();
+
+	ResourceTypes getBuildingType() const;
+	std::uint_least8_t getBuildingNumber() const;
+	std::uint_least8_t getPosition() const;
 };
 
 struct BuildingDeck
 {
 private:
-	const std::uint_least8_t* MAX_DECK_SIZE;
-	std::uint_least8_t* deckSize;
-	Building* deckContent;
+	const std::uint_least16_t* MAX_DECK_SIZE;
+	std::uint_least16_t* deckSize;
+	std::vector<Building>* deckContent;
 	
 public:
-	BuildingDeck(std::uint_least8_t = 144);
+	BuildingDeck();
 	~BuildingDeck();
 
-	std::uint_least8_t getDeckSize() const;
-	Building* draw() const;
+	std::uint_least16_t getDeckSize() const;
+	//Building* draw() const;
 };
 /*
 struct Hand

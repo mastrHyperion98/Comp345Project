@@ -1,5 +1,4 @@
 #include "Resources.h"
-#include <cstdlib>
 #include <time.h>
 
 std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
@@ -139,9 +138,9 @@ ResourceTypes* HarvestTile::getTileContent() const
 	return tileContent;
 }
 
-std::uint_least8_t* HarvestTile::getPosition() const
+std::uint_least8_t HarvestTile::getPosition() const
 {
-	return position;
+	return *position;
 }
 
 HarvestDeck::HarvestDeck(std::uint_least8_t deckSize):
@@ -181,11 +180,66 @@ Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber
 	position{new std::uint_least8_t(position)}
 {}
 
-BuildingDeck::BuildingDeck(std::uint_least8_t deckSize):
-	MAX_DECK_SIZE{ new std::uint_least8_t(deckSize) },
-	deckSize{ new std::uint_least8_t(deckSize) },
-	deckContent{ new Building[deckSize] }
-{}
+Building::~Building()
+{
+	delete buildingType;
+	delete buildingNumber;
+	delete position;
+}
+
+ResourceTypes Building::getBuildingType() const
+{
+	return *buildingType;
+}
+
+std::uint_least8_t Building::getBuildingNumber() const
+{
+	return *buildingNumber;
+}
+
+std::uint_least8_t Building::getPosition() const
+{
+	return *position;
+}
+
+BuildingDeck::BuildingDeck() :
+	MAX_DECK_SIZE{ new std::uint_least16_t(144) },
+	deckSize{ new std::uint_least16_t(144) },
+	deckContent{NULL}
+{
+	deckContent->reserve(144);
+
+	ResourceTypes buildingType;
+
+	for (std::uint_fast16_t i = 0; i < 4; i++)
+	{
+		switch (i)
+		{
+		case 0:
+			buildingType = ResourceTypes::SHEEP;
+			break;
+		case 1:
+			buildingType = ResourceTypes::STONE;
+			break;
+		case 2:
+			buildingType = ResourceTypes::WHEAT;
+			break;
+		case 6:
+			buildingType = ResourceTypes::WOOD;
+			break;
+		default:
+			break;
+		}
+
+		for (std::uint_fast8_t j = 0; j < 6; j++)
+		{
+			for (std::uint_fast8_t k = 0; k < 6; k++)
+			{
+				deckContent->emplace_back(Building(buildingType, j));
+			}
+		}
+	}
+}
 
 BuildingDeck::~BuildingDeck()
 {
@@ -194,20 +248,20 @@ BuildingDeck::~BuildingDeck()
 	delete[] deckContent;
 }
 
-std::uint_least8_t BuildingDeck::getDeckSize() const
+std::uint_least16_t BuildingDeck::getDeckSize() const
 {
 	return *deckSize;
 }
-
+/*
 Building* BuildingDeck::draw() const
 {
 	if (*deckSize > 0)
 	{
 		(*deckSize)--;
-		return &deckContent[*deckSize];
+		return &deckContent->at(*deckSize);
 	}
 	else
 	{
 		return nullptr;
 	}
-}
+}*/
