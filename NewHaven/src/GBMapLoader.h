@@ -1,6 +1,7 @@
 //
 // Created by Steven Smith on 2020-02-20.
 // Created for: Concordia W 2020 Comp 345
+// Header file for the GBMap Loader defines the signature for the methods that will be used to read a file
 //
 
 #ifndef NEWHAVEN_GBMAPLOADER_H

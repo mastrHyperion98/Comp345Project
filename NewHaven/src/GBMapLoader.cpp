@@ -1,8 +1,8 @@
 //
 // Created by Steven Smith on 2020-02-20.
 // Created for: Concordia W 2020 Comp 345
+// Implementation file for the GBMap Loader defines the signature for the methods that will be used to read a file
 //
-
 #include "GBMapLoader.h"
 #include <iostream>
 #include <boost/lexical_cast.hpp>
@@ -11,6 +11,7 @@
 #include "../Exceptions/InvalidConfigurationException.h"
 
 using namespace std;
+// Reads filepath and returns true if the board was creation. It will either return false or an exception if it fails.
 bool GBMapLoader::loadConfig(std::string filepath) {
 
     // create reader stream
@@ -54,7 +55,7 @@ bool GBMapLoader::loadConfig(std::string filepath) {
         return false;
     }
 }
-
+// create a GBMap, set its configuration and generate the graph before returning it.
 GBMap GBMapLoader::generateMap() {
     if(game_board_configuration != -1){
         GBMap gb_map;
@@ -63,7 +64,6 @@ GBMap GBMapLoader::generateMap() {
         return gb_map;
     }
     else{
-        cerr << "ERROR: No valid board configuration has been loaded" << endl;
         throw BoardConfigurationNotLoaded();
     }
 }
