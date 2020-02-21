@@ -19,16 +19,13 @@ using namespace std;
 class GBMap{
     // declaring public methods and parameters
 public:
-    int* getBoardConfig();
+    int getBoardConfig();
     int const *SIZE;
     const int *NUM_C_SQ = new int(25);
 
     // class constructor
-    GBMap();
+    GBMap(int config);
     ~GBMap();
-
-    void setBoardConfig(int config);
-    void generateGraph();
     void printGraph();
     void printConnectedGraph();
     // number of center squares
@@ -39,6 +36,7 @@ private:
     // 0 = 2 players, 1 = 3 players, 2 = 4 players;
     int *board_configuration;
     Graph *game_board = new Graph;
+    void generateGraph();
     void createCenterField();
     void createUpperLowerField();
     void createLeftRightField();

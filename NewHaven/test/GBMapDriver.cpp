@@ -1,18 +1,22 @@
 //
 // Created by Steven Smith
 // Concordia W 2020 Comp 345
+// Revised: 2020-02-21
+// GBMapDriver is simple:  It is a dynamic driver that responds to user input and creates a game_board
+// the user can then place 5 tiles at any location. The program will return the appropraite ResourceTrail and each
+// play
 //
 #include <iostream>
 #include <boost/graph/graph_utility.hpp>
+#include <boost/lexical_cast.hpp>
 #include "../src/GBMap.h"
 #include "../src/Resources.h"
 
 using namespace std;
 
 int main() {
-    GBMap *map = new GBMap();
     int configuration = 0;
-
+    GBMap* map = nullptr;
     input_configuration:
     //executes loop if the input fails (e.g., no characters were read)
     while (cout << "Enter the board configuration (0 = 2 players, 1 = 3 players, 2 = 4 players): " && !(cin >> configuration)) {
@@ -21,14 +25,12 @@ int main() {
         std::cout << "Invalid input; please re-enter.\n";
     }
     try {
-        map->setBoardConfig(configuration);
+       map = new GBMap(configuration);
     }catch(int e){
     cout << "ERROR: " << configuration << " is not a correct option: Please select 0, 1 or 2\n";
     // if incorrect input jump to input_config;
     goto input_configuration;
 }
-    cout << "\n***Generate Graph***\n" << endl;
-    map->generateGraph();
     cout << "\n***PRINT GRAPH***\n" << endl;
     map->printGraph();
     cout << "\n***Print Connected Components***\n" << endl;
@@ -42,12 +44,17 @@ int main() {
 
     for(int i = 0; i < 5; i++) {
         int position;
-        cout << "PLAY A HARVEST TILE AT SQUARE #: ";
-        cin >>  position;
+        while (cout << "PLAY A HARVEST TILE AT SQUARE #: " && !( cin >>  position)) {
+            std::cin.clear(); //clear bad input flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
+            std::cout << "Invalid input; please re-enter.\n";
+        }
         try{
         if(position >= *map->SIZE || position < 0) {
             throw 2;
         }
+        // loop through the entire resource trail and show the Square position and
+        // show the out going edges
             (*map).getSquare(position).setTile(&tile[i]);
             ResourceTrails trail = map->getConnectedGraph(position);
             ResourceTrails::vertex_iterator vertexIt, vertexEnd;
@@ -68,7 +75,7 @@ int main() {
             i--;
         }
     }
-    // clear up memory
+
     delete map;
     delete[] tile;
 

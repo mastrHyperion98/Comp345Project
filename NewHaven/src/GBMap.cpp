@@ -22,21 +22,19 @@ using namespace std;
 using namespace boost;
 
 // Define the constructor for the GameBoard Map
-GBMap::GBMap() {
+GBMap::GBMap(int config) {
+    if(config > 2 || config < 0)
+        throw 3;
+    this->board_configuration = new int(config);
+    generateGraph();
 }
 // Define the deconstructor of the GameBoard Map
 GBMap::~GBMap()=default;
 // return the pointer to the board configuration
-int* GBMap::getBoardConfig() {
-    return GBMap::board_configuration;
+int GBMap::getBoardConfig() {
+    return *GBMap::board_configuration;
 }
-// Define the function to set the board configuration
-void GBMap::setBoardConfig(int config) {
-    if(config > 2 || config < 0)
-        throw 3;
-    // assign the value of config to our int pointer board_configuration
-    GBMap::board_configuration = new int(config);
-}
+
 // Function that goes and fetches the graph
 // generate the graph
 /*
@@ -47,24 +45,24 @@ It will be created in a similar way as a 2D Matrix.
 */
 void GBMap::generateGraph() {
     // Is it a 2 player game, if so initialize center board only. 
-    if(*GBMap::getBoardConfig() == 0){
+    if(*this->board_configuration == 0){
         // Create the Center Field
         createCenterField();
         SIZE = new const int(25);
     }
-    else if(*GBMap::getBoardConfig() == 1){
+    else if(*this->board_configuration == 1){
         createCenterField();
         createUpperLowerField();
         SIZE = new const int(35);
     }
-    else if(*GBMap::getBoardConfig() == 2){
+    else if(*this->board_configuration == 2){
         createCenterField();
         createUpperLowerField();
         createLeftRightField();
         SIZE = new const int(45);
     }
     else{
-        cerr << "ERROR: Board configuration :" << *GBMap::getBoardConfig() << " is not a valid configuration" << endl;
+        cerr << "ERROR: Board configuration :" << *this->board_configuration << " is not a valid configuration" << endl;
     }
 }
 // create the center 5x5 field area
@@ -88,7 +86,7 @@ void GBMap::createCenterField() {
  */
 void GBMap::createUpperLowerField() {
     // first check that the center field has been created
-    for (int position = *GBMap().NUM_C_SQ; position < 35; position++) {
+    for (int position = *this->NUM_C_SQ; position < 35; position++) {
         add_vertex(*game_board);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (position % 5 != 0)
@@ -97,7 +95,7 @@ void GBMap::createUpperLowerField() {
     }
     // add edges for the first and last row going down
     for(int position = 0; position < 5; position++){
-        add_edge(position, position + *GBMap().NUM_C_SQ, *game_board);
+        add_edge(position, position + *this->NUM_C_SQ, *game_board);
     }
     for(int position = 20; position < 25; position++){
         add_edge(position, position + 10, *game_board);
