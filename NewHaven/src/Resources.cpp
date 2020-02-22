@@ -1,5 +1,6 @@
 #include "Resources.h"
 #include <time.h>
+#include <iostream>
 
 std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 {
@@ -143,10 +144,9 @@ std::uint_least8_t HarvestTile::getPosition() const
 	return *position;
 }
 
-HarvestDeck::HarvestDeck(std::uint_least8_t deckSize):
-	MAX_DECK_SIZE{ new std::uint_least8_t(deckSize) },
-	deckSize{ new std::uint_least8_t(deckSize) },
-	deckContent{ new HarvestTile[deckSize] }
+HarvestDeck::HarvestDeck():
+	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
+	deckContent{ new HarvestTile[*MAX_DECK_SIZE] }
 {}
 
 HarvestDeck::~HarvestDeck()
@@ -174,10 +174,11 @@ HarvestTile* HarvestDeck::draw() const
 	}
 }
 
-Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position):
-	buildingType{new ResourceTypes(buildingType)},
-	buildingNumber{new std::uint_least8_t(buildingNumber)},
-	position{new std::uint_least8_t(position)}
+Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position) :
+	buildingType{ new ResourceTypes(buildingType) },
+	buildingNumber{ new std::uint_least8_t(buildingNumber) },
+	position{ new std::uint_least8_t(position) },
+	faceUp{ new bool(true) }
 {}
 
 Building::~Building()
@@ -185,6 +186,11 @@ Building::~Building()
 	delete buildingType;
 	delete buildingNumber;
 	delete position;
+}
+
+bool Building::isFlipped() const
+{
+	return *faceUp;
 }
 
 ResourceTypes Building::getBuildingType() const
@@ -202,12 +208,17 @@ std::uint_least8_t Building::getPosition() const
 	return *position;
 }
 
-BuildingDeck::BuildingDeck() :
-	MAX_DECK_SIZE{ new std::uint_least16_t(144) },
-	deckSize{ new std::uint_least16_t(144) },
-	deckContent{NULL}
+bool Building::flipCard()
 {
-	deckContent->reserve(144);
+	*faceUp = !*faceUp;
+	return *faceUp;
+}
+
+BuildingDeck::BuildingDeck():
+	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
+	deckContent{ new std::vector<Building*> }
+{
+	deckContent->reserve(*MAX_DECK_SIZE);
 
 	ResourceTypes buildingType;
 
@@ -224,7 +235,7 @@ BuildingDeck::BuildingDeck() :
 		case 2:
 			buildingType = ResourceTypes::WHEAT;
 			break;
-		case 6:
+		case 3:
 			buildingType = ResourceTypes::WOOD;
 			break;
 		default:
@@ -235,7 +246,7 @@ BuildingDeck::BuildingDeck() :
 		{
 			for (std::uint_fast8_t k = 0; k < 6; k++)
 			{
-				deckContent->emplace_back(Building(buildingType, j));
+				deckContent->push_back(new Building(buildingType, j));
 			}
 		}
 	}
@@ -245,23 +256,39 @@ BuildingDeck::~BuildingDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
-	delete[] deckContent;
+	delete deckContent;
 }
 
-std::uint_least16_t BuildingDeck::getDeckSize() const
+std::uint_least8_t BuildingDeck::getDeckSize() const
 {
 	return *deckSize;
 }
-/*
+
 Building* BuildingDeck::draw() const
 {
 	if (*deckSize > 0)
 	{
 		(*deckSize)--;
-		return &deckContent->at(*deckSize);
+		return deckContent->at(*deckSize);
 	}
 	else
 	{
 		return nullptr;
 	}
-}*/
+}
+
+Hand::Hand():
+	harvestTiles{new std::vector<HarvestTile*>},
+	shipment{nullptr},
+	buildings{new std::vector<Building*>}
+{
+	harvestTiles->reserve(2);
+	buildings->reserve(6);
+}
+
+Hand::~Hand()
+{
+	delete harvestTiles;
+	delete shipment;
+	delete buildings;
+}

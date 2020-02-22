@@ -12,7 +12,7 @@ int main()
     for (std::uint_fast8_t i = 0; i < 60; i++)
     {
     tile = hDeck.draw();
-    deckSize = hDeck.getDeckSize();
+    hDeckSize = hDeck.getDeckSize();
     tContent = tile->getTileContent();
     tPosition = tile->getPosition();
 
@@ -35,25 +35,29 @@ int main()
     
     delete tContent;
     }*/
-
+    
     BuildingDeck bDeck;
     std::uint_least8_t bDeckSize;
     Building* building;
     ResourceTypes bType;
     std::uint_least8_t bNumber;
     std::uint_least8_t bPosition;
-    /*
+    bool side;
+    
     for (std::uint_fast8_t i = 0; i < 144; i++)
     {
-        bDeckSize = bDeck.getDeckSize();
         building = bDeck.draw();
+        bDeckSize = bDeck.getDeckSize();
         bType = building->getBuildingType();
         bNumber = building->getBuildingNumber();
         bPosition = building->getPosition();
+        side = building->isFlipped();
 
-        std::cout << "We drew a card.\nDeck size: " << static_cast<int>(bDeckSize) << "\tPosition: " << '\n' << "Building: " << static_cast<int>(bType)
-            << "\tNumber: " << static_cast<int>(bNumber) << "\tPosition: " << static_cast<int>(bPosition) << "\n\n";
+        std::cout << "We drew a card.\nDeck size: " << static_cast<int>(bDeckSize) << "\nBuilding: " << bType
+            << "\tNumber: " << static_cast<int>(bNumber) << "\tPosition: " << static_cast<int>(bPosition)
+            << "\tFace up: " << (side ? "true" : "false") << "\nWe flipped it.\nFace up: "
+            << (building->flipCard() ? "true" : "false") << "\n\n";
     }
-    */
+    
     return 0;
 }
