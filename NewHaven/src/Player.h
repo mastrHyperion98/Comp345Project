@@ -1,6 +1,3 @@
-#include<ostream>
-#include<cstdint>
-
 // Player can be placed on any open square/space on the GB
 struct Player
 {
@@ -29,4 +26,4 @@ public:
     void resourceTracker();
     void buildVillage();
     void calculateResources();
-}
+};
