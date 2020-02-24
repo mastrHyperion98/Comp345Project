@@ -19,18 +19,16 @@ using namespace std;
 class GBMap{
     // declaring public methods and parameters
 public:
-    int* getBoardConfig();
+    int getBoardConfig();
     int const *SIZE;
     const int *NUM_C_SQ = new int(25);
 
     // class constructor
-    GBMap();
+    GBMap(int config);
     ~GBMap();
-
-    void setBoardConfig(int config);
-    void generateGraph();
     void printGraph();
     void printConnectedGraph();
+    void printIndexConfiguration();
     // number of center squares
     Square getSquare(int position);
     ResourceTrails getConnectedGraph(int position);
@@ -39,9 +37,10 @@ private:
     // 0 = 2 players, 1 = 3 players, 2 = 4 players;
     int *board_configuration;
     Graph *game_board = new Graph;
-    void createCenterField();
-    void createUpperLowerField();
-    void createLeftRightField();
+    void generateGraph();
+    void generateTwoPlayerBoard();
+    void generateThreePlayerBoard();
+    void generateFourPlayerBoard();
     void resetVerticesVisited();
     bool vertexContainedInQueue(deque<vertex_t> queue, vertex_t element) const;
     bool graphContainsPosition(ResourceTrails graph, int position) const;
