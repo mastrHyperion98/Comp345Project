@@ -39,7 +39,7 @@ private:
     bool *isPlayed = new bool(false);
 };
 
-// defune our village board graph
+// define our village board graph
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Circle> Graph;
 // define our vertex descriptor
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_v;

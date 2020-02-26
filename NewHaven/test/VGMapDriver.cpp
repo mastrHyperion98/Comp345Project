@@ -10,8 +10,7 @@ using namespace std;
 int main() {
     int playerNum;
     cin >> playerNum;
-    VGMap* vgMaps = nullptr;
-    vgMaps = new VGMap[playerNum];
+    VGMap* vgMaps = new VGMap[playerNum];
 
     for(int i=0; i< playerNum;++i){
         cout << "\n***Generate Graph***\n" << endl;

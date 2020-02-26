@@ -16,7 +16,7 @@ using namespace boost;
 
 
 VGMap::VGMap() {
-    GenerateGraph();
+    CreateVillageField();
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() = default;
@@ -28,12 +28,8 @@ Each vertex (Square) will be labeled with a number. That number will be indentic
 and will start at 0 at the upper left most corner of the 2 player field. From there, the vertices will be created row by row.
 It will be created in a similar way as a 2D Matrix.
 */
-void VGMap::GenerateGraph() {
-    CreateVillageField();
-}
 // create the center 5x5 field area
 void VGMap::CreateVillageField() {
-
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
         (*village_board)[vPosition].setPosition(vPosition);
@@ -48,36 +44,35 @@ void VGMap::CreateVillageField() {
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
-        if (vPosition>=5 && vPosition<10) {
+        else if (vPosition>=5 && vPosition<10) {
             (*village_board)[vPosition].setVCost(5);
             (*village_board)[vPosition].setRow(1);
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
-        if (vPosition>=10 && vPosition<15) {
+        else if (vPosition>=10 && vPosition<15) {
             (*village_board)[vPosition].setVCost(4);
             (*village_board)[vPosition].setRow(2);
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
-        if (vPosition>=15 && vPosition<20) {
+        else if (vPosition>=15 && vPosition<20) {
             (*village_board)[vPosition].setVCost(3);
             (*village_board)[vPosition].setRow(3);
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
-        if (vPosition>=20 && vPosition<25) {
+        else if (vPosition>=20 && vPosition<25) {
             (*village_board)[vPosition].setVCost(2);
             (*village_board)[vPosition].setRow(4);
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
-        if (vPosition>=25 && vPosition<30) {
+        else if (vPosition>=25 && vPosition<30) {
             (*village_board)[vPosition].setVCost(1);
             (*village_board)[vPosition].setRow(5);
             (*village_board)[vPosition].setCol(vPosition % 5);
         }
     }
-
 
     for (int vPosition = 0; vPosition < 25; vPosition++) {
         add_edge(vPosition, vPosition + 5, *village_board);
