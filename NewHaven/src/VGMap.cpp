@@ -195,6 +195,13 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     return graph;
 }
 
+Circle VGMap::getCircle(int position) {
+    if(position < 30 && position >= 0)
+        (*village_board)[position];
+    else
+        throw 2;
+}
+
 void VGMap::resetVisited() {
     for(int i; i < 30; i++){
          *(*village_board)[i].isVisited = false;

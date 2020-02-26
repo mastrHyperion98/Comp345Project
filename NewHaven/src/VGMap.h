@@ -54,13 +54,12 @@ public:
     ~VGMap();;
     void PrintGraph();
     void PrintConnectedGraph();
-    void getCircle(int position);
+    Circle getCircle(int position);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
 private:
     void CreateVillageField();
-    void GenerateGraph();
     Graph *village_board = new Graph;
 };
 
