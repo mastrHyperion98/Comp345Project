@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "source/VGMap.h"
+#include "../src/VGMap.h"
 #include "boost/graph/graph_utility.hpp"
 
 using namespace std;
@@ -15,7 +15,6 @@ int main() {
 
     for(int i=0; i< playerNum;++i){
         cout << "\n***Generate Graph***\n" << endl;
-        vgMaps[i].GenerateGraph();
         cout << "\n***PRINT GRAPH***\n" << endl;
         vgMaps[i].PrintGraph();
         cout << "\n***Print Connected Components***\n" << endl;

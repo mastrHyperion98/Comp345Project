@@ -16,7 +16,7 @@ using namespace boost;
 
 
 VGMap::VGMap() {
-
+    GenerateGraph();
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() = default;
@@ -36,47 +36,46 @@ void VGMap::CreateVillageField() {
 
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
-        (*village_board)[vPosition].position = new int(vPosition);
+        (*village_board)[vPosition].setPosition(vPosition);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (vPosition > 0 && vPosition % 5 != 0)
             add_edge(vPosition, vPosition - 1, *village_board);
 
 
         if (vPosition>=0 && vPosition<5) {
-            (*village_board)[vPosition].vCost = new int(6);
-            (*village_board)[vPosition].row = new int(0);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(6);
+            (*village_board)[vPosition].setRow(0);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
         if (vPosition>=5 && vPosition<10) {
-            (*village_board)[vPosition].vCost = new int(5);
-            (*village_board)[vPosition].row = new int(1);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(5);
+            (*village_board)[vPosition].setRow(1);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
         if (vPosition>=10 && vPosition<15) {
-            (*village_board)[vPosition].vCost = new int(4);
-            (*village_board)[vPosition].row = new int(2);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(4);
+            (*village_board)[vPosition].setRow(2);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
         if (vPosition>=15 && vPosition<20) {
-            (*village_board)[vPosition].vCost = new int(3);
-            (*village_board)[vPosition].row = new int(3);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(3);
+            (*village_board)[vPosition].setRow(3);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
         if (vPosition>=20 && vPosition<25) {
-            (*village_board)[vPosition].vCost = new int(2);
-            (*village_board)[vPosition].row = new int(4);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(2);
+            (*village_board)[vPosition].setRow(4);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
 
         if (vPosition>=25 && vPosition<30) {
-            (*village_board)[vPosition].vCost = new int(1);
-            (*village_board)[vPosition].row = new int(5);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            (*village_board)[vPosition].setVCost(1);
+            (*village_board)[vPosition].setRow(5);
+            (*village_board)[vPosition].setCol(vPosition % 5);
         }
-       // (*village_board)[vPosition].none;
     }
 
 
@@ -88,7 +87,6 @@ void VGMap::CreateVillageField() {
 void VGMap::PrintGraph() {
     boost::print_graph(*village_board);
 }
-
 // Taken from the Boost Connected Graph Example
 //https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
 // Prints the number of Connected Components and which vertex belongs to which component
@@ -108,6 +106,7 @@ void VGMap::PrintConnectedGraph() {
 }
 
 // returns a graph with all the connected nodes in the selected column
+// same logic as getConnectedRow
 ConnectedCircles VGMap::getConnectedColumn(int const column){
     ConnectedCircles graph;
     deque<vertex_v> root_queue;
@@ -126,7 +125,7 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if (*(*village_board)[next_element].column == column && !*(*village_board)[next_element].isVisited) {
+            if ((*village_board)[next_element].getColumn() == column && !*(*village_board)[next_element].isVisited) {
                 // if the next_element is in the same column then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
@@ -178,7 +177,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if (*(*village_board)[next_element].row == row && !*(*village_board)[next_element].isVisited) {
+            if ((*village_board)[next_element].getRow() == row && !*(*village_board)[next_element].isVisited) {
                 // if the next_element is in the same row then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
@@ -205,4 +204,58 @@ void VGMap::resetVisited() {
     for(int i; i < 30; i++){
          *(*village_board)[i].isVisited = false;
     }
+}
+
+Circle::Circle(){
+
+}
+
+Circle::~Circle() = default;
+
+int Circle::getRow() const{
+    return *row;
+}
+
+int Circle::getColumn() const{
+    return *column;
+}
+
+int Circle::getPosition() const{
+    return *position;
+}
+
+int Circle::getVCost() const{
+    return *vCost;
+}
+
+Building Circle::getBuilding() const{
+    return *building;
+}
+
+void Circle::setCol(int col) {
+    column = new int(col);
+}
+
+void Circle::setRow(int row) {
+    this->row = new int(row);
+}
+
+void Circle::setVCost(int cost) {
+    vCost = new int(cost);
+}
+
+void Circle::setBuilding(Building * building) {
+    if(!*isPlayed) {
+        this->building = building;
+        *this->isPlayed = true;
+        return;
+    }
+    throw 1;
+}
+
+void Circle::setPosition(int pos) {
+    position = new int(pos);
+}
+bool Circle::getIsPlayed() const {
+    return *isPlayed;
 }

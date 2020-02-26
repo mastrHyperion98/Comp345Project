@@ -13,7 +13,8 @@ if(UNIX)
     #Execute Unix only command
     endif(UNIX)
 
-add_executable(VGMap VGMapDriver.cpp source/VGMap.cpp)
+add_executable(VGMap test/VGMapDriver.cpp src/VGMap.cpp)
 add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp)
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
+target_link_libraries (VGMap ${Boost_LIBRARIES})
 target_link_libraries (GameBoardMapTest ${Boost_LIBRARIES})
