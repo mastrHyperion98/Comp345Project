@@ -23,8 +23,9 @@ int main() {
         vgMaps[i].CalcScore();
     }
     cout << endl;
-    ConnectedCircles graph = vgMaps[0].getConnectedRow(3);
-    boost::print_graph(graph);
+//    ConnectedCircles graph = vgMaps[0].getConnectedRow(3);
+    ConnectedCircles graphC = vgMaps[0].getConnectedColumn(4);
+    boost::print_graph(graphC);
 
     delete[] vgMaps;
     return 0;

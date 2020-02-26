@@ -118,6 +118,48 @@ void VGMap::CalcScore(){
 
 }
 
+ConnectedCircles VGMap::getConnectedColumn(int const column){
+    ConnectedCircles graph;
+    deque<vertex_v> root_queue;
+    int origin_index = column % 5;
+    auto vertex_set = village_board->vertex_set();
+    vertex_v vertex = vertex_set[origin_index];
+    vertex_v origin_v = add_vertex(graph);
+    graph[origin_v] = (*village_board)[vertex];
+    root_queue.push_back(vertex);
+
+    while (!root_queue.empty()) {
+        vertex = root_queue.front();
+        *(*village_board)[vertex].isVisited = true;
+        Graph::adjacency_iterator start, end;
+        tie(start, end) = adjacent_vertices(vertex, *village_board);
+        for (; start != end; ++start) {
+            // create the next element
+            vertex_v next_element = vertex_set[*start];
+            if (*(*village_board)[next_element].column == column && !*(*village_board)[next_element].isVisited) {
+                // if the next_element is in the same column then push to queue
+                root_queue.push_back(next_element);
+                // add a vertex to the connectedCircles graph
+                vertex_v v = add_vertex(graph);
+                // assign circle to the next element of the graph
+                graph[v] = (*village_board)[next_element];
+                // add an edge -- origin_v always in front
+                add_edge(origin_v, v, graph);
+                // before leaving set v as the new origin;
+                origin_v = v;
+                // break
+                break;
+            }
+        }
+        // remove the front of the queue when the for loop is over.
+        root_queue.pop_front();
+    }
+    resetVisited();
+// return the new graph
+    return graph;
+
+}
+
 ConnectedCircles VGMap::getConnectedRow(int const row) {
     ConnectedCircles graph;
     // create a queue to keep track of the next element to traverse
