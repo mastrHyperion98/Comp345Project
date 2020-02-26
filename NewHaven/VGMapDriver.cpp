@@ -20,13 +20,8 @@ int main() {
         vgMaps[i].PrintGraph();
         cout << "\n***Print Connected Components***\n" << endl;
         vgMaps[i].PrintConnectedGraph();
-        vgMaps[i].CalcScore();
     }
     cout << endl;
-//    ConnectedCircles graph = vgMaps[0].getConnectedRow(3);
-    ConnectedCircles graphC = vgMaps[0].getConnectedColumn(4);
-    boost::print_graph(graphC);
-
     delete[] vgMaps;
     return 0;
 }

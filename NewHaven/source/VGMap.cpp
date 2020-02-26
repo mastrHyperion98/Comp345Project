@@ -18,10 +18,8 @@ using namespace boost;
 VGMap::VGMap() {
 
 }
-
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() = default;
-
 // Function that goes and fetches the graph
 // generate the graph
 /*
@@ -32,13 +30,13 @@ It will be created in a similar way as a 2D Matrix.
 */
 void VGMap::GenerateGraph() {
     CreateVillageField();
-
 }
 // create the center 5x5 field area
 void VGMap::CreateVillageField() {
 
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
+        (*village_board)[vPosition].position = new int(vPosition);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (vPosition > 0 && vPosition % 5 != 0)
             add_edge(vPosition, vPosition - 1, *village_board);
@@ -87,8 +85,6 @@ void VGMap::CreateVillageField() {
     }
 
 }
-
-
 void VGMap::PrintGraph() {
     boost::print_graph(*village_board);
 }
@@ -111,13 +107,7 @@ void VGMap::PrintConnectedGraph() {
     cout << endl;
 }
 
-void VGMap::CalcScore(){
-    for(int i = 0; i < 30; i++){
-       vertex_v vertex = village_board->vertex_set()[i];
-    }
-
-}
-
+// returns a graph with all the connected nodes in the selected column
 ConnectedCircles VGMap::getConnectedColumn(int const column){
     ConnectedCircles graph;
     deque<vertex_v> root_queue;
@@ -157,9 +147,9 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
     resetVisited();
 // return the new graph
     return graph;
-
 }
 
+// returns a graph with all the connected nodes in the selected row
 ConnectedCircles VGMap::getConnectedRow(int const row) {
     ConnectedCircles graph;
     // create a queue to keep track of the next element to traverse

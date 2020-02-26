@@ -11,6 +11,7 @@
 //enum face {up, down, none};
 struct Circle{
 public:
+    int *position = nullptr;
     int *row = nullptr;
     int *column = nullptr;
     int *vCost = nullptr;
@@ -31,7 +32,7 @@ public:
     void GenerateGraph();
     void PrintGraph();
     void PrintConnectedGraph();
-    void CalcScore();
+    void SetBuilding();
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
