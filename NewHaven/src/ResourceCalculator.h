@@ -16,7 +16,6 @@ public:
     int* computeResources(ResourceTrails trail);
 private:
     struct Quad{
-        Quad();
         bool *isMatching = {new bool[4]};
         // prevent infinite loop
         int const *MAX_VISIT = new int(4);
