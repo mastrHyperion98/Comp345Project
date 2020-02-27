@@ -54,7 +54,7 @@ int main() {
         }
         // loop through the entire resource trail and show the Square position and
         // show the out going edges
-            (*map).getSquare(position).setTile(&tile[i]);
+            (*map).setTile(position, &tile[i]);
             ResourceTrails trail = map->getConnectedGraph(position);
             ResourceTrails::vertex_iterator vertexIt, vertexEnd;
             ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
@@ -74,7 +74,6 @@ int main() {
             i--;
         }
     }
-
     delete map;
     delete[] tile;
 

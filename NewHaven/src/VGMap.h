@@ -55,6 +55,7 @@ public:
     void PrintGraph();
     void PrintConnectedGraph();
     Circle getCircle(int position);
+    void setBuilding(int position, Building *building);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
