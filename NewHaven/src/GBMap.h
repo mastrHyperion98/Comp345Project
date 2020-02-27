@@ -29,6 +29,7 @@ public:
     void printGraph();
     void printConnectedGraph();
     void printIndexConfiguration();
+    void setTile(int position, HarvestTile *tile);
     // number of center squares
     Square getSquare(int position);
     ResourceTrails getConnectedGraph(int position);

@@ -203,11 +203,14 @@ Circle VGMap::getCircle(int position) {
 }
 
 void VGMap::resetVisited() {
-    for(int i; i < 30; i++){
+    for(int i = 0; i < 30; i++){
          *(*village_board)[i].isVisited = false;
     }
 }
 
+void VGMap::setBuilding(int position, Building *building) {
+    (*village_board)[position].setBuilding(building);
+}
 Circle::Circle(){
 
 }
