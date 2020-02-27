@@ -2,40 +2,62 @@
 #include <iostream>
 
 int main()
-{
-    HarvestDeck deck;
+{/*
+    HarvestDeck hDeck;
     HarvestTile* tile;
-    ResourceTypes* content;
-    std::uint_least8_t deckSize;
-    std::uint_least8_t* position;
+    ResourceTypes* tContent;
+    std::uint_least8_t hDeckSize;
+    std::uint_least8_t tPosition;
 
     for (std::uint_fast8_t i = 0; i < 60; i++)
     {
-    tile = deck.draw();
-    deckSize = deck.getDeckSize();
-    content = tile->getTileContent();
-    position = tile->getPosition();
+    tile = hDeck.draw();
+    hDeckSize = hDeck.getDeckSize();
+    tContent = tile->getTileContent();
+    tPosition = tile->getPosition();
 
-    std::cout << "We drew a card.\nDeck size: " << static_cast<int>(deckSize) << "\tPosition: "
-        << static_cast<int>(position[0]) << ", " << static_cast<int>(position[1]) << '\n';
+    std::cout << "We drew a card.\nDeck size: " << static_cast<int>(hDeckSize) << "\tPosition: "
+        << static_cast<int>(tPosition) << '\n';
 
-    std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
     
     tile->rotateTileClockwise();
-    delete content;
-    content = tile->getTileContent();
+    delete tContent;
+    tContent = tile->getTileContent();
 
-    std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
 
     tile->rotateTileCounterClockwise();
-    delete content;
-    content = tile->getTileContent();
+    delete tContent;
+    tContent = tile->getTileContent();
 
-    std::cout << content[0] << '\t' << content[1] << '\n' << content[3] << '\t' << content[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
     
-    delete content;
-    delete[] position;
-    }
+    delete tContent;
+    }*/
+    
+    BuildingDeck bDeck;
+    std::uint_least8_t bDeckSize;
+    Building* building;
+    ResourceTypes bType;
+    std::uint_least8_t bNumber;
+    std::uint_least8_t bPosition;
+    bool side;
+    
+    for (std::uint_fast8_t i = 0; i < 144; i++)
+    {
+        building = bDeck.draw();
+        bDeckSize = bDeck.getDeckSize();
+        bType = building->getBuildingType();
+        bNumber = building->getBuildingNumber();
+        bPosition = building->getPosition();
+        side = building->isFlipped();
 
+        std::cout << "We drew a card.\nDeck size: " << static_cast<int>(bDeckSize) << "\nBuilding: " << bType
+            << "\tNumber: " << static_cast<int>(bNumber) << "\tPosition: " << static_cast<int>(bPosition)
+            << "\tFace up: " << (side ? "true" : "false") << "\nWe flipped it.\nFace up: "
+            << (building->flipCard() ? "true" : "false") << "\n\n";
+    }
+    
     return 0;
 }

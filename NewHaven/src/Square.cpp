@@ -13,7 +13,6 @@ Square::Square(){
     isVisited = new bool(false);
     isPlayed = new bool(false);
 }
-Square::~Square() = default;
 
 void Square::setPosition(int* position){
     this->position = position;

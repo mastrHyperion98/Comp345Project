@@ -1,6 +1,7 @@
 #pragma once
-#include<ostream>
+#include <ostream>
 #include <cstdint>
+#include <vector>
 
 enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };
 
@@ -9,16 +10,17 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource);
 struct HarvestTile
 {
 private:
-	ResourceTypes* const tileContent{ new ResourceTypes[4] };
-	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
+	ResourceTypes* tileContent;
+	std::uint_least8_t* position;
 
 	void generateResources();
 public:
 	HarvestTile();
 	~HarvestTile();
 
-	ResourceTypes* getTileContent();
-	std::uint_least8_t* getPosition();
+	ResourceTypes* getTileContent() const;
+	std::uint_least8_t getPosition() const;
+
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();
 };
@@ -26,47 +28,63 @@ public:
 struct HarvestDeck
 {
 private:
-	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
-	std::uint_least8_t* const deckSize{new std::uint_least8_t(*MAX_DECK_SIZE)};
-	HarvestTile* const deckContent { new HarvestTile[*MAX_DECK_SIZE] };
+	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(60) };
+	std::uint_least8_t* deckSize;
+	HarvestTile* deckContent;
 	
 public:
 	HarvestDeck();
 	~HarvestDeck();
 
-	std::uint_least8_t getDeckSize();
-	HarvestTile* draw();
-};
-/*
-struct BuildingDeck
-{
-private:
-	
-	
-public:
-	BuildingDeck();
+	std::uint_least8_t getDeckSize() const;
 
-	void draw();
+	HarvestTile* draw() const;
 };
-*/
-/*
+
 struct Building
 {
 private:
-
+	const ResourceTypes* buildingType;
+	const std::uint_least8_t* buildingNumber;
+	std::uint_least8_t* position;
+	bool* faceUp;
 
 public:
-	Building();
+	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
+	~Building();
 
+	bool isFlipped() const;
+	ResourceTypes getBuildingType() const;
+	std::uint_least8_t getBuildingNumber() const;
+	std::uint_least8_t getPosition() const;
+
+	bool flipCard();
+};
+
+struct BuildingDeck
+{
+private:
+	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(144) };
+	std::uint_least8_t* deckSize;
+	std::vector<Building*>* deckContent;
+	
+public:
+	BuildingDeck();
+	~BuildingDeck();
+
+	std::uint_least8_t getDeckSize() const;
+
+	Building* draw() const;
 };
 
 struct Hand
 {
 private:
-
+	std::vector<HarvestTile*>* harvestTiles;
+	HarvestTile* shipment;
+	std::vector<Building*>* buildings;
 
 public:
 	Hand();
-	void exchange();
+	~Hand();
 };
-*/

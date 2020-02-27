@@ -14,7 +14,6 @@ public:
     bool *isVisited;
 
     Square();
-    ~Square();
 
     HarvestTile getTile() const;
     int getPosition() const;
