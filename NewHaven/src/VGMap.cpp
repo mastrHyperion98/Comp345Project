@@ -197,7 +197,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
 
 Circle VGMap::getCircle(int position) {
     if(position < 30 && position >= 0)
-        (*village_board)[position];
+       return (*village_board)[position];
     else
         throw 2;
 }
