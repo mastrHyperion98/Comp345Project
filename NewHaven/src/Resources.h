@@ -51,7 +51,7 @@ private:
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
-	~Building();
+	//~Building();
 
 	bool isFlipped() const;
 	ResourceTypes getBuildingType() const;
@@ -70,7 +70,7 @@ private:
 	
 public:
 	BuildingDeck();
-	~BuildingDeck();
+	//~BuildingDeck();
 
 	std::uint_least8_t getDeckSize() const;
 

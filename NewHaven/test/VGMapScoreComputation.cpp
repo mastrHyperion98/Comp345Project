@@ -8,73 +8,55 @@
 #include "../src/Resources.h"
 #include <map>
 #include <iostream>
+#include "../src/ScoreCalculator.h"
 
 using namespace std;
 using namespace boost;
 int main(){
-    // keep a map for the scores
-    map<int, int> column_scores;
-    map<int, int> row_scores;
-    // populate the scores
-    column_scores.insert(pair<int, int>(0, 5));
-    column_scores.insert(pair<int, int>(1, 4));
-    column_scores.insert(pair<int, int>(2, 3));
-    column_scores.insert(pair<int, int>(3, 4));
-    column_scores.insert(pair<int, int>(4, 5));
-    row_scores.insert(pair<int, int>(0, 6));
-    row_scores.insert(pair<int, int>(1, 5));
-    row_scores.insert(pair<int, int>(2, 4));
-    row_scores.insert(pair<int, int>(3, 3));
-    row_scores.insert(pair<int, int>(4, 2));
-    row_scores.insert(pair<int, int>(5, 1));
-    // create ourselves a deck
-    /*
-     * The idea for the test is that we will create 6 buildings types (the same type) from # 1 to 6. To compute the score
-     * we will place these 6 buildings. Since these are only "logic" tests and we do not yet a Controller to validate
-     * user input or not and the boards are only containers. They will not validate to see if adjacent circles are of the
-     * same type or not. I believe that is the job of the controller. The board does/should verify that the position exists
-     * though and does prevent placing a building in a circle that already contains one.
-     */
-
+    // create ScoreCalculator object
+    ScoreCalculator s_calculator;
+    // Create a deck of buildings
     BuildingDeck deck;
-    // these are our 6 buildings. The building deck is not shuffled so they should in theory all be the same card.
-    VGMap *map = new VGMap();
-    Building  *buildings[6] = {deck.draw(), deck.draw(),deck.draw(), deck.draw(), deck.draw(), deck.draw()};
-
-    // now the first test here will be a repeatable test. Namely, this implies the 1st row index 0 to 4
-
+    // create a village map
+    VGMap map;
+    // now we need to populate the map board either manually or not
+    cout << "POPULATING ROW 1: TOP ROW WITH 6 FACE-UP BUILDINGS";
     for(int i = 0; i < 5; i++){
-        Circle circle = map->getCircle(i);
-        circle.setBuilding(buildings[i]);
-        cout << "use a debug end point";
+        map.setBuilding(i, deck.draw());
     }
-
-    // now lets see what we will get as an output
-    // fetch row 0
-
-    int row = 0;
-    ConnectedCircles graph = map->getConnectedRow(row);
-    // now we traverse through the graph. However, these graphs have a peculiar property
-    // namely they can be traversed as an array because of their structure.
-    int score = 0;
-    bool isIncomplete = false;
-    bool isFlipped = false;
-    int num_vertices = boost::num_vertices(graph);
-    for(int i = 0; i < num_vertices; i++) {
-        // now we traverse and compute points -- essentially we check if there is a circle without a building or
-        // if there is a flipped down piece.
-        Circle circle = graph[i];
-        if (!circle.getIsPlayed())
-          isIncomplete = true;
-       else if(circle.getBuilding().isFlipped())
-            isFlipped = true;
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
+    map.getCircle(3).getBuilding().flipCard();
+    cout << "FLIPPING ONE BUILDING IN ROW 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
+    for(int i = 5; i < 10; i++){
+        map.setBuilding(i, deck.draw());
     }
-   if(!isFlipped)
-        score = 2 * row_scores[row];
-    else if(!isIncomplete)
-        score = row_scores[row];
+    cout << "POPULATING ROW 2: TOP ROW WITH 6 FACE-UP BUILDINGS";
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
+    map.getCircle(3).getBuilding().flipCard();
+    cout << "FLIPPING THE BUILDING IN ROW 1 FACEUP THE SCORE IS: " << s_calculator.getScore(map) << endl;
+    cout << "POPULATING COLUMN 1: LEFT-MOST WITH 5 FACE-UP BUILDINGS";
+    for(int i = 5; i < 26; i += 5){
+        if(!map.getCircle(i).getIsPlayed())
+            map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
+    map.getCircle(0).getBuilding().flipCard();
+    cout << "FLIPPING THE BUILDING IN ROW 1 AND COLUMN 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
+    cout << "POPULATING COLUMN 5: RIGHT-MOST WITH 5 FACE-UP BUILDINGS";
+    for(int i = 4; i < 30; i += 5){
+        if(!map.getCircle(i).getIsPlayed())
+            map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
+    cout << "POPULATING COLUMN 3: MIDDLE WITH 5 FACE-UP BUILDINGS";
+    for(int i = 2; i < 28; i += 5){
+        if(!map.getCircle(i).getIsPlayed())
+            map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
+    map.getCircle(7).getBuilding().flipCard();
+    cout << "FLIPPING THE BUILDING IN ROW 2 AND COLUMN 3 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
 
-    cout << score;
 
     return 1;
 }

@@ -180,13 +180,13 @@ Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber
 	position{ new std::uint_least8_t(position) },
 	faceUp{ new bool(true) }
 {}
-
+/*
 Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
 	delete position;
-}
+}*/
 
 bool Building::isFlipped() const
 {
@@ -251,14 +251,14 @@ BuildingDeck::BuildingDeck():
 		}
 	}
 }
-
+/*
 BuildingDeck::~BuildingDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
 }
-
+*/
 std::uint_least8_t BuildingDeck::getDeckSize() const
 {
 	return *deckSize;
