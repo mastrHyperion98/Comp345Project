@@ -290,3 +290,6 @@ void GBMap::printIndexConfiguration() {
     }
 }
 
+void GBMap::setTile(int position, HarvestTile *tile) {
+    (*game_board)[position].setTile(tile);
+}
