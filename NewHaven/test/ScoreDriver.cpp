@@ -19,15 +19,15 @@ int main()
  * -  21 22 23 24 25 -
  */
 
-	map.getSquare(6)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::WOOD, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD }));	//I've created a HarvestTile constructor that takea a custom content array
-	map.getSquare(7)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WHEAT }));
-	map.getSquare(8)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::STONE }));
-	map.getSquare(11)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::WHEAT, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::STONE }));
-	map.getSquare(13)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WHEAT, ResourceTypes::WOOD, ResourceTypes::STONE }));	//Here we create all the tile where we want them with the content wanted
-	map.getSquare(14)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::WHEAT }));
-	map.getSquare(16)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::SHEEP }));
-	map.getSquare(17)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::SHEEP }));
-	map.getSquare(18)->setTile(new HarvestTile(new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::WOOD, ResourceTypes::WOOD }));
+	map.getSquare(6)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::WOOD, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD }*/));	//I've created a HarvestTile constructor that takea a custom content array
+	map.getSquare(7)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WHEAT }*/));
+	map.getSquare(8)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::STONE }*/));
+	map.getSquare(11)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::WHEAT, ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::STONE }*/));
+	map.getSquare(13)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WHEAT, ResourceTypes::WOOD, ResourceTypes::STONE }*/));	//Here we create all the tile where we want them with the content wanted
+	map.getSquare(14)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::WHEAT, ResourceTypes::WHEAT }*/));
+	map.getSquare(16)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::SHEEP }*/));
+	map.getSquare(17)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::SHEEP }*/));
+	map.getSquare(18)->setTile(new HarvestTile(/*new ResourceTypes[4]{ ResourceTypes::STONE, ResourceTypes::WOOD, ResourceTypes::WOOD, ResourceTypes::WOOD }*/));
 
 	/*Creating a variable for every tile to store its content for the sole purpose of printing it to console.
 	* They are all pointers because tileContent is an array.
@@ -60,36 +60,37 @@ int main()
 	for (unsigned short i = 0; i < 4; i++)
 	{
 		map.getSquare(startTile)->getTile()->rootConnected[i] = true;	//The starting tile is the root, so all its resources are rooted
+		map.getSquare(startTile)->getTile()->visitedResource[i] = true;
 	}
 
 	map.printIndexConfiguration();
 
 	cout << '\n';
 
-	ResourceTrails connection{map.getConnectedGraph(startTile)};
+	ResourceTrails tileCluster{map.getConnectedGraph(startTile)};
 	ResourceTrails::vertex_iterator v_start, v_end;
 	ResourceTrails::adjacency_iterator e_start, e_end;
 	HarvestTile* sourceTile, *targetTile;
 	int sourcePos, targetPos;
 	ResourceTypes* sourceContent, *targetContent;
 	std::map<ResourceTypes, unsigned short> resourceTotal{ {ResourceTypes::SHEEP, 0}, {ResourceTypes::STONE, 0},{ResourceTypes::WHEAT, 0},{ResourceTypes::WOOD, 0} };	//Map for the final score
-
+	
 	for (unsigned short i = 0; i < 4; i++)
 	{
-		resourceTotal[map.getSquare(startTile)->getTile()->getTileContent()[i]]++;	//Adding starting tile resources to the score
+		resourceTotal[tileCluster[0].getTile()->getTileContent()[i]]++;	//Adding starting tile resources to the score
 	}
 
-	for (tie(v_start, v_end) = vertices(connection); v_start != v_end; ++v_start) {
-		sourceTile = connection[*v_start].getTile();
-		sourcePos = connection[*v_start].getPosition();
-		sourceContent = connection[*v_start].getTile()->getTileContent();
-		cout << connection[*v_start].getPosition() << " is connected with ";
+	for (tie(v_start, v_end) = vertices(tileCluster); v_start != v_end; ++v_start) {
+		sourceTile = tileCluster[*v_start].getTile();
+		sourcePos = tileCluster[*v_start].getPosition();
+		sourceContent = tileCluster[*v_start].getTile()->getTileContent();
+		cout << tileCluster[*v_start].getPosition() << " is connected with ";
 		
-		for (tie(e_start, e_end) = adjacent_vertices(*v_start, connection); e_start != e_end; ++e_start)
+		for (tie(e_start, e_end) = adjacent_vertices(*v_start, tileCluster); e_start != e_end; ++e_start)
 		{
-			targetTile = connection[*e_start].getTile();
-			targetPos = connection[*e_start].getPosition();
-			targetContent = connection[*e_start].getTile()->getTileContent();
+			targetTile = tileCluster[*e_start].getTile();
+			targetPos = tileCluster[*e_start].getPosition();
+			targetContent = tileCluster[*e_start].getTile()->getTileContent();
 
 			if (targetPos == sourcePos - 1)		//Target is on the left
 			{
@@ -108,7 +109,7 @@ int main()
 				adjacentTile(sourceContent, targetContent, resourceTotal, sourceTile, targetTile, 3, 0);
 			}
 
-			cout << connection[*e_start].getPosition() << " ";
+			cout << tileCluster[*e_start].getPosition() << " ";
 		}
 
 		cout << '\n';
@@ -134,8 +135,10 @@ void adjacentTile(const ResourceTypes* const sourceContent, const ResourceTypes*
 	If they are it means there's the potential to add one or the other to the score.
 	If they were both visited, there's nothing else to do there.
 	*/
-	if ((!targetTile->visitedResource[targetIndex] || !sourceTile->visitedResource[sourceIndex]) && (sourceContent[sourceIndex] == targetContent[targetIndex]))
+	for (std::uint_fast8_t i = 0; i < 2; i++)
 	{
+		if ((!targetTile->visitedResource[targetIndex] || !sourceTile->visitedResource[sourceIndex]) && (sourceContent[sourceIndex] == targetContent[targetIndex]))
+
 		/*
 		Here we check which on of the connected equal resources is connected to the root. If it was the resource from the source tile, we mark the target resource as visited and connected to the root too.
 		We then browse through the target tile, check browseTile function.
@@ -154,30 +157,17 @@ void adjacentTile(const ResourceTypes* const sourceContent, const ResourceTypes*
 
 			resourceTotal[targetContent[sourceIndex]] += browseTile(sourceTile, sourceContent, sourceIndex);
 		}
-	}
+		
+		sourceIndex = ((sourceIndex - 1) + 4) % 4;
+		targetIndex = (targetIndex + 1) % 4;
 	/*
-	The second if is exactly the same thing as the first except that we evaluate the second resource of the source tile with the second resource of the target tile.
+	The second time is exactly the same thing as the first except that we evaluate the second resource of the source tile with the second resource of the target tile.
 	Remeber that adjacent tiles are connected via two resources. As mentioned above the function, the second source resource is the first one decremented and the the second target resource is the first one incremented.
 	That forces us to use modulo to stay in array bounds.
 	*/
-	if ((!targetTile->visitedResource[(targetIndex + 1) % 4] || !sourceTile->visitedResource[((sourceIndex - 1) + 4) % 4]) && (sourceContent[((sourceIndex - 1) + 4) % 4] == targetContent[(targetIndex + 1) % 4]))
-	{
-		if (sourceTile->rootConnected[((sourceIndex - 1) + 4) % 4])
-		{
-			targetTile->visitedResource[(targetIndex + 1) % 4] = true;
-			targetTile->rootConnected[(targetIndex + 1) % 4] = true;
-
-			resourceTotal[targetContent[(targetIndex + 1) % 4]] += browseTile(targetTile, targetContent, (targetIndex + 1) % 4);
-		}
-		else if (targetTile->rootConnected[(targetIndex + 1) % 4])
-		{
-			sourceTile->rootConnected[((sourceIndex - 1) + 4) % 4] = true;
-			sourceTile->visitedResource[((sourceIndex - 1) + 4) % 4] = true;
-
-			resourceTotal[targetContent[((sourceIndex - 1) + 4) % 4]] += browseTile(sourceTile, sourceContent, ((sourceIndex - 1) + 4) % 4);
-		}
 	}
 }
+	
 /*
 This function's purpose is to count equal adjacent resources to a specific index. Basically finding the connected resource within a single tile instead of accross tiles like adjecentTile().
 Every resource counted here is marked as visited and rooted. The idea with this function is to check for equal resources to the one in index clockwise, then counter-clockwise.
@@ -185,35 +175,29 @@ It returns an integer that will be added to the score for the resource specific 
 */
 unsigned short browseTile(const HarvestTile* const tile, const ResourceTypes* const content, const unsigned short& index)
 {
-	unsigned short j{ 1 }, total{ 1 }; //total defaults to one because we count the resource at the index. j defaults to 1 because we want to check the index right after the current one.
+	unsigned short j{ 1 }, i{ static_cast<unsigned short>((index + j) % 4) }, total{ 1 }; //total defaults to one because we count the resource at the index. j defaults to 1 because we want to check the index right after the current one.
 	/*
 	index + j % 4 is to point to the next resource in the array of resources. Its purpose is to move circularly and never go out of bound.
 	We make sure that the next resource was not visited before and that it is equal to the previous.
 	If it was the case, we make it visited and rooted, rooted because the starting resource is rooted too. Rooted resources make adjacent resources rooted too.
 	We then increment the total and j to proceed to the next resource in the tile.
 	*/
-	while ((!tile->visitedResource[(index + j) % 4]) && (content[index] == content[(index + j) % 4]))
+	for (std::uint_fast8_t k = 0; k < 2; k++)
 	{
-		tile->visitedResource[(index + j) % 4] = true;
-		tile->rootConnected[(index + j) % 4] = true;
+		while ((!tile->visitedResource[i]) && (content[index] == content[i]))
+		{
+			tile->visitedResource[i] = true;
+			tile->rootConnected[i] = true;
 
-		total++;
-		j++;
-	}
-
-	j = 1;	//We're redoing the first part counter-clockwise this time, so we reset j
-
-	/*
-	Here index - j + 4 % 4 has the same purpose as the one above except that the +4 will not allow index - j to be negative. C++ can not apply modulus to negative numbers.
-	By the properties of modular arithmetic, the result is is equal and still valid.
-	*/
-	while ((!tile->visitedResource[((index - j) + 4) % 4]) && (content[index] == content[((index - j) + 4) % 4]))	//C++ can't handle negative moduli
-	{
-		tile->visitedResource[((index - j) + 4) % 4] = true;
-		tile->rootConnected[((index - j) + 4) % 4] = true;
-
-		total++;
-		j++;
+			total++;
+			j++;
+			i = (index + j) % 4;
+		}
+		/*
+		We're redoing the first part counter-clockwise this time, so we reset j.
+		Here index - j + 4 % 4 has the same purpose as the one above except that the +4 will not allow index - j to be negative. C++ can not apply modulus to negative numbers.
+		*/
+		j = 1, i = ((index - j) + 4) % 4;
 	}
 
 	return total;
