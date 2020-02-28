@@ -24,14 +24,18 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 	}
 }
 
-HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t() }
+HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
 {
 	generateResources();
 }
 
+HarvestTile::HarvestTile(const HarvestTile &tile) {
+    // this important because not all Game Squares possess a non null tile.
+    if(&tile != nullptr)
+        tileContent = new ResourceTypes(*tile.tileContent);
+}
 HarvestTile::~HarvestTile()
 {
-	delete position;
 	delete[] tileContent;
 }
 
@@ -137,11 +141,6 @@ ResourceTypes* HarvestTile::getTileContent() const
 	}
 
 	return tileContent;
-}
-
-std::uint_least8_t HarvestTile::getPosition() const
-{
-	return *position;
 }
 
 HarvestDeck::HarvestDeck():

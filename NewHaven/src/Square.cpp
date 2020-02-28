@@ -8,17 +8,33 @@
 using namespace std;
 
 Square::Square(){
-    position = 0;
-    tile = 0;
+    position = nullptr;
+    tile = nullptr;
     isVisited = new bool(false);
     isPlayed = new bool(false);
 }
 
+Square::Square(const Square &square) {
+    position = new int(*square.position);
+    if(tile != nullptr)
+        tile = new HarvestTile(*square.tile);
+    else
+        tile = nullptr;
+    isVisited = new bool(*square.isVisited);
+    isPlayed = new bool(*square.isPlayed);
+}
+
+Square::~Square() = default;
+
 void Square::setPosition(int* position){
-    this->position = position;
+    int *cpy = new int(*position);
+    this->position = new int(*cpy);
+    delete cpy;
+    delete position;
 }
 int Square::getPosition() const{
-    return *position;
+    int *cpy = new int(*position);
+    return *cpy;
 }
 void Square::setTile(HarvestTile * tile){
     if(!*isPlayed) {
