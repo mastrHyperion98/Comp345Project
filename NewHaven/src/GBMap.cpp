@@ -301,4 +301,5 @@ void GBMap::printIndexConfiguration() {
 void GBMap::setTile(int position, HarvestTile *tile) {
     HarvestTile *cpy = new HarvestTile(*tile);
     (*game_board)[position].setTile(cpy);
+    delete cpy;
 }

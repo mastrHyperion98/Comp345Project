@@ -28,11 +28,6 @@ int main(){
         // if incorrect input jump to input_config;
         goto input_configuration;
     }
-    cout << "\n***PRINT GRAPH***\n" << endl;
-    map->printGraph();
-    cout << "\n***Print Connected Components***\n" << endl;
-    map->printConnectedGraph();
-
     // loop and create a trail of 5 resources that the user can place
     HarvestTile* tile = {new HarvestTile[5]};
     cout << "TESTING HARVEST TRAILS AND PLAYER OWNED RESOURCES FOR A TURN: ALL SQUARES ARE CURRENTLY EMPTY\n";
@@ -53,8 +48,11 @@ int main(){
             // show the out going edges
             (*map).setTile(position, &tile[i]);
             ResourceTrails trail = map->getConnectedGraph(position);
-            ResourceTrails cpy = ResourceTrails(trail);
-            int *resources = cal.computeResources(cpy);
+            //ResourceTrails cpy = ResourceTrails(trail);
+            int *resources = cal.computeResources(trail);
+            cout << "\n POSITION: " << position << endl;
+            cout << tile[i].getTileContent()[0] << " , " << tile[i].getTileContent()[1] << endl;
+            cout << tile[i].getTileContent()[2] << " ," << tile[i].getTileContent()[3] << endl;
             cout << resources[0] << " , " << resources[1] << " , " << resources[2]<< " , " << resources[3] <<endl ;
             ResourceTrails::vertex_iterator vertexIt, vertexEnd;
             ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;

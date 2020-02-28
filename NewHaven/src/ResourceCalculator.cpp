@@ -36,11 +36,11 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     while(!next_e_queue.empty()){
         // this means we are the root so we add all our resources to the count
         vertex_t next_element = next_e_queue.front();
-        ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
-
+        ResourceTypes *next_resources = (*trail[next_element].getTile()).getTileContent();
         if(root_queue.empty()){
             for(int i = 0; i < 4; i++){
-               addResources(resources, next_resources[i]);
+                ResourceTypes resource = next_resources[i];
+               addResources(resources, resource);
             }
             Quad quad;
             for(int i= 0; i < 4; i++) {
@@ -58,7 +58,8 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
              * We need to compute adjacency connection between root and neighbour.
              *  first we determine direction
              */
-            ResourceTypes *root_resources = trail[root].getTile().getTileContent();
+            ResourceTypes *root_resources = (*trail[root].getTile()).getTileContent();
+
             int direction = trail[root].getPosition() - trail[next_element].getPosition();
             if(direction == *DOWN){
                 // compare index 2 of root to index 0 of next element
@@ -77,7 +78,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                 /*
                  * Now we need to check within the element itself if other of its own nodes connect
                  */
-                setQuadInner(resources,next_quad, next_resources);
+                setQuadInner(resources,next_quad, next_resources, direction);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *UP){
@@ -96,7 +97,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                 /*
                  * Now we need to check within the element itself if other of its own nodes connect
                  */
-                setQuadInner(resources,next_quad, next_resources);
+                setQuadInner(resources,next_quad, next_resources, direction);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *LEFT){
@@ -115,7 +116,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                 /*
                  * Now we need to check within the element itself if other of its own nodes connect
                  */
-                setQuadInner(resources,next_quad, next_resources);
+                setQuadInner(resources,next_quad, next_resources, direction);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *RIGHT){
@@ -134,7 +135,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                 /*
                  * Now we need to check within the element itself if other of its own nodes connect
                  */
-                setQuadInner(resources,next_quad, next_resources);
+                setQuadInner(resources,next_quad, next_resources, direction);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             map.insert(pair<vertex_t, Quad>(next_element, next_quad));
@@ -146,7 +147,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             // get ourselves our vertex
             vertex_t vertex = vertices[*neighbourIt];
             // check if the quad for said vertex exists if it does verify count
-            if(map.find(next_element) == map.end()) {
+            if(map.find(next_element) != map.end()) {
                Quad next_quad = map[next_element];
                if(*next_quad.current_visit_count <= *next_quad.MAX_VISIT)
                    next_e_queue.push_back(vertex);
@@ -164,42 +165,114 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     return resources;
 }
 // compute Inner
-inline void ResourceCalculator::setQuadInner(int *arr, Quad quad, ResourceTypes* resource){
+inline void ResourceCalculator::setQuadInner(int *arr, Quad quad, ResourceTypes* resource, int direction){
     /*
      * check if 0 and 2 matches, 0 and 1, 1 and 3 and 3 and 2 in that order
      */
     // i know a lot of conditional checks but we cant avoid that
-    if(resource[0] == resource[1]&& quad.isMatching[0]&& !quad.isMatching[1]) {
-        quad.isMatching[1] = true;
-        addResources(arr, resource[0]);
+    if(direction == *LEFT){
+        if(resource[1] == resource[3] && quad.isMatching[1] && !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[3]);
+        }
+        else if(resource[3] == resource[1] && quad.isMatching[3] && !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[3]);
+        }
+        if(resource[1] == resource[0] && quad.isMatching[1] && !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[1]);
+        }
+        if(resource[0] == resource[2] && quad.isMatching[0]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[0]);
+        }
+        if(resource[3] == resource[2]&& quad.isMatching[3]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[3]);
+        }
+        if(resource[2] == resource[0]&& quad.isMatching[2]&& !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[2]);
+        }
     }
-    if(resource[1] == resource[3] && quad.isMatching[1] && !quad.isMatching[3]) {
-        quad.isMatching[3] = true;
-        addResources(arr, resource[1]);
+    else if(direction == *RIGHT){
+        if(resource[0] == resource[2] && quad.isMatching[0]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[0]);
+        }
+        else if(resource[2] == resource[0]&& quad.isMatching[2]&& !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[2]);
+        }
+        if(resource[0] == resource[1]&& quad.isMatching[0]&& !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[0]);
+        }
+        if(resource[1] == resource[3] && quad.isMatching[1] && !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[3]);
+        }
+        if(resource[2] == resource[3]&& quad.isMatching[2]&& !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[2]);
+        }
+        if(resource[3] == resource[1] && quad.isMatching[3] && !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[3]);
+        }
     }
-    if(resource[1] == resource[0] && quad.isMatching[1] && !quad.isMatching[0]) {
-        quad.isMatching[0] = true;
-        addResources(arr, resource[1]);
+    else if(direction == *UP){
+        if(resource[2] == resource[3]&& quad.isMatching[2]&& !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[2]);
+        }
+        else if(resource[3] == resource[2]&& quad.isMatching[3]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[3]);
+        }
+         if(resource[2] == resource[0]&& quad.isMatching[2]&& !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[2]);
+        }
+        if(resource[0] == resource[1]&& quad.isMatching[0]&& !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[0]);
+        }
+        if(resource[3] == resource[1] && quad.isMatching[3] && !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[3]);
+        }
+        if(resource[1] == resource[0] && quad.isMatching[1] && !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[1]);
+        }
     }
-    if(resource[3] == resource[1] && quad.isMatching[3] && !quad.isMatching[1]) {
-        quad.isMatching[1] = true;
-        addResources(arr, resource[3]);
-    }
-    if(resource[0] == resource[2]&& quad.isMatching[0]&& !quad.isMatching[2]) {
-        quad.isMatching[2] = true;
-        addResources(arr, resource[0]);
-    }
-    if(resource[2] == resource[0]&& quad.isMatching[2]&& !quad.isMatching[0]) {
-        quad.isMatching[0] = true;
-        addResources(arr, resource[2]);
-    }
-    if(resource[2] == resource[3]&& quad.isMatching[2]&& !quad.isMatching[3]) {
-        quad.isMatching[3] = true;
-        addResources(arr, resource[2]);
-    }
-    if(resource[3] == resource[2]&& quad.isMatching[3]&& !quad.isMatching[2]) {
-        quad.isMatching[2] = true;
-        addResources(arr, resource[3]);
+    else if(direction == *DOWN){
+        if(resource[0] == resource[1]&& quad.isMatching[0]&& !quad.isMatching[1]) {
+            quad.isMatching[1] = true;
+            addResources(arr, resource[0]);
+        }
+        else if(resource[1] == resource[0] && quad.isMatching[1] && !quad.isMatching[0]) {
+            quad.isMatching[0] = true;
+            addResources(arr, resource[1]);
+        }
+        if(resource[0] == resource[2] && quad.isMatching[0]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[0]);
+        }
+        if(resource[2] == resource[3]&& quad.isMatching[2]&& !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[2]);
+        }
+        if(resource[1] == resource[3] && quad.isMatching[1] && !quad.isMatching[3]) {
+            quad.isMatching[3] = true;
+            addResources(arr, resource[3]);
+        }
+        if(resource[3] == resource[2]&& quad.isMatching[3]&& !quad.isMatching[2]) {
+            quad.isMatching[2] = true;
+            addResources(arr, resource[3]);
+        }
     }
 }
 
@@ -210,6 +283,6 @@ inline void ResourceCalculator::addResources(int *arr, ResourceTypes type){
         arr[*SHEEP] =  arr[*SHEEP] + 1;
     else if(type == ResourceTypes::STONE)
         arr[*STONE] =  arr[*STONE] + 1;
-    else
+    else if(type == ResourceTypes::WOOD)
         arr[*WOOD] =  arr[*WOOD] + 1;
 }

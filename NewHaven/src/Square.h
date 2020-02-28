@@ -16,7 +16,7 @@ public:
     Square();
     Square(const Square &square);
     ~Square();
-    HarvestTile getTile() const;
+    HarvestTile* getTile() const;
     int getPosition() const;
     bool getIsPlayed();
     void setPosition(int* position);

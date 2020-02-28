@@ -37,16 +37,17 @@ int Square::getPosition() const{
     return *cpy;
 }
 void Square::setTile(HarvestTile * tile){
-    if(!*isPlayed) {
-        this->tile = tile;
+    if(!*isPlayed && tile != nullptr) {
+        this->tile = new HarvestTile(*tile);
         *isPlayed = true;
     }
     else {
         throw 1;
     }
 }
-HarvestTile Square::getTile() const{
-    return *tile;
+HarvestTile* Square::getTile() const{
+    HarvestTile* cpy =new HarvestTile(*tile);
+    return cpy;
 }
 bool Square::getIsPlayed() {
         return *isPlayed;

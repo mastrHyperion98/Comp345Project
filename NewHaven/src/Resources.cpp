@@ -30,9 +30,12 @@ HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
 }
 
 HarvestTile::HarvestTile(const HarvestTile &tile) {
-    // this important because not all Game Squares possess a non null tile.
-    if(&tile != nullptr)
-        tileContent = new ResourceTypes(*tile.tileContent);
+        tileContent = new ResourceTypes[4];
+        // reassign the values by using pass-by value
+        tileContent[0] = tile.tileContent[0];
+        tileContent[1] = tile.tileContent[1];
+        tileContent[2] = tile.tileContent[2];
+        tileContent[3] = tile.tileContent[3];
 }
 HarvestTile::~HarvestTile()
 {
