@@ -18,6 +18,10 @@ ResourceCalculator::~ResourceCalculator() = default;
 int* ResourceCalculator::computeResources(ResourceTrails trail) {
     // setup -- first step is to add the elements of the main root to the total for each resources
     int *resources = {new int[4]};
+    resources[0] = 0;
+    resources[1] = 0;
+    resources[2] = 0;
+    resources[3] = 0;
     deque<vertex_t> root_queue;
     deque<vertex_t> next_e_queue;
     map<vertex_t, Quad> map;
@@ -32,10 +36,11 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     while(!next_e_queue.empty()){
         // this means we are the root so we add all our resources to the count
         vertex_t next_element = next_e_queue.front();
-        ResourceTypes *tile = trail[next_element].getTile().getTileContent();
+        ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
+
         if(root_queue.empty()){
             for(int i = 0; i < 4; i++){
-               addResources(resources, tile[i]);
+               addResources(resources, next_resources[i]);
             }
             Quad quad;
             for(int i= 0; i < 4; i++) {
@@ -46,24 +51,21 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
         }
         // otherwise their is a defined root
         else{
-            bool exist = false;
             root = root_queue.front();
+            Quad next_quad;
             /*
              * Now the more complicate part starts
              * We need to compute adjacency connection between root and neighbour.
              *  first we determine direction
              */
-
+            ResourceTypes *root_resources = trail[root].getTile().getTileContent();
             int direction = trail[root].getPosition() - trail[next_element].getPosition();
             if(direction == *DOWN){
                 // compare index 2 of root to index 0 of next element
-                Quad next_quad;
-                if(map.find(next_element) == map.end()) {
+
+                if(map.find(next_element) != map.end()) {
                     next_quad = map[next_element];
-                    exist = true;
                 }
-                ResourceTypes *root_resources = trail[root].getTile().getTileContent();
-                ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
                 if(root_resources[2] == next_resources[0] && !next_quad.isMatching[0]){
                     next_quad.isMatching[0] = true;
                     addResources(resources, next_resources[0]);
@@ -80,13 +82,9 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             }
             else if(direction == *UP){
                 // compare index 2 of root to index 0 of next element
-                Quad next_quad;
-                if(map.find(next_element) == map.end()) {
+                if(map.find(next_element) != map.end()) {
                     next_quad = map[next_element];
-                    exist = true;
                 }
-                ResourceTypes *root_resources = trail[root].getTile().getTileContent();
-                ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
                 if(root_resources[0] == next_resources[2] && !next_quad.isMatching[2]){
                     next_quad.isMatching[2] = true;
                     addResources(resources, next_resources[2]);
@@ -103,13 +101,9 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             }
             else if(direction == *LEFT){
                 // compare index 2 of root to index 0 of next element
-                Quad next_quad;
-                if(map.find(next_element) == map.end()) {
+                if(map.find(next_element) != map.end()) {
                     next_quad = map[next_element];
-                    exist = true;
                 }
-                ResourceTypes *root_resources = trail[root].getTile().getTileContent();
-                ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
                 if(root_resources[0] == next_resources[1] && !next_quad.isMatching[1]){
                     next_quad.isMatching[1] = true;
                     addResources(resources, next_resources[1]);
@@ -126,13 +120,9 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             }
             else if(direction == *RIGHT){
                 // compare index 2 of root to index 0 of next element
-                Quad next_quad;
-                if(map.find(next_element) == map.end()) {
+                if(map.find(next_element) != map.end()) {
                     next_quad = map[next_element];
-                    exist = true;
                 }
-                ResourceTypes *root_resources = trail[root].getTile().getTileContent();
-                ResourceTypes *next_resources = trail[next_element].getTile().getTileContent();
                 if(root_resources[1] == next_resources[0] && !next_quad.isMatching[0]){
                     next_quad.isMatching[0] = true;
                     addResources(resources, next_resources[0]);
@@ -147,6 +137,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                 setQuadInner(resources,next_quad, next_resources);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
+            map.insert(pair<vertex_t, Quad>(next_element, next_quad));
         }
         // now we build the queues
         ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
@@ -166,7 +157,8 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             }
         }
         next_e_queue.pop_front();
-        root_queue.pop_front();
+        if(!root_queue.empty())
+            root_queue.pop_front();
         root_queue.push_back(next_element);
     }
     return resources;
