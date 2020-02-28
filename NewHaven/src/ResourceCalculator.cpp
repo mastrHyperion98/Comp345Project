@@ -136,6 +136,8 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             if(map.find(next_element) == map.end()) {
                 map.insert(pair<vertex_t, Quad>(next_element, next_quad));
             }
+            delete root_resources;
+            delete next_resources;
         }
         queue.pop_front();
     }
