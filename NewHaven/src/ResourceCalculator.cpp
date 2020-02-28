@@ -22,48 +22,40 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     resources[1] = 0;
     resources[2] = 0;
     resources[3] = 0;
-    deque<vertex_t> root_queue;
-    deque<vertex_t> next_e_queue;
+    deque<vertex_t> queue;
     map<vertex_t, Quad> map;
     int num_vertices = boost::num_vertices(trail);
     auto vertices = trail.vertex_set();
     vertex_t root = vertices[0];
     // Add the starting resources from the root to the count?
-    next_e_queue.push_back(root);
-    /*
-     * Now this is where the real fun begins
-     */
-    while(!next_e_queue.empty()){
-        // this means we are the root so we add all our resources to the count
-        vertex_t next_element = next_e_queue.front();
-        ResourceTypes *next_resources = (*trail[next_element].getTile()).getTileContent();
-        if(root_queue.empty()){
+    queue.push_back(root);
+    ResourceTypes *r_resources = (*trail[root].getTile()).getTileContent();
+    Quad quad;
             for(int i = 0; i < 4; i++){
-                ResourceTypes resource = next_resources[i];
+               ResourceTypes resource = r_resources[i];
                addResources(resources, resource);
-            }
-            Quad quad;
-            for(int i= 0; i < 4; i++) {
                 quad.isMatching[i] = true;
             }
             *quad.current_visit_count = *quad.current_visit_count + 1;
-            map.insert(pair<vertex_t, Quad>(next_element, quad));
-        }
-        // otherwise their is a defined root
-        else{
-            root = root_queue.front();
+            map.insert(pair<vertex_t, Quad>(root, quad));
+    // delete r_resources
+    delete r_resources;
+
+    while(!queue.empty()){
+        root = queue.front();
+        // now we build the queues
+        ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
+        tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail);
+        for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+            // get ourselves our vertex
             Quad next_quad;
-            /*
-             * Now the more complicate part starts
-             * We need to compute adjacency connection between root and neighbour.
-             *  first we determine direction
-             */
+            vertex_t next_element = vertices[*neighbourIt];
+            ResourceTypes *next_resources = (*trail[next_element].getTile()).getTileContent();
             ResourceTypes *root_resources = (*trail[root].getTile()).getTileContent();
 
             int direction = trail[root].getPosition() - trail[next_element].getPosition();
             if(direction == *DOWN){
                 // compare index 2 of root to index 0 of next element
-
                 if(map.find(next_element) != map.end()) {
                     next_quad = map[next_element];
                 }
@@ -137,30 +129,15 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                  */
                 setQuadInner(resources,next_quad, next_resources, direction);
                 *next_quad.current_visit_count = *next_quad.current_visit_count +1;
+                if(*next_quad.current_visit_count <= *next_quad.MAX_VISIT)
+                    queue.push_back(next_element);
             }
-            map.insert(pair<vertex_t, Quad>(next_element, next_quad));
-        }
-        // now we build the queues
-        ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
-        tie(neighbourIt, neighbourEnd) = adjacent_vertices(next_element, trail);
-        for (; neighbourIt != neighbourEnd; ++neighbourIt) {
-            // get ourselves our vertex
-            vertex_t vertex = vertices[*neighbourIt];
             // check if the quad for said vertex exists if it does verify count
-            if(map.find(next_element) != map.end()) {
-               Quad next_quad = map[next_element];
-               if(*next_quad.current_visit_count <= *next_quad.MAX_VISIT)
-                   next_e_queue.push_back(vertex);
-            }
-            // not yet defined push to queue
-            else{
-                next_e_queue.push_back(vertex);
+            if(map.find(next_element) == map.end()) {
+                map.insert(pair<vertex_t, Quad>(next_element, next_quad));
             }
         }
-        next_e_queue.pop_front();
-        if(!root_queue.empty())
-            root_queue.pop_front();
-        root_queue.push_back(next_element);
+        queue.pop_front();
     }
     return resources;
 }
