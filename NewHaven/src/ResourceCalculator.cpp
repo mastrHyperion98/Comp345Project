@@ -46,12 +46,12 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
         // now we build the queues
         ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
         tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail);
+        ResourceTypes *root_resources = (*trail[root].getTile()).getTileContent();
         for (; neighbourIt != neighbourEnd; ++neighbourIt) {
             // get ourselves our vertex
             Quad next_quad;
             vertex_t next_element = vertices[*neighbourIt];
             ResourceTypes *next_resources = (*trail[next_element].getTile()).getTileContent();
-            ResourceTypes *root_resources = (*trail[root].getTile()).getTileContent();
 
             int direction = trail[root].getPosition() - trail[next_element].getPosition();
             if(direction == *DOWN){
@@ -136,9 +136,10 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             if(map.find(next_element) == map.end()) {
                 map.insert(pair<vertex_t, Quad>(next_element, next_quad));
             }
-            delete root_resources;
+
             delete next_resources;
         }
+        delete root_resources;
         queue.pop_front();
     }
     return resources;
