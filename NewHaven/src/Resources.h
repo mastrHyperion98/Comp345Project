@@ -15,7 +15,10 @@ private:
 
 	void generateResources();
 public:
+	bool* visitedResource, *rootConnected;
+
 	HarvestTile();
+	HarvestTile(ResourceTypes* tileContent);
 	~HarvestTile();
 
 	ResourceTypes* getTileContent() const;

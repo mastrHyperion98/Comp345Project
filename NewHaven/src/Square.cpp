@@ -30,8 +30,8 @@ void Square::setTile(HarvestTile * tile){
         throw 1;
     }
 }
-HarvestTile Square::getTile() const{
-    return *tile;
+HarvestTile* Square::getTile() const{
+    return tile;
 }
 bool Square::getIsPlayed() {
         return *isPlayed;

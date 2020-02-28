@@ -156,12 +156,12 @@ void GBMap::generateFourPlayerBoard(){
         }
     }
 }
-Square GBMap::getSquare(int position) {
+Square* GBMap::getSquare(int position) {
     /*TO-DO
      * Verify position is within the appropriate ranged based on the board configuration
      * return an error otherwise.
      */
-    return (*game_board)[position];
+    return &(*game_board)[position];
 }
 void GBMap::printGraph() {
     boost::print_graph(*game_board);

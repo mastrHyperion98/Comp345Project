@@ -30,7 +30,7 @@ public:
     void printConnectedGraph();
     void printIndexConfiguration();
     // number of center squares
-    Square getSquare(int position);
+    Square* getSquare(int position);
     ResourceTrails getConnectedGraph(int position);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board

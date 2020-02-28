@@ -24,15 +24,19 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 	}
 }
 
-HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t() }
+HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t() }, visitedResource{new bool[4]{ false, false, false, false } }, rootConnected{ new bool[4]{ false, false, false, false } }
 {
 	generateResources();
 }
+
+HarvestTile::HarvestTile(ResourceTypes* tileContent) : tileContent{ tileContent }, position{ new std::uint_least8_t() }, visitedResource{ new bool[4]{ false, false, false, false } }, rootConnected{ new bool[4]{ false, false, false, false } }
+{}
 
 HarvestTile::~HarvestTile()
 {
 	delete position;
 	delete[] tileContent;
+	delete[] visitedResource;
 }
 
 void HarvestTile::generateResources()
