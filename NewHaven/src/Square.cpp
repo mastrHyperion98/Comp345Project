@@ -16,7 +16,7 @@ Square::Square(){
 
 Square::Square(const Square &square) {
     position = new int(*square.position);
-    if(tile != nullptr)
+    if(square.tile != nullptr)
         tile = new HarvestTile(*square.tile);
     else
         tile = nullptr;

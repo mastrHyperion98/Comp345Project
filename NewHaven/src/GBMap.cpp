@@ -198,7 +198,7 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
         auto vertices = (*board).vertex_set();
         vertex_t first_v = vertices[position];
         vertex_t root = add_vertex(*connectedGraph);
-        (*connectedGraph)[root] = (*board)[first_v];
+        (*connectedGraph)[root] = Square((*board)[first_v]);
         deque<vertex_t> queue;
         deque<vertex_t> root_queue;
         queue.push_back(first_v);
@@ -222,7 +222,7 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
                          queue.push_back(next_element);
                     if(!graphContainsPosition(*connectedGraph, (*board)[next_element].getPosition())){
                         vertex_t vertex1 = add_vertex(*connectedGraph);
-                        (*connectedGraph)[vertex1] = (*board)[next_element];
+                        (*connectedGraph)[vertex1] = Square((*board)[next_element]);
                         root_queue.push_back(vertex1);
                         add_edge(root, vertex1, *connectedGraph);
                     }
@@ -240,10 +240,8 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
         // reset all the vertices isVisited to false;
         resetVerticesVisited();
 
-        ResourceTrails trail = ResourceTrails(*connectedGraph);
-        delete connectedGraph;
         delete board;
-    return trail;
+    return *connectedGraph;
 }
 /*
  * The function resetVerticesVisited traverses the graph and sets all the square isVisited data to false
