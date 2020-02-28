@@ -11,18 +11,16 @@ struct HarvestTile
 {
 private:
 	ResourceTypes* tileContent;
-	std::uint_least8_t* position;
 
 	void generateResources();
 public:
 	bool* visitedResource, *rootConnected;
 
 	HarvestTile();
-	HarvestTile(ResourceTypes* tileContent);
+    HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
 	ResourceTypes* getTileContent() const;
-	std::uint_least8_t getPosition() const;
 
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();

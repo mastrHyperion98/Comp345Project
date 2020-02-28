@@ -29,14 +29,19 @@ HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new 
 	generateResources();
 }
 
-HarvestTile::HarvestTile(ResourceTypes* tileContent) : tileContent{ tileContent }, position{ new std::uint_least8_t() }, visitedResource{ new bool[4]{ false, false, false, false } }, rootConnected{ new bool[4]{ false, false, false, false } }
-{}
-
+HarvestTile::HarvestTile(const HarvestTile &tile) {
+        tileContent = new ResourceTypes[4];
+        // reassign the values by using pass-by value
+        tileContent[0] = tile.tileContent[0];
+        tileContent[1] = tile.tileContent[1];
+        tileContent[2] = tile.tileContent[2];
+        tileContent[3] = tile.tileContent[3];
+}
 HarvestTile::~HarvestTile()
 {
-	delete position;
 	delete[] tileContent;
 	delete[] visitedResource;
+	delete[] rootConnected;
 }
 
 void HarvestTile::generateResources()
@@ -141,11 +146,6 @@ ResourceTypes* HarvestTile::getTileContent() const
 	}
 
 	return tileContent;
-}
-
-std::uint_least8_t HarvestTile::getPosition() const
-{
-	return *position;
 }
 
 HarvestDeck::HarvestDeck():

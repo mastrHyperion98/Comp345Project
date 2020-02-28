@@ -14,8 +14,8 @@ public:
     bool *isVisited;
 
     Square();
+    Square(const Square &square);
     ~Square();
-
     HarvestTile* getTile() const;
     int getPosition() const;
     bool getIsPlayed();

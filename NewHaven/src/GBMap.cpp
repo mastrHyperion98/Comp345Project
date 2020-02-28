@@ -8,6 +8,7 @@
 #include "boost/graph/adjacency_list.hpp"
 #include "boost/graph/graph_utility.hpp"
 #include "boost/graph/connected_components.hpp"
+#include "boost/graph/copy.hpp"
 // include the io stream library
 #include <iostream>
 // include the string library
@@ -157,11 +158,12 @@ void GBMap::generateFourPlayerBoard(){
     }
 }
 Square* GBMap::getSquare(int position) {
-    /*TO-DO
-     * Verify position is within the appropriate ranged based on the board configuration
-     * return an error otherwise.
-     */
-    return &(*game_board)[position];
+    if(position >= 0 && position < *SIZE) {
+        Square *sq_cpy = new Square((*game_board)[position]);
+        return sq_cpy;
+    }
+    else
+        return nullptr;
 }
 void GBMap::printGraph() {
     boost::print_graph(*game_board);
@@ -188,11 +190,15 @@ void GBMap::printConnectedGraph() {
  * From a given origin compute a graph of connected played tiles
  */
 ResourceTrails GBMap::getConnectedGraph(int const position){
-        ResourceTrails connectedGraph;
-        auto vertices = (*game_board).vertex_set();
+        // create a copy of the game_board
+        // and use the copy throughout
+        Graph *board = new Graph(*game_board);
+
+        ResourceTrails *connectedGraph = new ResourceTrails;
+        auto vertices = (*board).vertex_set();
         vertex_t first_v = vertices[position];
-        vertex_t root = add_vertex(connectedGraph);
-        connectedGraph[root] = (*game_board)[first_v];
+        vertex_t root = add_vertex(*connectedGraph);
+        (*connectedGraph)[root] = Square((*board)[first_v]);
         deque<vertex_t> queue;
         deque<vertex_t> root_queue;
         queue.push_back(first_v);
@@ -204,26 +210,26 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
             vertex_t origin = queue.front();
             root = root_queue.front();
             // fetches references to the last vertex
-            tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *game_board);
+            tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board);
             for (; neighbourIt != neighbourEnd; ++neighbourIt) {
-                *(*game_board)[origin].isVisited = true;
+                *(*board)[origin].isVisited = true;
                 // next_element
                 vertex_t next_element = vertices[*neighbourIt];
                 // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
                 // search its neighbours
-                if (!*(*game_board)[next_element].isVisited && (*game_board)[next_element].getIsPlayed()){
+                if (!*(*board)[next_element].isVisited && (*board)[next_element].getIsPlayed()){
                     if( !vertexContainedInQueue(queue, next_element))
                          queue.push_back(next_element);
-                    if(!graphContainsPosition(connectedGraph, (*game_board)[next_element].getPosition())){
-                        vertex_t vertex1 = add_vertex(connectedGraph);
-                        connectedGraph[vertex1] = (*game_board)[next_element];
+                    if(!graphContainsPosition(*connectedGraph, (*board)[next_element].getPosition())){
+                        vertex_t vertex1 = add_vertex(*connectedGraph);
+                        (*connectedGraph)[vertex1] = Square((*board)[next_element]);
                         root_queue.push_back(vertex1);
-                        add_edge(root, vertex1, connectedGraph);
+                        add_edge(root, vertex1, *connectedGraph);
                     }
                     // we need to go fetch the vertexID for the element with the required position to complete our trail
                     else{
-                        int v_position = getVertexPosition(connectedGraph, (*game_board)[next_element].getPosition());
-                        add_edge(root, connectedGraph.vertex_set()[v_position], connectedGraph);
+                        int v_position = getVertexPosition(*connectedGraph, (*board)[next_element].getPosition());
+                        add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
                     }
                 }
             }
@@ -233,7 +239,9 @@ ResourceTrails GBMap::getConnectedGraph(int const position){
         } // end of while loop
         // reset all the vertices isVisited to false;
         resetVerticesVisited();
-    return connectedGraph;
+
+        delete board;
+    return *connectedGraph;
 }
 /*
  * The function resetVerticesVisited traverses the graph and sets all the square isVisited data to false
@@ -290,3 +298,8 @@ void GBMap::printIndexConfiguration() {
     }
 }
 
+void GBMap::setTile(int position, HarvestTile *tile) {
+    HarvestTile *cpy = new HarvestTile(*tile);
+    (*game_board)[position].setTile(cpy);
+    delete cpy;
+}
