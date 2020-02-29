@@ -83,6 +83,7 @@ int main()
             valid_root = true;
         else {
             std::cout << "Invalid input; please re-enter.\n";
+            valid_root = false;
             i--;
         }
         if(valid_root) {
