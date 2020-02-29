@@ -110,7 +110,7 @@ It returns an integer that will be added to the score for the resource specific 
 */
 std::int_fast8_t ResourceScore::browseTile(const Square& square, const ResourceTypes* const content, const std::uint_fast8_t& index)
 {
-	std::int_fast8_t j{ 1 }, i{ (index + j) % 4 }, total{ 1 }; //total defaults to one because we count the resource at the index. j defaults to 1 because we want to check the index right after the current one.
+	std::int_fast8_t j{ 1 }, i{ static_cast<int_fast8_t>((index + j) % 4) }, total{ 1 }; //total defaults to one because we count the resource at the index. j defaults to 1 because we want to check the index right after the current one.
 	/*
 	index + j % 4 is to point to the next resource in the array of resources. Its purpose is to move circularly and never go out of bound.
 	We make sure that the next resource was not visited before and that it is equal to the previous.
