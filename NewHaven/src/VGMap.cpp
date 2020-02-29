@@ -115,7 +115,7 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
     while (!root_queue.empty()) {
         vertex = root_queue.front();
         *(*village_board)[vertex].isVisited = true;
-        Graph::adjacency_iterator start, end;
+        C_Graph::adjacency_iterator start, end;
         tie(start, end) = adjacent_vertices(vertex, *village_board);
         for (; start != end; ++start) {
             // create the next element
@@ -167,7 +167,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
         vertex = root_queue.front();
         *(*village_board)[vertex].isVisited = true;
         // define your adjacency iterator
-        Graph::adjacency_iterator start, end;
+        C_Graph::adjacency_iterator start, end;
         tie(start, end) = adjacent_vertices(vertex, *village_board);
         for (; start != end; ++start) {
             // create the next element
