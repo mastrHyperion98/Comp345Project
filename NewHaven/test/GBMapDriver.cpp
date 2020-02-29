@@ -74,7 +74,6 @@ int main() {
             i--;
         }
     }
-    cout << (*map->getSquare(0)->getTile()).getTileContent()[2];
     delete map;
     delete[] tile;
     return 0;
