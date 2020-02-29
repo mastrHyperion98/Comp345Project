@@ -11,11 +11,12 @@
 class Square
 {
 public:
-    bool *isVisited;
+    bool *isVisited, *visitedResource, *rootConnected;
 
     Square();
-
-    HarvestTile getTile() const;
+    Square(const Square &square);
+    ~Square();
+    HarvestTile* getTile() const;
     int getPosition() const;
     bool getIsPlayed();
     void setPosition(int* position);

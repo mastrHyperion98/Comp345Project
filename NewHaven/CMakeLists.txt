@@ -18,6 +18,7 @@ add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
 add_executable(CalculatorTest src/Resources.cpp src/GBMap.cpp src/Square.cpp)
 add_executable(VGMapScore test/VGMapScoreComputation.cpp src/Resources.cpp src/VGMap.cpp src/ScoreCalculator.cpp)
+add_executable(ScoreTest test/ScoreDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp src/ResourceScore.cpp)
 target_link_libraries (VGMap ${Boost_LIBRARIES})
 target_link_libraries (GameBoardMapTest ${Boost_LIBRARIES})
 target_link_libraries (VGMapScore ${Boost_LIBRARIES})
