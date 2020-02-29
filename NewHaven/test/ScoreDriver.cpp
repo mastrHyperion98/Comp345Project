@@ -79,11 +79,12 @@ int main()
             std::cout << "Invalid input; please re-enter.\n";
         }
 
-        if ((root >= 5 && root != 12) || root == 24 || root <= 18)
+        if ((root >= 5 && root != 12 && root <= 18)  || root == 24)
             valid_root = true;
-        else
+        else {
             std::cout << "Invalid input; please re-enter.\n";
-
+            i--;
+        }
         if(valid_root) {
             calculator.computeScore(
                     map.getConnectedGraph(root)); //13 is the root tile, can be changed to any other valid tile.
