@@ -283,9 +283,9 @@ void GBMap::printIndexConfiguration() {
         config.append(" -  05 06 07 08 09 -\n");
         config.append(" -  10 11 12 13 14 -\n");
         config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  21 22 23 24 25 -\n");
-        config.append(" -  26 27 28 29 30 -\n");
-        config.append(" -  31 32 33 34 35 -\n");
+        config.append(" -  20 21 22 23 24 -\n");
+        config.append(" -  25 26 27 28 29 -\n");
+        config.append(" -  30 31 32 33 34 -\n");
       cout << config;
     }
     else{
@@ -293,7 +293,7 @@ void GBMap::printIndexConfiguration() {
         config.append(" -  05 06 07 08 09 -\n");
         config.append(" -  10 11 12 13 14 -\n");
         config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  21 22 23 24 25 -\n");
+        config.append(" -  20 21 22 23 24 -\n");
         cout << config;
     }
 }
