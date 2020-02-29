@@ -11,7 +11,7 @@
 class Square
 {
 public:
-    bool *isVisited;
+    bool *isVisited, *visitedResource, *rootConnected;
 
     Square();
     Square(const Square &square);

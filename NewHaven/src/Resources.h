@@ -14,7 +14,6 @@ private:
 
 	void generateResources();
 public:
-	bool* visitedResource, *rootConnected;
 
 	HarvestTile();
     HarvestTile(const HarvestTile &tile);

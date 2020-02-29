@@ -7,14 +7,16 @@
 
 using namespace std;
 
-Square::Square(){
+Square::Square() : visitedResource{ new bool[4]{ false, false, false, false } }, rootConnected{ new bool[4]{ false, false, false, false } }
+{
     position = nullptr;
     tile = nullptr;
     isVisited = new bool(false);
     isPlayed = new bool(false);
 }
 
-Square::Square(const Square &square) {
+Square::Square(const Square& square) : visitedResource{ new bool[4] }, rootConnected{ new bool[4] }
+{
     position = new int(*square.position);
     if(square.tile != nullptr)
         tile = new HarvestTile(*square.tile);
@@ -22,6 +24,12 @@ Square::Square(const Square &square) {
         tile = nullptr;
     isVisited = new bool(*square.isVisited);
     isPlayed = new bool(*square.isPlayed);
+
+    for (std::int_fast8_t i = 0; i < 4; i++)
+    {
+        visitedResource[i] = square.visitedResource[i];
+        rootConnected[i] = square.rootConnected[i];
+    }
 }
 
 Square::~Square() = default;
@@ -33,8 +41,7 @@ void Square::setPosition(int* position){
     delete position;
 }
 int Square::getPosition() const{
-    int *cpy = new int(*position);
-    return *cpy;
+    return *position;
 }
 void Square::setTile(HarvestTile * tile){
     if(!*isPlayed && tile != nullptr) {
