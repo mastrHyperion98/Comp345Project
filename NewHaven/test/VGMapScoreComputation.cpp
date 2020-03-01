@@ -25,14 +25,14 @@ int main(){
         map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
-    map.getCircle(3).getBuilding().flipCard();
+    map.getCircle(3).getBuilding()->flipCard();
     cout << "FLIPPING ONE BUILDING IN ROW 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
     for(int i = 5; i < 10; i++){
         map.setBuilding(i, deck.draw());
     }
     cout << "POPULATING ROW 2: TOP ROW WITH 6 FACE-UP BUILDINGS";
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
-    map.getCircle(3).getBuilding().flipCard();
+    map.getCircle(3).getBuilding()->flipCard();
     cout << "FLIPPING THE BUILDING IN ROW 1 FACEUP THE SCORE IS: " << s_calculator.getScore(map) << endl;
     cout << "POPULATING COLUMN 1: LEFT-MOST WITH 5 FACE-UP BUILDINGS";
     for(int i = 5; i < 26; i += 5){
@@ -40,7 +40,7 @@ int main(){
             map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
-    map.getCircle(0).getBuilding().flipCard();
+    map.getCircle(0).getBuilding()->flipCard();
     cout << "FLIPPING THE BUILDING IN ROW 1 AND COLUMN 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
     cout << "POPULATING COLUMN 5: RIGHT-MOST WITH 5 FACE-UP BUILDINGS";
     for(int i = 4; i < 30; i += 5){
@@ -54,7 +54,7 @@ int main(){
             map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(map) << endl;
-    map.getCircle(7).getBuilding().flipCard();
+    map.getCircle(7).getBuilding()->flipCard();
     cout << "FLIPPING THE BUILDING IN ROW 2 AND COLUMN 3 FACEDOWN THE SCORE IS: " << s_calculator.getScore(map) << endl;
 
 

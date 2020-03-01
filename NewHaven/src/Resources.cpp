@@ -184,6 +184,12 @@ Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber
 	faceUp{ new bool(true) }
 {}
 
+Building::Building(const Building &building) {
+    buildingType = new ResourceTypes(*building.buildingType);
+    buildingNumber = new std::uint_least8_t(*building.buildingNumber);
+    position = new std::uint_least8_t(*building.position);
+    faceUp = new bool(*building.faceUp);
+}
 Building::~Building()
 {
 	delete buildingType;

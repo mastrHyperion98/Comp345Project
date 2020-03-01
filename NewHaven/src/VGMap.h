@@ -27,7 +27,7 @@ public:
     void setPosition(int pos);
     void setBuilding(Building * building);
     void setVCost(int cost);
-    Building getBuilding() const;
+    Building* getBuilding() const;
     bool getIsPlayed() const;
 
     // our private properties and functions
