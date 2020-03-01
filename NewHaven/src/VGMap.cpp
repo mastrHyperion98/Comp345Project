@@ -110,7 +110,7 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
     auto vertex_set = board.vertex_set();
     vertex_v vertex = vertex_set[origin_index];
     vertex_v origin_v = add_vertex(graph);
-    graph[origin_v] = (board)[vertex];
+    graph[origin_v] = Circle((board)[vertex]);
     root_queue.push_back(vertex);
 
     while (!root_queue.empty()) {
@@ -127,7 +127,7 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = (board)[next_element];
+                graph[v] = Circle((board)[next_element]);
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
@@ -158,7 +158,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     // create new vertex in ConnectedGraph graph
     vertex_v origin_v = add_vertex(graph);
     // assign the circle from vertex to origin_v
-    graph[origin_v] = (board)[vertex];
+    graph[origin_v] = Circle((board)[vertex]);
     // push origin into queue
     root_queue.push_back(vertex);
 
@@ -180,7 +180,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = (board)[next_element];
+                graph[v] = Circle((board)[next_element]);
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
@@ -215,6 +215,18 @@ void VGMap::setBuilding(int position, Building *building) {
 }
 Circle::Circle(){
 
+}
+
+Circle::Circle(const Circle &circle){
+    if(circle.building != nullptr){
+        building = new Building(*circle.building);
+    } else
+        building = nullptr;
+    row = new int(*circle.row);
+    column = new int(*circle.column);
+    vCost = new int(*circle.vCost);
+    isVisited = new bool(*circle.isVisited);
+    isPlayed = new bool(*circle.isPlayed);
 }
 
 Circle::~Circle() = default;

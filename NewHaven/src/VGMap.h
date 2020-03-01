@@ -16,6 +16,7 @@ public:
     // our public properties and methods
     bool *isVisited = new bool(false);
     Circle();
+    Circle(const Circle &circle);
     ~Circle();
     int getRow() const;
     int getColumn() const;
