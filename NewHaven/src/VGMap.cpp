@@ -103,30 +103,31 @@ void VGMap::PrintConnectedGraph() {
 // returns a graph with all the connected nodes in the selected column
 // same logic as getConnectedRow
 ConnectedCircles VGMap::getConnectedColumn(int const column){
+    C_Graph board = C_Graph(*village_board);
     ConnectedCircles graph;
     deque<vertex_v> root_queue;
     int origin_index = column % 5;
-    auto vertex_set = village_board->vertex_set();
+    auto vertex_set = board.vertex_set();
     vertex_v vertex = vertex_set[origin_index];
     vertex_v origin_v = add_vertex(graph);
-    graph[origin_v] = (*village_board)[vertex];
+    graph[origin_v] = (board)[vertex];
     root_queue.push_back(vertex);
 
     while (!root_queue.empty()) {
         vertex = root_queue.front();
-        *(*village_board)[vertex].isVisited = true;
+        *(board)[vertex].isVisited = true;
         C_Graph::adjacency_iterator start, end;
-        tie(start, end) = adjacent_vertices(vertex, *village_board);
+        tie(start, end) = adjacent_vertices(vertex, board);
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if ((*village_board)[next_element].getColumn() == column && !*(*village_board)[next_element].isVisited) {
+            if ((board)[next_element].getColumn() == column && !*(board)[next_element].isVisited) {
                 // if the next_element is in the same column then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = (*village_board)[next_element];
+                graph[v] = (board)[next_element];
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
@@ -145,18 +146,19 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
 
 // returns a graph with all the connected nodes in the selected row
 ConnectedCircles VGMap::getConnectedRow(int const row) {
+    C_Graph board = C_Graph(*village_board);
     ConnectedCircles graph;
     // create a queue to keep track of the next element to traverse
     deque<vertex_v> root_queue;
     int origin_index = 5 * row;
     // define the vertexSet of Village Board
-    auto vertex_set = village_board->vertex_set();
+    auto vertex_set = board.vertex_set();
     // get vertex from village board
     vertex_v vertex = vertex_set[origin_index];
     // create new vertex in ConnectedGraph graph
     vertex_v origin_v = add_vertex(graph);
     // assign the circle from vertex to origin_v
-    graph[origin_v] = (*village_board)[vertex];
+    graph[origin_v] = (board)[vertex];
     // push origin into queue
     root_queue.push_back(vertex);
 
@@ -165,20 +167,20 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     while (!root_queue.empty()) {
         // get the head of the queue
         vertex = root_queue.front();
-        *(*village_board)[vertex].isVisited = true;
+        *(board)[vertex].isVisited = true;
         // define your adjacency iterator
         C_Graph::adjacency_iterator start, end;
-        tie(start, end) = adjacent_vertices(vertex, *village_board);
+        tie(start, end) = adjacent_vertices(vertex, board);
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if ((*village_board)[next_element].getRow() == row && !*(*village_board)[next_element].isVisited) {
+            if ((board)[next_element].getRow() == row && !*(board)[next_element].isVisited) {
                 // if the next_element is in the same row then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = (*village_board)[next_element];
+                graph[v] = (board)[next_element];
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
