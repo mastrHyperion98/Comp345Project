@@ -4,19 +4,18 @@
 
 struct Player
 {
-private:
-    VGMap* villageGameBoard;
-    Hand* hand;
-    std::map<ResourceTypes, std::uint_least16_t>* score;
-
 public:
     Player();
     ~Player();
 
+    VGMap* villageGameBoard;
+    Hand* hand;
+    std::map<ResourceTypes, std::uint_least16_t>* score;
+
     void placeHarvestTile();
-    void drawBuilding();
-    void drawHarvestTile();
-    void resourceTracker();
+    void drawBuilding(BuildingDeck* buildingDeck);
+    void drawHarvestTile(HarvestDeck* harvestDeck);
+    void resourceTracker(ResourceScore* resourceScore);
     void buildVillage();
-    void calculateResources();
+    void calculateResources(ResourceScore* resourceScore);
 };
