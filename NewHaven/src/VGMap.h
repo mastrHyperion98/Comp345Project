@@ -16,6 +16,7 @@ public:
     // our public properties and methods
     bool *isVisited = new bool(false);
     Circle();
+    Circle(const Circle &circle);
     ~Circle();
     int getRow() const;
     int getColumn() const;
@@ -26,7 +27,7 @@ public:
     void setPosition(int pos);
     void setBuilding(Building * building);
     void setVCost(int cost);
-    Building getBuilding() const;
+    Building* getBuilding() const;
     bool getIsPlayed() const;
 
     // our private properties and functions
