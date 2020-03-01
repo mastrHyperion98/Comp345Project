@@ -14,6 +14,7 @@ typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Squ
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Square> ResourceTrails;
 typedef boost::graph_traits<Graph>::vertex_descriptor vertex_t;
 
+
 using namespace std;
 
 class GBMap{
@@ -31,7 +32,7 @@ public:
     void printIndexConfiguration();
     void setTile(int position, HarvestTile *tile);
     // number of center squares
-    Square getSquare(int position);
+    Square* getSquare(int position);
     ResourceTrails getConnectedGraph(int position);
 private:
     // an int value in the range [0,2] denotes the initial configuration of the board

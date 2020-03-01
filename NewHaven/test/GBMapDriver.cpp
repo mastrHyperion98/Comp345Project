@@ -76,6 +76,5 @@ int main() {
     }
     delete map;
     delete[] tile;
-
     return 0;
 }
