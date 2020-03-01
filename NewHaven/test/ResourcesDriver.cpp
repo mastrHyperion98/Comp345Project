@@ -8,7 +8,7 @@ int main()
     ResourceTypes* tContent;
     std::uint_least8_t hDeckSize;
     std::uint_least8_t tPosition;
-
+/*
     for (std::uint_fast8_t i = 0; i < 60; i++)
     {
     tile = hDeck.draw();
@@ -32,7 +32,7 @@ int main()
     std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
     
     delete tContent;
-    }
+    }*/
     
     BuildingDeck bDeck;
     std::uint_least8_t bDeckSize;
@@ -48,11 +48,10 @@ int main()
         bDeckSize = bDeck.getDeckSize();
         bType = building->getBuildingType();
         bNumber = building->getBuildingNumber();
-        bPosition = building->getPosition();
         side = building->isFlipped();
 
         std::cout << "We drew a card.\nDeck size: " << static_cast<int>(bDeckSize) << "\nBuilding: " << bType
-            << "\tNumber: " << static_cast<int>(bNumber) << "\tPosition: " << static_cast<int>(bPosition)
+            << "\tNumber: " << static_cast<int>(bNumber)
             << "\tFace up: " << (side ? "true" : "false") << "\nWe flipped it.\nFace up: "
             << (building->flipCard() ? "true" : "false") << "\n\n";
     }

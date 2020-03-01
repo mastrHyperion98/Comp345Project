@@ -180,16 +180,18 @@ HarvestTile* HarvestDeck::draw() const
 Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position) :
 	buildingType{ new ResourceTypes(buildingType) },
 	buildingNumber{ new std::uint_least8_t(buildingNumber) },
-	position{ new std::uint_least8_t(position) },
 	faceUp{ new bool(true) }
 {}
-/*
+Building::Building(const Building &building){
+   buildingType = new ResourceTypes(*building.buildingType);
+   buildingNumber = new std::uint_least8_t(*building.buildingNumber);
+   faceUp = new bool(building.faceUp);
+}
 Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
-	delete position;
-}*/
+}
 
 bool Building::isFlipped() const
 {
@@ -204,11 +206,6 @@ ResourceTypes Building::getBuildingType() const
 std::uint_least8_t Building::getBuildingNumber() const
 {
 	return *buildingNumber;
-}
-
-std::uint_least8_t Building::getPosition() const
-{
-	return *position;
 }
 
 bool Building::flipCard()
@@ -254,14 +251,14 @@ BuildingDeck::BuildingDeck():
 		}
 	}
 }
-/*
+
 BuildingDeck::~BuildingDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
 }
-*/
+
 std::uint_least8_t BuildingDeck::getDeckSize() const
 {
 	return *deckSize;

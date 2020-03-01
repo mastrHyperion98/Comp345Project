@@ -46,17 +46,16 @@ struct Building
 private:
 	const ResourceTypes* buildingType;
 	const std::uint_least8_t* buildingNumber;
-	std::uint_least8_t* position;
 	bool* faceUp;
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
-	//~Building();
+	Building(const Building &building);
+	~Building();
 
 	bool isFlipped() const;
 	ResourceTypes getBuildingType() const;
 	std::uint_least8_t getBuildingNumber() const;
-	std::uint_least8_t getPosition() const;
 
 	bool flipCard();
 };
@@ -70,7 +69,7 @@ private:
 	
 public:
 	BuildingDeck();
-	//~BuildingDeck();
+	~BuildingDeck();
 
 	std::uint_least8_t getDeckSize() const;
 
