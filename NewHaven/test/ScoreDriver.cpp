@@ -3,7 +3,12 @@
 #include "../src/GBMap.h"
 #include "../src/Resources.h"
 #include "../src/ResourceScore.h"
+#include "../src/VGMap.h"
+#include "../src/Resources.h"
+#include "../src/ScoreCalculator.h"
 
+using namespace std;
+using namespace boost;
 int main()
 {
 	GBMap map(0);
@@ -79,7 +84,7 @@ int main()
             std::cout << "Invalid input; please re-enter.\n";
         }
 
-        if ((root >= 5 && root != 12 && root <= 18)  || root == 24)
+        if ((root >= 5 && root != 12 && root != 15 && root <= 18)  || root == 24)
             valid_root = true;
         else {
             std::cout << "Invalid input; please re-enter.\n";
@@ -93,4 +98,50 @@ int main()
             calculator.printScore();
         }
     }
+
+
+    cout << "\n******** VILLAGE GAME BOARD SCORE TEST ***************\n" << endl;
+    ScoreCalculator s_calculator;
+    // Create a deck of buildings
+    BuildingDeck deck;
+    // create a village map
+    VGMap v_map;
+    // now we need to populate the map board either manually or not
+    cout << "POPULATING ROW 1: TOP ROW WITH 6 FACE-UP BUILDINGS";
+    for(int i = 0; i < 5; i++){
+        v_map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    v_map.flipMapBuilding(3);
+    cout << "FLIPPING ONE BUILDING IN ROW 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    for(int i = 5; i < 10; i++){
+        v_map.setBuilding(i, deck.draw());
+    }
+    cout << "POPULATING ROW 2: TOP ROW WITH 6 FACE-UP BUILDINGS";
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    v_map.flipMapBuilding(3);
+    cout << "FLIPPING THE BUILDING IN ROW 1 FACEUP THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    cout << "POPULATING COLUMN 1: LEFT-MOST WITH 5 FACE-UP BUILDINGS";
+    for(int i = 5; i < 26; i += 5){
+        if(!v_map.getCircle(i).getIsPlayed())
+            v_map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    v_map.flipMapBuilding(0);
+    cout << "FLIPPING THE BUILDING IN ROW 1 AND COLUMN 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    cout << "POPULATING COLUMN 5: RIGHT-MOST WITH 5 FACE-UP BUILDINGS";
+    for(int i = 4; i < 30; i += 5){
+        if(!v_map.getCircle(i).getIsPlayed())
+            v_map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    cout << "POPULATING COLUMN 3: MIDDLE WITH 5 FACE-UP BUILDINGS";
+    for(int i = 2; i < 28; i += 5){
+        if(!v_map.getCircle(i).getIsPlayed())
+            v_map.setBuilding(i, deck.draw());
+    }
+    cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+    v_map.flipMapBuilding(7);
+    cout << "FLIPPING THE BUILDING IN ROW 2 AND COLUMN 3 FACEDOWN THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
+
 }

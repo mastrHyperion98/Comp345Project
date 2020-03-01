@@ -148,7 +148,6 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
 // returns a graph with all the connected nodes in the selected row
 ConnectedCircles VGMap::getConnectedRow(int const row) {
     C_Graph *board = new C_Graph(*village_board);
-
     ConnectedCircles graph;
     // create a queue to keep track of the next element to traverse
     deque<vertex_v> root_queue;
@@ -159,6 +158,8 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     vertex_v vertex = vertex_set[origin_index];
     // create new vertex in ConnectedGraph graph
     vertex_v origin_v = add_vertex(graph);
+
+
     // assign the circle from vertex to origin_v
     graph[origin_v] = Circle((*board)[vertex]);
     // push origin into queue
@@ -213,6 +214,10 @@ void VGMap::resetVisited() {
     }
 }
 
+void VGMap::flipMapBuilding(int position) {
+    (*village_board)[position].flipBuilding();
+}
+
 void VGMap::setBuilding(int position, Building *building) {
     (*village_board)[position].setBuilding(building);
 }
@@ -232,14 +237,7 @@ Circle::Circle(const Circle &circle){
     isPlayed = new bool(*circle.isPlayed);
 }
 
-Circle::~Circle() {
-    delete building;
-    delete row;
-    delete column;
-    delete vCost;
-    delete isVisited;
-    delete isPlayed;
-}
+Circle::~Circle() = default;
 int Circle::getRow() const{
     return *row;
 }
@@ -274,7 +272,7 @@ void Circle::setVCost(int cost) {
 
 void Circle::setBuilding(Building * building) {
     if(!*isPlayed) {
-        this->building = building;
+        this->building = new Building(*building);
         *this->isPlayed = true;
         return;
     }
@@ -286,4 +284,8 @@ void Circle::setPosition(int pos) {
 }
 bool Circle::getIsPlayed() const {
     return *isPlayed;
+}
+
+void Circle::flipBuilding() {
+    this->building->flipCard();
 }

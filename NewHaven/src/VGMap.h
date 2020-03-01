@@ -29,6 +29,7 @@ public:
     void setVCost(int cost);
     Building* getBuilding() const;
     bool getIsPlayed() const;
+    void flipBuilding();
 
     // our private properties and functions
 private:
@@ -60,6 +61,7 @@ public:
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
+    void flipMapBuilding(int position);
 private:
     void CreateVillageField();
     C_Graph *village_board = new C_Graph;
