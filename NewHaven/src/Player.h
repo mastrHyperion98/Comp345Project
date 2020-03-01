@@ -1,25 +1,18 @@
-// Player can be placed on any open square/space on the GB
+#include "VGMap.h"
+#include "Resources.h"
+#include "ResourceScore.h"
+
 struct Player
 {
 private:
-    // Player's Village GB
-    VillageGameBoard* villageGameBoard{};
-    // Havest Tiles player owns
-    HarvestTile* tiles{};
-    // Buildings player owns
-    Building* buildings{};
-    // Player's owened Resource markers
-    ResourceMarker* resources{};
-    // Player's Gathering and Building Scoring facilities
-    Facilities* facilities{};
+    VGMap* villageGameBoard;
+    Hand* hand;
+    std::map<ResourceTypes, std::uint_least16_t>* score;
 
 public:
-    // Constructor
-    Player(VillageGameBoard, HarvestTiles, Buildings, Resources, GatheringAndBuildingFacilities);
-    // Destructor
+    Player();
     ~Player();
 
-    // Methods to be implemented
     void placeHarvestTile();
     void drawBuilding();
     void drawHarvestTile();
