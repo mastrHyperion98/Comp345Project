@@ -11,15 +11,15 @@ struct HarvestTile
 {
 private:
 	ResourceTypes* tileContent;
-	std::uint_least8_t* position;
 
 	void generateResources();
 public:
+
 	HarvestTile();
+    HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
 	ResourceTypes* getTileContent() const;
-	std::uint_least8_t getPosition() const;
 
 	void rotateTileClockwise();
 	void rotateTileCounterClockwise();
@@ -51,6 +51,7 @@ private:
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
+	Building(const Building &building);
 	~Building();
 
 	bool isFlipped() const;

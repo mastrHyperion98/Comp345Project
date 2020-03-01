@@ -16,6 +16,7 @@ public:
     // our public properties and methods
     bool *isVisited = new bool(false);
     Circle();
+    Circle(const Circle &circle);
     ~Circle();
     int getRow() const;
     int getColumn() const;
@@ -26,8 +27,9 @@ public:
     void setPosition(int pos);
     void setBuilding(Building * building);
     void setVCost(int cost);
-    Building getBuilding() const;
+    Building* getBuilding() const;
     bool getIsPlayed() const;
+    void flipBuilding();
 
     // our private properties and functions
 private:
@@ -40,9 +42,9 @@ private:
 };
 
 // define our village board graph
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Circle> Graph;
+typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Circle> C_Graph;
 // define our vertex descriptor
-typedef boost::graph_traits<Graph>::vertex_descriptor vertex_v;
+typedef boost::graph_traits<C_Graph>::vertex_descriptor vertex_v;
 // define the graph we will be using for computing scores
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Circle> ConnectedCircles;
 
@@ -59,9 +61,10 @@ public:
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
+    void flipMapBuilding(int position);
 private:
     void CreateVillageField();
-    Graph *village_board = new Graph;
+    C_Graph *village_board = new C_Graph;
 };
 
 #endif //NEWHAVEN_VGMAP_H

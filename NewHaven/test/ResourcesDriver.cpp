@@ -2,7 +2,7 @@
 #include <iostream>
 
 int main()
-{/*
+{
     HarvestDeck hDeck;
     HarvestTile* tile;
     ResourceTypes* tContent;
@@ -14,10 +14,8 @@ int main()
     tile = hDeck.draw();
     hDeckSize = hDeck.getDeckSize();
     tContent = tile->getTileContent();
-    tPosition = tile->getPosition();
 
-    std::cout << "We drew a card.\nDeck size: " << static_cast<int>(hDeckSize) << "\tPosition: "
-        << static_cast<int>(tPosition) << '\n';
+    std::cout << "We drew a card.\nDeck size: " << static_cast<int>(hDeckSize) << '\n';
 
     std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
     
@@ -34,7 +32,7 @@ int main()
     std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
     
     delete tContent;
-    }*/
+    }
     
     BuildingDeck bDeck;
     std::uint_least8_t bDeckSize;

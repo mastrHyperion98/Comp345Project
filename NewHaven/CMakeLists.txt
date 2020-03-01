@@ -13,11 +13,11 @@ if(UNIX)
     #Execute Unix only command
     endif(UNIX)
 
-add_executable(VGMap test/VGMapDriver.cpp src/VGMap.cpp)
+add_executable(VGMap test/VGMapDriver.cpp src/VGMap.cpp src/Resources.cpp)
 add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp)
 add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/VGMapLoader.cpp src/VGMap.cpp src/GBMapLoader.cpp src/GBMap.cpp src/Square.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp)
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
+add_executable(ScoreTest test/ScoreDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp src/ResourceScore.cpp src/VGMap.cpp src/ScoreCalculator.cpp)
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
 target_link_libraries (VGMap ${Boost_LIBRARIES})
 target_link_libraries (GameBoardMapTest ${Boost_LIBRARIES})
-

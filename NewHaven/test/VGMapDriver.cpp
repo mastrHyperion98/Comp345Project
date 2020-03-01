@@ -8,10 +8,10 @@
 
 using namespace std;
 int main() {
+    cout << "Input the number of village game board to generate: ";
     int playerNum;
     cin >> playerNum;
     VGMap* vgMaps = new VGMap[playerNum];
-
     for(int i=0; i< playerNum;++i){
         cout << "\n***Generate Graph***\n" << endl;
         cout << "\n***PRINT GRAPH***\n" << endl;

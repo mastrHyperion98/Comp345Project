@@ -24,14 +24,22 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
 	}
 }
 
-HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }, position{ new std::uint_least8_t() }
+HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
 {
 	generateResources();
 }
 
+HarvestTile::HarvestTile(const HarvestTile &tile)
+{
+        tileContent = new ResourceTypes[4];
+        // reassign the values by using pass-by value
+        tileContent[0] = tile.tileContent[0];
+        tileContent[1] = tile.tileContent[1];
+        tileContent[2] = tile.tileContent[2];
+        tileContent[3] = tile.tileContent[3];
+}
 HarvestTile::~HarvestTile()
 {
-	delete position;
 	delete[] tileContent;
 }
 
@@ -139,11 +147,6 @@ ResourceTypes* HarvestTile::getTileContent() const
 	return tileContent;
 }
 
-std::uint_least8_t HarvestTile::getPosition() const
-{
-	return *position;
-}
-
 HarvestDeck::HarvestDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new HarvestTile[*MAX_DECK_SIZE] }
@@ -181,6 +184,12 @@ Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber
 	faceUp{ new bool(true) }
 {}
 
+Building::Building(const Building &building) {
+    buildingType = new ResourceTypes(*building.buildingType);
+    buildingNumber = new std::uint_least8_t(*building.buildingNumber);
+    position = new std::uint_least8_t(*building.position);
+    faceUp = new bool(*building.faceUp);
+}
 Building::~Building()
 {
 	delete buildingType;
