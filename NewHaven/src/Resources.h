@@ -51,6 +51,7 @@ private:
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
+	Building(const Building &building);
 	~Building();
 
 	bool isFlipped() const;
