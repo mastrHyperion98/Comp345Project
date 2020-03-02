@@ -81,11 +81,12 @@ public:
 struct Hand
 {
 private:
-	std::vector<HarvestTile*>* harvestTiles;
-	HarvestTile* shipment;
-	std::vector<Building*>* buildings;
 
 public:
 	Hand();
 	~Hand();
+
+    std::vector<HarvestTile*>* harvestTiles;
+    HarvestTile* shipment;
+    std::vector<Building*>* buildings;
 };
