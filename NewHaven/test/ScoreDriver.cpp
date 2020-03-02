@@ -33,7 +33,7 @@ int main()
 	map.setTile(16, new HarvestTile);
 	map.setTile(17, new HarvestTile);
 	map.setTile(18, new HarvestTile);
-	map.setTile(24, new HarvestTile);
+	map.setTile(19, new HarvestTile);
 
 	/*Creating a variable for every tile to store its content for the sole purpose of printing it to console.
 	* They are all pointers because tileContent is an array.
@@ -51,7 +51,7 @@ int main()
 		*t7{ map.getSquare(16)->getTile()->getTileContent() },
 		*t8{ map.getSquare(17)->getTile()->getTileContent() },
 		*t9{ map.getSquare(18)->getTile()->getTileContent() },
-		* t9_1{ map.getSquare(24)->getTile()->getTileContent() };
+		* t9_1{ map.getSquare(19)->getTile()->getTileContent() };
 
 	/*
 	This printing part is where I printed the tiles for a visual support. We print line by line every row of the connected tiles seperating every string with a tab.
@@ -84,7 +84,7 @@ int main()
             std::cout << "Invalid input; please re-enter.\n";
         }
 
-        if ((root >= 5 && root != 12 && root != 15 && root <= 18)  || root == 24)
+        if (root >= 5 && root != 12 && root != 15 && root <= 19)
             valid_root = true;
         else {
             std::cout << "Invalid input; please re-enter.\n";

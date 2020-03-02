@@ -13,7 +13,7 @@ public:
 	ResourceScore();
 	~ResourceScore();
 
-    std::map<ResourceTypes, std::uint_least16_t>* score;
+    std::map<ResourceTypes, std::uint_least16_t>* score;	//Map to store the score for each resource type
 
 	void computeScore(ResourceTrails);
 	void printScore();
