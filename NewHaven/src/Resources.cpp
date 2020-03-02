@@ -2,8 +2,11 @@
 #include <time.h>
 #include <iostream>
 
-std::ostream& operator<<(std::ostream& output, const ResourceTypes resource)
+std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource)
 {
+	/*
+	Case by case, we print the proper string for each enum type
+	*/
 	switch (resource)
 	{
 	case ResourceTypes::SHEEP:
@@ -29,15 +32,15 @@ HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
 	generateResources();
 }
 
-HarvestTile::HarvestTile(const HarvestTile &tile)
+HarvestTile::HarvestTile(const HarvestTile& tile) : tileContent{ new ResourceTypes[4] }
 {
-        tileContent = new ResourceTypes[4];
-        // reassign the values by using pass-by value
-        tileContent[0] = tile.tileContent[0];
-        tileContent[1] = tile.tileContent[1];
-        tileContent[2] = tile.tileContent[2];
-        tileContent[3] = tile.tileContent[3];
+    // reassign the values by using pass-by value
+	tileContent[0] = tile.tileContent[0];
+	tileContent[1] = tile.tileContent[1];
+	tileContent[2] = tile.tileContent[2];
+	tileContent[3] = tile.tileContent[3];
 }
+
 HarvestTile::~HarvestTile()
 {
 	delete[] tileContent;
@@ -45,23 +48,27 @@ HarvestTile::~HarvestTile()
 
 void HarvestTile::generateResources()
 {
-	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };
-	std::srand(time(NULL) + std::rand());
+	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };	//Keep count of the number of a type on a single tile
+	std::srand(time(NULL) + std::rand());	//Different see every execution
 
 	for (std::uint_least8_t i = 0; i < 4; i++)
 	{
-		switch (std::rand() % 4 + 1)
+		switch (std::rand() % 4 + 1)	//Random number between 1 and 4
 		{
 		case 1:
 			sheepCount++;
-
+			/*
+			First condition checking that if it's the last iteration, we can't have one of all the other types, otherwise we end up with a tile with 4 different resources
+			the second condition makes sure that there are no more than 3 of the current resource, otherwise we'll have a tile full of the same resource.
+			Both conditions need to be fullfilled to add the resrouce on the tile.
+			*/
 			if (((i < 3) || !(stoneCount && wheatCount && woodCount)) && sheepCount <= 3)
 			{
 				tileContent[i] = ResourceTypes::SHEEP;
 			}
 			else
 			{
-				i--;
+				i--;	//If the conditions weren't met, we scrap this iteration and run again hoping to fall on another resource
 			}
 
 			break;
@@ -114,10 +121,12 @@ void HarvestTile::generateResources()
 void HarvestTile::rotateTileClockwise()
 {
 	ResourceTypes _temp{ tileContent[3] };
-	
+	/*
+	We move the content of the array clockwise: index 0->1->2->3->0
+	*/
 	for (std::uint_fast8_t i = 0; i < 3; i++)
 	{
-		tileContent[3-i] = tileContent[2-i];
+		tileContent[3-i] = tileContent[2-i];	//3->2->1->0->_temp(which is 3), 
 	}
 	
 	tileContent[0] = _temp;
@@ -129,7 +138,7 @@ void HarvestTile::rotateTileCounterClockwise()
 
 	for (std::uint_fast8_t i = 0; i < 3; i++)
 	{
-		tileContent[i] = tileContent[i+1];
+		tileContent[i] = tileContent[i+1];	//0->1->2->3->_temp(which is 0)
 	}
 
 	tileContent[3] = _temp;
@@ -141,7 +150,7 @@ ResourceTypes* HarvestTile::getTileContent() const
 
 	for (std::int_fast8_t i = 0; i < 4; i++)
 	{
-		tileContent[i] = this->tileContent[i];
+		tileContent[i] = this->tileContent[i];	//Copy array
 	}
 
 	return tileContent;
@@ -166,7 +175,7 @@ std::uint_least8_t HarvestDeck::getDeckSize() const
 
 HarvestTile* HarvestDeck::draw() const
 {
-	if (*deckSize > 0)
+	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
 		(*deckSize)--;
 		return &deckContent[*deckSize];
@@ -180,21 +189,18 @@ HarvestTile* HarvestDeck::draw() const
 Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position) :
 	buildingType{ new ResourceTypes(buildingType) },
 	buildingNumber{ new std::uint_least8_t(buildingNumber) },
-	position{ new std::uint_least8_t(position) },
 	faceUp{ new bool(true) }
 {}
 
 Building::Building(const Building &building) {
     buildingType = new ResourceTypes(*building.buildingType);
     buildingNumber = new std::uint_least8_t(*building.buildingNumber);
-    position = new std::uint_least8_t(*building.position);
     faceUp = new bool(*building.faceUp);
 }
 Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
-	delete position;
 }
 
 bool Building::isFlipped() const
@@ -212,11 +218,6 @@ std::uint_least8_t Building::getBuildingNumber() const
 	return *buildingNumber;
 }
 
-std::uint_least8_t Building::getPosition() const
-{
-	return *position;
-}
-
 bool Building::flipCard()
 {
 	*faceUp = !*faceUp;
@@ -227,11 +228,11 @@ BuildingDeck::BuildingDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new std::vector<Building*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);
+	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
 
 	ResourceTypes buildingType;
 
-	for (std::uint_fast16_t i = 0; i < 4; i++)
+	for (std::uint_fast16_t i = 0; i < 4; i++)	//BuildingType will be a different resource every iteration
 	{
 		switch (i)
 		{
@@ -250,7 +251,10 @@ BuildingDeck::BuildingDeck():
 		default:
 			break;
 		}
-
+		/*
+		We create a building with the same number 6 times before incrementing it all the way to 6. The building type stays the same.
+		We create 36 building cards of the same resource and add it to the deckContent vector
+		*/
 		for (std::uint_fast8_t j = 0; j < 6; j++)
 		{
 			for (std::uint_fast8_t k = 0; k < 6; k++)
@@ -291,8 +295,7 @@ Hand::Hand():
 	shipment{nullptr},
 	buildings{new std::vector<Building*>}
 {
-	harvestTiles->reserve(2);
-	buildings->reserve(6);
+	harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
 Hand::~Hand()

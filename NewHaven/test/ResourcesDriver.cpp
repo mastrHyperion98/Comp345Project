@@ -17,19 +17,19 @@ int main()
 
     std::cout << "We drew a card.\nDeck size: " << static_cast<int>(hDeckSize) << '\n';
 
-    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";    //Printing the tile content
     
     tile->rotateTileClockwise();
     delete tContent;
     tContent = tile->getTileContent();
 
-    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";    //Printing the tile content after rotating it
 
     tile->rotateTileCounterClockwise();
     delete tContent;
     tContent = tile->getTileContent();
 
-    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";
+    std::cout << tContent[0] << '\t' << tContent[1] << '\n' << tContent[3] << '\t' << tContent[2] << "\n\n";    //rotate it again to its original position and printing
     
     delete tContent;
     }
@@ -48,13 +48,12 @@ int main()
         bDeckSize = bDeck.getDeckSize();
         bType = building->getBuildingType();
         bNumber = building->getBuildingNumber();
-        bPosition = building->getPosition();
         side = building->isFlipped();
 
         std::cout << "We drew a card.\nDeck size: " << static_cast<int>(bDeckSize) << "\nBuilding: " << bType
-            << "\tNumber: " << static_cast<int>(bNumber) << "\tPosition: " << static_cast<int>(bPosition)
+            << "\tNumber: " << static_cast<int>(bNumber)
             << "\tFace up: " << (side ? "true" : "false") << "\nWe flipped it.\nFace up: "
-            << (building->flipCard() ? "true" : "false") << "\n\n";
+            << (building->flipCard() ? "true" : "false") << "\n\n";     //We print building info before and after flipping it
     }
     
     return 0;
