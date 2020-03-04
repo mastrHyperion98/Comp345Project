@@ -28,12 +28,16 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 	ResourceTrails::adjacency_iterator e_start, e_end;
 	Square sourceSquare, targetSquare;
 	std::uint_fast8_t sourcePos, targetPos;
-
+	/*
+	Here we will visit the whole graph breadth first counting rooted and visited resource.
+	The second iteration does the exact same thing in the exact reverse order.
+	That way we go up the tree from the bottom against the graph's direction.
+	*/
 	for (std::uint_least8_t i = 0; i < 2; i++)
 	{
 		for (tie(v_start, v_end) = vertices(tileCluster); v_start != v_end;)
 		{
-			sourceSquare = tileCluster[i == 0 ? *(*v_direction) : *(*v_direction) - 1];
+			sourceSquare = tileCluster[i == 0 ? *(*v_direction) : *(*v_direction) - 1];	//If it's the second iteration, we can't use v_end as the index because it's out of bound. v_end - 1 is in bound.
 			sourcePos = sourceSquare.getPosition();
 
 			for (tie(e_start, e_end) = adjacent_vertices(i == 0 ? *(*v_direction) : *(*v_direction) - 1, tileCluster); e_start != e_end; ++e_start)
@@ -63,13 +67,13 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 			{
 				v_direction = &++v_start;
 			}
-			else
+			else		//On the second iteration, we start from the end of the tree to the start
 			{
 				v_direction = &--v_end;
 			}
 		}
 
-		v_direction = &v_end;
+		v_direction = &v_end;	//After the first iteration, the direction will changed from end to start
 	}
 }
 
