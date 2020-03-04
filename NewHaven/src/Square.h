@@ -13,7 +13,7 @@ struct Square
 public:
     bool *isVisited, *visitedResource, *rootConnected, *isPlayed;
     int *position;
-    //HarvestTile* tile;
+    HarvestTile* tile;
     Square();
     Square(const Square &square);
     Square &operator=(const Square &square);
