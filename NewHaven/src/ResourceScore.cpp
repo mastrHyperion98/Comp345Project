@@ -24,36 +24,52 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 	}
 
 	ResourceTrails::vertex_iterator v_start, v_end;
+	ResourceTrails::vertex_iterator* v_direction{ &v_start };
 	ResourceTrails::adjacency_iterator e_start, e_end;
 	Square sourceSquare, targetSquare;
 	std::uint_fast8_t sourcePos, targetPos;
 
-	for (tie(v_start, v_end) = vertices(tileCluster); v_start != v_end; ++v_start) {
-		sourceSquare = tileCluster[*v_start];
-		sourcePos = sourceSquare.getPosition();
-
-		for (tie(e_start, e_end) = adjacent_vertices(*v_start, tileCluster); e_start != e_end; ++e_start)
+	for (std::uint_least8_t i = 0; i < 2; i++)
+	{
+		for (tie(v_start, v_end) = vertices(tileCluster); v_start != v_end;)
 		{
-			targetSquare = tileCluster[*e_start];
-			targetPos = targetSquare.getPosition();
+			sourceSquare = tileCluster[i == 0 ? *(*v_direction) : *(*v_direction) - 1];
+			sourcePos = sourceSquare.getPosition();
 
-			if (targetPos == sourcePos - 1)		//Target is on the left
+			for (tie(e_start, e_end) = adjacent_vertices(i == 0 ? *(*v_direction) : *(*v_direction) - 1, tileCluster); e_start != e_end; ++e_start)
 			{
-				adjacentTile(sourceSquare, targetSquare, 0, 1);
+				targetSquare = tileCluster[*e_start];
+				targetPos = targetSquare.getPosition();
+
+				if (targetPos == sourcePos - 1)		//Target is on the left
+				{
+					adjacentTile(sourceSquare, targetSquare, 0, 1);
+				}
+				else if (targetPos == sourcePos + 1)	//Target is on the right
+				{
+					adjacentTile(sourceSquare, targetSquare, 2, 3);
+				}
+				else if (targetPos == sourcePos - 5)	//Target is on top
+				{
+					adjacentTile(sourceSquare, targetSquare, 1, 2);
+				}
+				else	//Target is at bottom
+				{
+					adjacentTile(sourceSquare, targetSquare, 3, 0);
+				}
 			}
-			else if (targetPos == sourcePos + 1)	//Target is on the right
+
+			if (i == 0)
 			{
-				adjacentTile(sourceSquare, targetSquare, 2, 3);
+				v_direction = &++v_start;
 			}
-			else if (targetPos == sourcePos - 5)	//Target is on top
+			else
 			{
-				adjacentTile(sourceSquare, targetSquare, 1, 2);
-			}
-			else	//Target is at bottom
-			{
-				adjacentTile(sourceSquare, targetSquare, 3, 0);
+				v_direction = &--v_end;
 			}
 		}
+
+		v_direction = &v_end;
 	}
 }
 
@@ -87,7 +103,7 @@ void ResourceScore::adjacentTile(const Square& sourceSquare, const Square& targe
 				sourceSquare.rootConnected[sourceIndex] = true;
 				sourceSquare.visitedResource[sourceIndex] = true;
 
-				(*score)[targetContent[sourceIndex]] += browseTile(sourceSquare, sourceContent, sourceIndex);
+				(*score)[sourceContent[sourceIndex]] += browseTile(sourceSquare, sourceContent, sourceIndex);
 			}
 
 		sourceIndex = ((sourceIndex - 1) + 4) % 4;
