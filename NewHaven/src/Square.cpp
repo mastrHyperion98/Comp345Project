@@ -17,8 +17,11 @@ Square::Square() : visitedResource{ new bool[4]{ false, false, false, false } },
 
 Square::Square(const Square& square) : visitedResource{ new bool[4] }, rootConnected{ new bool[4] }
 {
-    if(square.tile != nullptr)
-        tile = new HarvestTile(*tile);
+    if(square.tile != nullptr) {
+        tile = new HarvestTile();
+        // use the operator overloader
+        *tile = *square.tile;
+    }
     else
         tile = nullptr;
     position = new int(*square.position);
