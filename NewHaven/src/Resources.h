@@ -18,6 +18,7 @@ public:
 	HarvestTile();
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
+    HarvestTile & operator=(const HarvestTile &tile);
 
 	ResourceTypes* getTileContent() const;	//Returns a copy of the tileContent array
 

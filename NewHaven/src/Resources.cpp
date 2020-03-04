@@ -45,6 +45,20 @@ HarvestTile::~HarvestTile()
 {
 	delete[] tileContent;
 }
+HarvestTile & HarvestTile::operator=(const HarvestTile &tile){
+    if(&tile == this)
+        return *this;
+    else {
+        delete[] tileContent;
+        tileContent = new ResourceTypes[4];
+    for(int i=0; i < 4; i++){
+        tileContent[i] = tile.tileContent[i];
+    }
+    }
+
+    return *this;
+}
+
 
 void HarvestTile::generateResources()
 {
