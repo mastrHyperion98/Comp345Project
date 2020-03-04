@@ -8,23 +8,15 @@
 
 #include "Resources.h"
 
-class Square
+struct Square
 {
 public:
-    bool *isVisited, *visitedResource, *rootConnected;
-
+    bool *isVisited, *visitedResource, *rootConnected, *isPlayed;
+    int *position;
+    //HarvestTile* tile;
     Square();
     Square(const Square &square);
+    Square &operator=(const Square &square);
     ~Square();
-    HarvestTile* getTile() const;
-    int getPosition() const;
-    bool getIsPlayed();
-    void setPosition(int* position);
-    void setTile(HarvestTile * tile);
-
-private:
-    HarvestTile* tile;
-    int *position;
-    bool *isPlayed;
 };
 #endif //NEWHAVEN_SQUARE_H
