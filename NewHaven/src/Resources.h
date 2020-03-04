@@ -28,7 +28,7 @@ public:
 struct HarvestDeck
 {
 private:
-	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(60) };
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
 	std::uint_least8_t* deckSize;
 	HarvestTile* deckContent; //Array of harvest tile objects
 	
@@ -63,7 +63,7 @@ public:
 struct BuildingDeck
 {
 private:
-	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(144) };
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
 	std::uint_least8_t* deckSize;
 	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
 	
