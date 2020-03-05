@@ -19,6 +19,8 @@ public:
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
+	HarvestTile& operator=(const HarvestTile&);
+
 	ResourceTypes* getTileContent() const;	//Returns a copy of the tileContent array
 
 	void rotateTileClockwise();

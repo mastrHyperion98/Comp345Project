@@ -46,6 +46,13 @@ HarvestTile::~HarvestTile()
 	delete[] tileContent;
 }
 
+HarvestTile& HarvestTile::operator=(const HarvestTile& tile)
+{
+	tileContent = tile.getTileContent();
+	
+	return *this;
+}
+
 void HarvestTile::generateResources()
 {
 	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };	//Keep count of the number of a type on a single tile
