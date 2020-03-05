@@ -46,6 +46,17 @@ HarvestTile::~HarvestTile()
 	delete[] tileContent;
 }
 
+HarvestTile& HarvestTile::operator=(const HarvestTile& tile)
+{
+	if (this == &tile)						//Checking for self-assignment
+		return *this;
+
+	delete[] tileContent;					//Delete old data that will be discarded
+	tileContent = tile.getTileContent();	//getTileContent returns an array copy
+	
+	return *this;							//We return the updated object for chain operations
+}
+
 void HarvestTile::generateResources()
 {
 	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };	//Keep count of the number of a type on a single tile
@@ -201,6 +212,18 @@ Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
+}
+
+Building& Building::operator=(const Building& building)
+{
+	if (this == &building)						//Checking for self-assignment
+		return *this;
+
+	*buildingType = *building.buildingType;		//We copy all the member data
+	*buildingNumber = *building.buildingNumber;
+	*faceUp = *building.faceUp;
+
+	return *this;							//We return the updated object for chain operations
 }
 
 bool Building::isFlipped() const

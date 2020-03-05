@@ -19,6 +19,8 @@ public:
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
+	HarvestTile& operator=(const HarvestTile&);
+
 	ResourceTypes* getTileContent() const;	//Returns a copy of the tileContent array
 
 	void rotateTileClockwise();
@@ -44,14 +46,16 @@ public:
 struct Building
 {
 private:
-	const ResourceTypes* buildingType;	//Determines resource
-	const std::uint_least8_t* buildingNumber;
+	ResourceTypes* buildingType;	//Determines resource
+	std::uint_least8_t* buildingNumber;
 	bool* faceUp;	//Either the card is flipped or not
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
 	Building(const Building &building);
 	~Building();
+
+	Building& operator=(const Building&);
 
 	bool isFlipped() const;		//Return the state of the card, flipped or not
 	ResourceTypes getBuildingType() const;
