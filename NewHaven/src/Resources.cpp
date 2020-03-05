@@ -48,9 +48,13 @@ HarvestTile::~HarvestTile()
 
 HarvestTile& HarvestTile::operator=(const HarvestTile& tile)
 {
-	tileContent = tile.getTileContent();
+	if (this == &tile)						//Checking for self-assignment
+		return *this;
+
+	delete[] tileContent;					//Delete old data that will be discarded
+	tileContent = tile.getTileContent();	//getTileContent returns an array copy
 	
-	return *this;
+	return *this;							//We return the updated object for chain operations
 }
 
 void HarvestTile::generateResources()
@@ -208,6 +212,15 @@ Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
+}
+
+Building& Building::operator=(const Building& building)
+{
+	*buildingType = *building.buildingType;		//We copy all the member data
+	*buildingNumber = *building.buildingNumber;
+	*faceUp = *building.faceUp;
+
+	return *this;							//We return the updated object for chain operations
 }
 
 bool Building::isFlipped() const
