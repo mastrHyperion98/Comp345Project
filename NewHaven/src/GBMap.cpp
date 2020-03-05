@@ -69,7 +69,7 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
                 if( !vertexContainedInQueue(queue, next_element))
                     queue.push_back(next_element);
 
-                if(getVertexPosition(*connectedGraph, *(*board)[next_element].position) > 0){
+                if(getVertexPosition(*connectedGraph, *(*board)[next_element].position) < 0){
                     NodeID vertex1 = add_vertex(*connectedGraph);
                     (*connectedGraph)[vertex1] = Square((* board)[next_element]);
                     root_queue.push_back(vertex1);
