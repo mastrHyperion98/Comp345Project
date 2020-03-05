@@ -30,10 +30,11 @@ GBMap & GBMap::operator=(const GBMap &map) {
 // needs to be defined ahaha not done yet lol
 
 }
-bool GBMap::placeHarvestTile(int NodeID) {
+bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
  if(NodeID > *SIZE || NodeID < 0)
      return false;
-
+    // should use the operator overload
+    (*board)[NodeID].tile = new HarvestTile(tile);
     *(*board)[NodeID].isPlayed = true;
     return true;
 }
@@ -43,11 +44,11 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
     ResourceTrails *connectedGraph = new ResourceTrails;
     auto vertices = (*board).vertex_set();
     NodeID first_v = vertices[position];
-    ResourceNode root = add_vertex(*connectedGraph);
+    NodeID root = add_vertex(*connectedGraph);
     // copy the squares! IMPORTANT!
     (*connectedGraph)[root] = Square((*board)[first_v]);
     deque<NodeID> queue;
-    deque<ResourceNode> root_queue;
+    deque<NodeID> root_queue;
     queue.push_back(first_v);
     root_queue.push_back(root);
 
@@ -69,7 +70,7 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
                     queue.push_back(next_element);
 
                 if(getVertexPosition(*connectedGraph, *(*board)[next_element].position) > 0){
-                    ResourceNode vertex1 = add_vertex(*connectedGraph);
+                    NodeID vertex1 = add_vertex(*connectedGraph);
                     (*connectedGraph)[vertex1] = Square((* board)[next_element]);
                     root_queue.push_back(vertex1);
                     add_edge(root, vertex1, *connectedGraph);
@@ -96,7 +97,7 @@ void GBMap::printBoard() {
     boost::print_graph(*board);
 }
 
-void  GBMap::resetVisitedNodes() {
+void GBMap::resetVisitedNodes() {
     for(int i = 0; i < *SIZE;i++){
         *(*board)[i].isVisited = false;
     }

@@ -13,7 +13,6 @@
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Square> ResourceTrails;
 typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
-typedef boost::graph_traits<ResourceTrails>::vertex_descriptor ResourceNode;
 
 
 using namespace std;
@@ -24,13 +23,14 @@ public:
     GBMap(const GBMap &map);
     GBMap &operator=(const GBMap &map);
     ~GBMap();
-    bool placeHarvestTile(int NodeID);
-    ResourceTrails* getResourcedGraph(int position);
-    inline void printBoard();
-
-private:
     const int* const CONFIG;
     const int * const SIZE;
+    bool placeHarvestTile(int NodeID,HarvestTile &tile);
+    ResourceTrails* getResourcedGraph(int position);
+    void printBoard();
+
+private:
+
     GameBoard* board;
     bool createBoard();
     inline void resetVisitedNodes();
