@@ -216,6 +216,9 @@ Building::~Building()
 
 Building& Building::operator=(const Building& building)
 {
+	if (this == &building)						//Checking for self-assignment
+		return *this;
+
 	*buildingType = *building.buildingType;		//We copy all the member data
 	*buildingNumber = *building.buildingNumber;
 	*faceUp = *building.faceUp;
