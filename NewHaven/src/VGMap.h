@@ -18,21 +18,7 @@ public:
     Circle();
     Circle(const Circle &circle);
     ~Circle();
-    int getRow() const;
-    int getColumn() const;
-    int getVCost() const;
-    int getPosition() const;
-    void setRow(int row);
-    void setCol(int col);
-    void setPosition(int pos);
-    void setBuilding(Building * building);
-    void setVCost(int cost);
-    Building* getBuilding() const;
     bool getIsPlayed() const;
-    void flipBuilding();
-
-    // our private properties and functions
-private:
     int *position = nullptr;
     int *row = nullptr;
     int *column = nullptr;
@@ -53,6 +39,7 @@ class VGMap {
 public:
     // class constructor
     VGMap();
+    VGMap(const VGMap &map);
     ~VGMap();;
     void PrintGraph();
     void PrintConnectedGraph();

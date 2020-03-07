@@ -215,11 +215,13 @@ void VGMap::resetVisited() {
 }
 
 void VGMap::flipMapBuilding(int position) {
-    (*village_board)[position].flipBuilding();
+    if(*(*village_board)[position].isPlayed)
+        (*village_board)[position].building->flipCard();
 }
 
 void VGMap::setBuilding(int position, Building *building) {
-    (*village_board)[position].setBuilding(building);
+    (*village_board)[position].building = new Building(*building);
+    *(*village_board)[position].isPlayed = true;
 }
 Circle::Circle(){
 
@@ -227,7 +229,8 @@ Circle::Circle(){
 
 Circle::Circle(const Circle &circle){
     if(circle.building != nullptr){
-        building = new Building(*circle.building);
+         building = new Building;
+        *building = *circle.building;
     } else
         building = nullptr;
     row = new int(*circle.row);
@@ -237,55 +240,12 @@ Circle::Circle(const Circle &circle){
     isPlayed = new bool(*circle.isPlayed);
 }
 
-Circle::~Circle() = default;
-int Circle::getRow() const{
-    return *row;
+Circle::~Circle(){
+    delete row;
+    delete column;
+    delete vCost;
+    delete isVisited;
+    delete isPlayed;
+    delete building;
 }
 
-int Circle::getColumn() const{
-    return *column;
-}
-
-int Circle::getPosition() const{
-    return *position;
-}
-
-int Circle::getVCost() const{
-    return *vCost;
-}
-
-Building* Circle::getBuilding() const{
-    return building;
-}
-
-void Circle::setCol(int col) {
-    column = new int(col);
-}
-
-void Circle::setRow(int row) {
-    this->row = new int(row);
-}
-
-void Circle::setVCost(int cost) {
-    vCost = new int(cost);
-}
-
-void Circle::setBuilding(Building * building) {
-    if(!*isPlayed) {
-        this->building = new Building(*building);
-        *this->isPlayed = true;
-        return;
-    }
-    throw 1;
-}
-
-void Circle::setPosition(int pos) {
-    position = new int(pos);
-}
-bool Circle::getIsPlayed() const {
-    return *isPlayed;
-}
-
-void Circle::flipBuilding() {
-    this->building->flipCard();
-}
