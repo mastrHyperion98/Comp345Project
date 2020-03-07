@@ -18,13 +18,12 @@ public:
     Circle();
     Circle(const Circle &circle);
     ~Circle();
-    bool getIsPlayed() const;
-    int *position = nullptr;
-    int *row = nullptr;
-    int *column = nullptr;
-    int *vCost = nullptr;
-    Building* building = nullptr;
-    bool *isPlayed = new bool(false);
+    int *position;
+    int *row;
+    int *column;
+    int *vCost;
+    Building* building;
+    bool *isPlayed;
 };
 
 // define our village board graph
@@ -51,7 +50,7 @@ public:
     void flipMapBuilding(int position);
 private:
     void CreateVillageField();
-    C_Graph *village_board = new C_Graph;
+    C_Graph *village_board;
 };
 
 #endif //NEWHAVEN_VGMAP_H
