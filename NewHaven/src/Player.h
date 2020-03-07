@@ -1,21 +1,27 @@
 #include "VGMap.h"
 #include "Resources.h"
 #include "ResourceScore.h"
+#include "ScoreCalculator.h"
 
 struct Player
 {
 public:
     Player();
+    Player(const Player &player);
     ~Player();
-
-    VGMap* villageGameBoard;
-    Hand* hand;
-    std::map<ResourceTypes, std::uint_least16_t>* score;
-
-    void placeHarvestTile();
-    void drawBuilding(BuildingDeck* buildingDeck);
-    void drawHarvestTile(HarvestDeck* harvestDeck);
-    void resourceTracker(ResourceScore* resourceScore);
+    Player &operator = (const Player &player);
+    bool placeHarvestTile();
+    inline void drawBuilding();
+    inline void drawHarvestTile();
+    // im assuming this prints out the available resources;
+    inline void resourceTracker();
     void buildVillage();
-    void calculateResources(ResourceScore* resourceScore);
+    void calculateResources();
+
+private:
+    VGMap *village;
+    ResourceScore *resource_score;
+    ScoreCalculator *vb_score;
+    Hand *my_hand;
+
 };

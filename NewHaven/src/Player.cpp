@@ -1,36 +1,40 @@
 #include "Player.h"
-#include "Resources.h"
-#include "VGMap.h"
-#include "ResourceScore.h"
 
 Player::Player(){
-    this->hand = new Hand();
+    village = new VGMap();
+    resource_score = new ResourceScore();
+    vb_score = new ScoreCalculator();
+    my_hand = new Hand();
+}
+
+Player::Player(const Player &player) {
+    village = new VGMap(*player.village);
+    resource_score = new ResourceScore(*player.resource_score);
+    vb_score = new ScoreCalculator(*player.vb_score);
+    my_hand = new Hand(*player.my_hand);
 }
 
 Player::~Player(){
-    delete hand;
+    delete village;
+    delete resource_score;
+    delete vb_score;
+    delete my_hand;
 }
 
-void Player::buildVillage() {
-    // to be discussed
+Player& Player::operator=(const Player &player) {
+    // nullptr and self assignment guard
+    if(&player == this || &player == nullptr)
+        return *this;
+    else{
+        // use assignment operator overload
+        *village = *player.village;
+        *resource_score = *player.resource_score;
+        *vb_score = *player.vb_score;
+        *my_hand = *player.my_hand;
+    }
+    return *this;
 }
-
-void Player::drawHarvestTile(HarvestDeck* harvestDeck) {
-    this->hand->harvestTiles->push_back(harvestDeck->draw());
-}
-
-void Player::drawBuilding(BuildingDeck* buildingDeck) {
-    this->hand->buildings->push_back(buildingDeck->draw());
-}
-
-void Player::placeHarvestTile() {
-    // place tile on the main game board
-}
-
-void Player::calculateResources(ResourceScore* resourceScore) {
-    score = resourceScore->score;
-}
-
-void Player::resourceTracker(ResourceScore* resourceScore) {
-    resourceScore->printScore();
+// I'm assuming it just wants to know the amount of resources available
+void Player::resourceTracker() {
+    resource_score->printScore();
 }
