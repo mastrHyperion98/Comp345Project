@@ -28,7 +28,7 @@ public:
     bool placeHarvestTile(int NodeID,HarvestTile &tile);
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
-
+    void printIndexConfiguration();
 private:
 
     GameBoard* board;

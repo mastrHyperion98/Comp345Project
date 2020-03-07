@@ -18,7 +18,6 @@ public:
 	HarvestTile();
 	HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
-    HarvestTile &operator=(const HarvestTile &tile);
 
 	HarvestTile& operator=(const HarvestTile&);
 
