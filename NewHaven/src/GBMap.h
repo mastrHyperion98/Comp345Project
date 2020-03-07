@@ -19,6 +19,7 @@ using namespace std;
 class GBMap{
     // declaring public methods and parameters
 public:
+    GBMap();
     GBMap(int configuration);
     GBMap(const GBMap &map);
     ~GBMap();

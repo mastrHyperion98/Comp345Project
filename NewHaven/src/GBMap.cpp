@@ -26,7 +26,13 @@ GBMap::~GBMap(){
     delete SIZE;
     delete board;
 }
-
+GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)){
+    board = new GameBoard();
+    // populate board
+    if(!createBoard())
+        // create a proper exception maybe
+        throw 1;
+}
 bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
  if(NodeID > *SIZE || NodeID < 0)
      return false;
