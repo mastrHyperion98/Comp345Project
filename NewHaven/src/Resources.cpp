@@ -28,9 +28,7 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource)
 }
 
 HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
-{
-	generateResources();
-}
+{}
 
 HarvestTile::HarvestTile(const HarvestTile& tile) : tileContent{ new ResourceTypes[4] }
 {
@@ -55,78 +53,6 @@ HarvestTile& HarvestTile::operator=(const HarvestTile& tile)
 	tileContent = tile.getTileContent();	//getTileContent returns an array copy
 	
 	return *this;							//We return the updated object for chain operations
-}
-
-void HarvestTile::generateResources()
-{
-	std::uint_least8_t sheepCount{ 0 }, stoneCount{ 0 }, wheatCount{ 0 }, woodCount{ 0 };	//Keep count of the number of a type on a single tile
-	std::srand(time(NULL) + std::rand());	//Different see every execution
-
-	for (std::uint_least8_t i = 0; i < 4; i++)
-	{
-		switch (std::rand() % 4 + 1)	//Random number between 1 and 4
-		{
-		case 1:
-			sheepCount++;
-			/*
-			First condition checking that if it's the last iteration, we can't have one of all the other types, otherwise we end up with a tile with 4 different resources
-			the second condition makes sure that there are no more than 3 of the current resource, otherwise we'll have a tile full of the same resource.
-			Both conditions need to be fullfilled to add the resrouce on the tile.
-			*/
-			if (((i < 3) || !(stoneCount && wheatCount && woodCount)) && sheepCount <= 3)
-			{
-				tileContent[i] = ResourceTypes::SHEEP;
-			}
-			else
-			{
-				i--;	//If the conditions weren't met, we scrap this iteration and run again hoping to fall on another resource
-			}
-
-			break;
-		case 2:
-			stoneCount++;
-
-			if (((i < 3) || !(sheepCount && wheatCount && woodCount)) && stoneCount <= 3)
-			{
-				tileContent[i] = ResourceTypes::STONE;
-			}
-			else
-			{
-				i--;
-			}
-
-			break;
-		case 3:
-			wheatCount++;
-
-			if (((i < 3) || !(sheepCount && stoneCount && woodCount)) && wheatCount <= 3)
-			{
-				tileContent[i] = ResourceTypes::WHEAT;
-			}
-			else
-			{
-				i--;
-			}
-			
-			break;
-		case 4:
-			woodCount++;
-
-			if (((i < 3) || !(sheepCount && stoneCount && wheatCount)) && woodCount <= 3)
-			{
-				tileContent[i] = ResourceTypes::WOOD;
-			}
-			else
-			{
-				i--;
-			}
-
-			break;
-		default:
-			i--;
-			break;
-		}
-	}
 }
 
 void HarvestTile::rotateTileClockwise()

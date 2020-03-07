@@ -12,7 +12,6 @@ struct HarvestTile
 private:
 	ResourceTypes* tileContent;	//Array of resource types
 
-	void generateResources();	//Create random resources following restrictions
 public:
 
 	HarvestTile();
