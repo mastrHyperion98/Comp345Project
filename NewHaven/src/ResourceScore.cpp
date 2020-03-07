@@ -53,7 +53,7 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 				{
 					adjacentTile(sourceSquare, targetSquare, 2, 3);
 				}
-				else if (targetPos == sourcePos - 5)	//Target is on top
+				else if (targetPos - sourcePos < 0)	//Target is on top because their difference is negative, which means the sourcePos is bigger than the target
 				{
 					adjacentTile(sourceSquare, targetSquare, 1, 2);
 				}

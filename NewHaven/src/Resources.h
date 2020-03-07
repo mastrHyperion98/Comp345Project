@@ -20,6 +20,8 @@ public:
 	~HarvestTile();
     HarvestTile &operator=(const HarvestTile &tile);
 
+	HarvestTile& operator=(const HarvestTile&);
+
 	ResourceTypes* getTileContent() const;	//Returns a copy of the tileContent array
 
 	void rotateTileClockwise();
@@ -29,7 +31,7 @@ public:
 struct HarvestDeck
 {
 private:
-	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(60) };
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
 	std::uint_least8_t* deckSize;
 	HarvestTile* deckContent; //Array of harvest tile objects
 	
@@ -45,14 +47,16 @@ public:
 struct Building
 {
 private:
-	const ResourceTypes* buildingType;	//Determines resource
-	const std::uint_least8_t* buildingNumber;
+	ResourceTypes* buildingType;	//Determines resource
+	std::uint_least8_t* buildingNumber;
 	bool* faceUp;	//Either the card is flipped or not
 
 public:
 	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1, std::uint_least8_t = 0);
 	Building(const Building &building);
 	~Building();
+
+	Building& operator=(const Building&);
 
 	bool isFlipped() const;		//Return the state of the card, flipped or not
 	ResourceTypes getBuildingType() const;
@@ -64,7 +68,7 @@ public:
 struct BuildingDeck
 {
 private:
-	const std::uint_least8_t* MAX_DECK_SIZE{ new std::uint_least8_t(144) };
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
 	std::uint_least8_t* deckSize;
 	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
 	
