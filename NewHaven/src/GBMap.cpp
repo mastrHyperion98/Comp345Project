@@ -26,10 +26,7 @@ GBMap::~GBMap(){
     delete SIZE;
     delete board;
 }
-GBMap & GBMap::operator=(const GBMap &map) {
-// needs to be defined ahaha not done yet lol
 
-}
 bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
  if(NodeID > *SIZE || NodeID < 0)
      return false;

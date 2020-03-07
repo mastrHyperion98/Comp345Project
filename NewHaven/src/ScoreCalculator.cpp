@@ -37,11 +37,11 @@ for(int i = 0; i < *NUM_ROWS; i++){
     bool isComplete = true;
 
     for(int j = 0; j < num_vertices; j++){
-        if(!graph[j].getIsPlayed()) {
+        if(!*graph[j].isPlayed) {
             isComplete = false;
             break;
         }
-        else if(!graph[j].getBuilding()->isFlipped())
+        else if(!graph[j].building->isFlipped())
             isFlippedDown = true;
     }
 
@@ -60,11 +60,11 @@ for(int i = 0; i < *NUM_ROWS; i++){
         bool isComplete = true;
 
         for(int j = 0; j < num_vertices; j++){
-            if(!graph[j].getIsPlayed()) {
+            if(!*graph[j].isPlayed) {
                 isComplete = false;
                 break;
             }
-            else if(!graph[j].getBuilding()->isFlipped())
+            else if(!graph[j].building->isFlipped())
                 isFlippedDown = true;
         }
 

@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include "../src/GBMap.h"
 #include "../src/Resources.h"
@@ -73,7 +72,7 @@ int main()
 	*/
 
 	ResourceScore calculator;
-   // map.printIndexConfiguration();
+    map.printIndexConfiguration();
 	cout << "\n***The Asterisk denotes the position 13!***\n" << endl;
 	int root;
     bool valid_root = false;
@@ -123,7 +122,7 @@ int main()
     cout << "FLIPPING THE BUILDING IN ROW 1 FACEUP THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
     cout << "POPULATING COLUMN 1: LEFT-MOST WITH 5 FACE-UP BUILDINGS";
     for(int i = 5; i < 26; i += 5){
-        if(!v_map.getCircle(i).getIsPlayed())
+        if(!v_map.isPlayed(i))
             v_map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
@@ -131,17 +130,18 @@ int main()
     cout << "FLIPPING THE BUILDING IN ROW 1 AND COLUMN 1 FACEDOWN THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
     cout << "POPULATING COLUMN 5: RIGHT-MOST WITH 5 FACE-UP BUILDINGS";
     for(int i = 4; i < 30; i += 5){
-        if(!v_map.getCircle(i).getIsPlayed())
+        if(!v_map.isPlayed(i))
             v_map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
     cout << "POPULATING COLUMN 3: MIDDLE WITH 5 FACE-UP BUILDINGS";
     for(int i = 2; i < 28; i += 5){
-        if(!v_map.getCircle(i).getIsPlayed())
+        if(!v_map.isPlayed(i))
             v_map.setBuilding(i, deck.draw());
     }
     cout << "\tTHE SCORE IS: " << s_calculator.getScore(v_map) << endl;
     v_map.flipMapBuilding(7);
     cout << "FLIPPING THE BUILDING IN ROW 2 AND COLUMN 3 FACEDOWN THE SCORE IS: " << s_calculator.getScore(v_map) << endl;
 
+    return 1;
 }

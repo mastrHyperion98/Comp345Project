@@ -21,7 +21,6 @@ class GBMap{
 public:
     GBMap(int configuration);
     GBMap(const GBMap &map);
-    GBMap &operator=(const GBMap &map);
     ~GBMap();
     const int* const CONFIG;
     const int * const SIZE;

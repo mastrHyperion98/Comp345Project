@@ -17,6 +17,7 @@ public:
     bool *isVisited = new bool(false);
     Circle();
     Circle(const Circle &circle);
+    Circle &operator=(const Circle &circle);
     ~Circle();
     int *position;
     int *row;
@@ -39,10 +40,11 @@ public:
     // class constructor
     VGMap();
     VGMap(const VGMap &map);
+    VGMap &operator=(const VGMap &map);
     ~VGMap();;
     void PrintGraph();
     void PrintConnectedGraph();
-    Circle getCircle(int position);
+    bool isPlayed(int position);
     void setBuilding(int position, Building *building);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);

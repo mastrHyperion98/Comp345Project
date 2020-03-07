@@ -20,7 +20,20 @@ VGMap::VGMap() {
     CreateVillageField();
 }
 // Define the deconstructor of the GameBoard Map
-VGMap::~VGMap() = default;
+VGMap::~VGMap() {
+    delete village_board;
+}
+
+VGMap & VGMap::operator=(const VGMap &map){
+    if(this == &map)
+        return *this;
+    else{
+        delete village_board;
+        village_board = new C_Graph(*map.village_board);
+    }
+
+    return *this;
+}
 // Function that goes and fetches the graph
 // generate the graph
 /*
@@ -202,11 +215,11 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     return graph;
 }
 
-Circle VGMap::getCircle(int position) {
+bool VGMap::isPlayed(int position) {
     if(position < 30 && position >= 0)
-       return (*village_board)[position];
+       return *(*village_board)[position].isPlayed;
     else
-        throw 2;
+        return false;
 }
 
 void VGMap::resetVisited() {
@@ -241,8 +254,7 @@ Circle::Circle(){
 
 Circle::Circle(const Circle &circle){
     if(circle.building != nullptr){
-         building = new Building;
-        *building = *circle.building;
+         building = new Building(*circle.building);
     } else
         building = nullptr;
     row = new int(*circle.row);
@@ -258,7 +270,31 @@ Circle::~Circle(){
     delete column;
     delete vCost;
     delete isVisited;
+    delete position;
     delete isPlayed;
     delete building;
 }
 
+// override assignment operator
+Circle & Circle::operator=(const Circle &circle){
+    if (this == &circle)
+        return *this;
+    else {
+        delete row;
+        delete column;
+        delete vCost;
+        delete isVisited;
+        delete isPlayed;
+        delete building;
+        row = new int(*circle.row);
+        column = new int(*circle.column);
+        vCost = new int(*circle.vCost);
+        isVisited = new bool(*circle.isVisited);
+        isPlayed = new bool(*circle.isPlayed);
+        // for some reason copy constructor of building is causing a segFault here
+        building = new Building();
+        *building = *circle.building;
+        position = new int(*circle.position);
+    }
+    return *this;
+}
