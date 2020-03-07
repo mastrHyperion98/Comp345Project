@@ -1,6 +1,8 @@
 #include "Resources.h"
 #include <time.h>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource)
 {
@@ -27,8 +29,13 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource)
 	}
 }
 
-HarvestTile::HarvestTile() : tileContent{ new ResourceTypes[4] }
-{}
+HarvestTile::HarvestTile(ResourceTypes* tileContent) : tileContent{ new ResourceTypes[4] }
+{
+	for (std::uint_fast8_t i = 0; i < 4; i++)
+	{
+		this->tileContent[i] = tileContent[i];
+	}
+}
 
 HarvestTile::HarvestTile(const HarvestTile& tile) : tileContent{ new ResourceTypes[4] }
 {
@@ -95,14 +102,71 @@ ResourceTypes* HarvestTile::getTileContent() const
 
 HarvestDeck::HarvestDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
-	deckContent{ new HarvestTile[*MAX_DECK_SIZE] }
-{}
+	deckContent{ new std::vector<HarvestTile*> }
+{
+	deckContent->reserve(*MAX_DECK_SIZE);
+	/*
+	In VS, the file path is relative to the build directory, not the source file directory.
+	The build directory is represented where the debug condition is true.
+	*/
+#ifdef _DEBUG
+	std::ifstream inFile("../../../config/HarvestTiles.config");
+
+#else
+	std::ifstream inFile("../config/HarvestTiles.config");
+
+#endif // DEBUG
+
+	if (!inFile)
+	{
+		std::cerr << "\n../config/HarvestTiles.config was not found or could not be opened for reading.\n";
+		exit(1);
+	}
+
+	std::string resourceToken[4];						//To store file line data
+	ResourceTypes* resource{ new ResourceTypes[4] };	//Resource array to construct Harvest Tile with
+
+	inFile.ignore(256, '\n');	//We skip the first line
+
+	while (inFile)		//While we didn't reach the end of the file yet
+	{
+		std::getline(inFile, resourceToken[0], '\t');	//Get the fours elements of the line
+		std::getline(inFile, resourceToken[1], '\t');
+		std::getline(inFile, resourceToken[2], '\t');
+		std::getline(inFile, resourceToken[3], '\n');	//The last element is delimited by a new line
+
+		for (std::uint_fast8_t i = 0; i < 4; i++)		//For all four resources in the line
+		{
+			switch (resourceToken[i].at(0) - resourceToken[i].at(1)) //We take the difference between the two characters composing the resource
+			{	//sh:11, st:-1, wd:19, wt:3
+			case 11:
+				resource[i] = ResourceTypes::SHEEP;
+				break;
+			case -1:
+				resource[i] = ResourceTypes::STONE;
+				break;
+			case 19:
+				resource[i] = ResourceTypes::WOOD;
+				break;
+			case 3:
+				resource[i] = ResourceTypes::WHEAT;
+				break;
+			default:
+				break;
+			}
+		}
+
+		deckContent->push_back(new HarvestTile(resource));	//We push the harvest tile with the specified resources inside the deck
+	}
+
+	delete[] resource;		//We delete the temporary variable used for constructing Harvest Tiles
+}
 
 HarvestDeck::~HarvestDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
-	delete[] deckContent;
+	delete deckContent;
 }
 
 std::uint_least8_t HarvestDeck::getDeckSize() const
@@ -115,7 +179,7 @@ HarvestTile* HarvestDeck::draw() const
 	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
 		(*deckSize)--;
-		return &deckContent[*deckSize];
+		return deckContent->at(*deckSize);
 	}
 	else
 	{
