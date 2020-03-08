@@ -12,10 +12,9 @@ struct HarvestTile
 private:
 	ResourceTypes* tileContent;	//Array of resource types
 
-	void generateResources();	//Create random resources following restrictions
 public:
 
-	HarvestTile();
+	HarvestTile(ResourceTypes*);
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
@@ -32,7 +31,7 @@ struct HarvestDeck
 private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
 	std::uint_least8_t* deckSize;
-	HarvestTile* deckContent; //Array of harvest tile objects
+	std::vector<HarvestTile*>* deckContent; //Array of harvest tile objects
 	
 public:
 	HarvestDeck();
