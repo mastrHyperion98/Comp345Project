@@ -39,22 +39,15 @@ Square & Square::operator=(const Square &square) {
     if(&square == this)
         return *this;
     else{
-        delete position;
-        delete isVisited;
-        delete isPlayed;
-        delete tile;
-        delete[] visitedResource;
-        delete[] rootConnected;
-        position = new int(*square.position);
-        isVisited = new bool(*square.isVisited);
-        isPlayed = new bool(*square.isPlayed);
-        tile = new HarvestTile(*square.tile);
-        visitedResource = new bool[4];
-        rootConnected = new bool[4];
+        *position = *square.position;
+        *isVisited = *square.isVisited;
+        *isPlayed = *square.isPlayed;
+        *tile = *square.tile;
         for(int i =0; i < 4; i++){
             visitedResource[i]=square.visitedResource[i];
             rootConnected[i]=square.rootConnected[i];
         }
+
     } return *this;
 }
 

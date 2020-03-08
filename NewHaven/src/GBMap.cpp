@@ -60,9 +60,8 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
         // origin of the current search
         NodeID origin = queue.front();
         root = root_queue.front();
-        // fetches references to the last vertex
-        tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board);
-        for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+
+        for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board); neighbourIt != neighbourEnd; ++neighbourIt) {
             *(*board)[origin].isVisited = true;
             // next_element
             NodeID next_element = vertices[*neighbourIt];

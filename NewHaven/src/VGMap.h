@@ -45,14 +45,19 @@ public:
     void PrintGraph();
     void PrintConnectedGraph();
     bool isPlayed(int position);
-    void setBuilding(int position, Building *building);
+    bool setBuilding(int position, Building *building);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
-    void flipMapBuilding(int position);
 private:
     void CreateVillageField();
     C_Graph *village_board;
+    bool *typePlayed;
+    bool isAdjacentType(ResourceTypes type, int position);
+    const int const *WOOD = new const int(0);
+    const int const *STONE = new const int(1);
+    const int const *WHEAT = new const int(2);
+    const int const *SHEEP = new const int(3);
 };
 
 #endif //NEWHAVEN_VGMAP_H

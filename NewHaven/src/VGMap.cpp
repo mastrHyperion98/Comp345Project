@@ -15,13 +15,17 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap() {
+VGMap::VGMap() : typePlayed(new bool[4]{false,false,false,false}) {
     village_board = new C_Graph;
     CreateVillageField();
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {
     delete village_board;
+}
+
+VGMap::VGMap(const VGMap &map) {
+    village_board = new C_Graph(*map.village_board);
 }
 
 VGMap & VGMap::operator=(const VGMap &map){
@@ -227,21 +231,81 @@ void VGMap::resetVisited() {
          *(*village_board)[i].isVisited = false;
     }
 }
+bool VGMap::setBuilding(int position, Building *building) {
+    if(building->getBuildingNumber() == *(*village_board)[position].vCost || !building->isFlipped()){
+       building->getBuildingType();
+        if( building->getBuildingType() == ResourceTypes::WOOD && !typePlayed[*WOOD]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            typePlayed[*WOOD] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::WOOD && typePlayed[*WOOD]){
+            // check adjacency
+            if(isAdjacentType(ResourceTypes::WOOD, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+        }
+        else if( building->getBuildingType() == ResourceTypes::STONE && !typePlayed[*STONE]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            typePlayed[*STONE] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::STONE && typePlayed[*STONE]){
+            if(isAdjacentType(ResourceTypes::STONE, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
 
-void VGMap::flipMapBuilding(int position) {
-    if(*(*village_board)[position].isPlayed)
-        (*village_board)[position].building->flipCard();
+        }
+        else if( building->getBuildingType() == ResourceTypes::SHEEP && !typePlayed[*SHEEP]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            typePlayed[*SHEEP] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::SHEEP && typePlayed[*SHEEP]){
+            if(isAdjacentType(ResourceTypes::SHEEP, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+
+        }
+        else if( building->getBuildingType() == ResourceTypes::WHEAT && !typePlayed[*WHEAT]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            typePlayed[*WHEAT] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::WHEAT && typePlayed[*WHEAT]){
+            if(isAdjacentType(ResourceTypes::WHEAT, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
-void VGMap::setBuilding(int position, Building *building) {
-    (*village_board)[position].building = new Building(*building);
-    *(*village_board)[position].isPlayed = true;
-}
 
-VGMap::VGMap(const VGMap &map) {
-    village_board = new C_Graph(*map.village_board);
+bool VGMap::isAdjacentType(ResourceTypes type, int position) {
+    // can only be called internally no need to verify the bounds of position
+    vertex_v root = village_board->vertex_set()[position];
+    C_Graph::adjacency_iterator start, end;
+    tie(start, end) = adjacent_vertices(root, *village_board);
+    for (; start != end; ++start) {
+        // create the next element
+        if((*village_board)[*start].building != nullptr && type == (*village_board)[*start].building->getBuildingType())
+            return true;
+        }
+    return false;
 }
-
 Circle::Circle(){
     row = nullptr;
     column = nullptr;
@@ -254,7 +318,7 @@ Circle::Circle(){
 
 Circle::Circle(const Circle &circle){
     if(circle.building != nullptr){
-         building = new Building(*circle.building);
+         building = circle.building;
     } else
         building = nullptr;
     row = new int(*circle.row);
@@ -272,7 +336,6 @@ Circle::~Circle(){
     delete isVisited;
     delete position;
     delete isPlayed;
-    delete building;
 }
 
 // override assignment operator
@@ -280,21 +343,17 @@ Circle & Circle::operator=(const Circle &circle){
     if (this == &circle)
         return *this;
     else {
-        delete row;
-        delete column;
-        delete vCost;
-        delete isVisited;
-        delete isPlayed;
-        delete building;
-        row = new int(*circle.row);
-        column = new int(*circle.column);
-        vCost = new int(*circle.vCost);
-        isVisited = new bool(*circle.isVisited);
-        isPlayed = new bool(*circle.isPlayed);
-        // for some reason copy constructor of building is causing a segFault here
-        building = new Building();
-        *building = *circle.building;
-        position = new int(*circle.position);
+        *row = *circle.row;
+        *column = *circle.column;
+        *vCost = *circle.vCost;
+        *isVisited = *circle.isVisited;
+        *isPlayed = *circle.isPlayed;
+       if(circle.building != nullptr && building == nullptr)
+           // we dont create copies of buildings. We will clear it with the decks
+        building = circle.building;
+       else if(circle.building != nullptr && building != nullptr)
+           *building = *circle.building;
+       *position = *circle.position;
     }
     return *this;
 }
