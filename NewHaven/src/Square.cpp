@@ -17,11 +17,7 @@ Square::Square() : visitedResource{ new bool[4]{ false, false, false, false } },
 
 Square::Square(const Square& square) : visitedResource{ new bool[4] }, rootConnected{ new bool[4] }
 {
-    if(square.tile != nullptr) {
-        tile = new HarvestTile(*square.tile);
-    }
-    else
-        tile = nullptr;
+    tile = square.tile;
     position = new int(*square.position);
     isVisited = new bool(*square.isVisited);
     isPlayed = new bool(*square.isPlayed);
@@ -40,17 +36,11 @@ Square & Square::operator=(const Square &square) {
         *position = *square.position;
         *isVisited = *square.isVisited;
         *isPlayed = *square.isPlayed;
-        if(tile != nullptr && square.tile != nullptr)
-        *tile = *square.tile;
-        else if(tile == nullptr && square.tile != nullptr)
-            tile = new HarvestTile(*square.tile);
-        else
-            tile = nullptr;
+        tile = square.tile;
         for(int i =0; i < 4; i++){
             visitedResource[i]=square.visitedResource[i];
             rootConnected[i]=square.rootConnected[i];
         }
-
     } return *this;
 }
 

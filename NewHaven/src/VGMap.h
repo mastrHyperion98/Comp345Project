@@ -9,6 +9,7 @@
 #include "boost/graph/adjacency_list.hpp"
 #include "Resources.h"
 #include <string>
+#include <map>
 
 // Our vertex Data Circle that will contain all our needed information
 class Circle{
@@ -41,7 +42,7 @@ public:
     VGMap();
     VGMap(const VGMap &map);
     VGMap &operator=(const VGMap &map);
-    ~VGMap();;
+    ~VGMap();
     void PrintGraph();
     void PrintConnectedGraph();
     bool isPlayed(int position);
@@ -52,12 +53,9 @@ public:
 private:
     void CreateVillageField();
     C_Graph *village_board;
-    bool *typePlayed;
+    map<ResourceTypes, bool> *typePlayed;
     bool isAdjacentType(ResourceTypes type, int position);
-    const int const *WOOD = new const int(0);
-    const int const *STONE = new const int(1);
-    const int const *WHEAT = new const int(2);
-    const int const *SHEEP = new const int(3);
+
 };
 
 #endif //NEWHAVEN_VGMAP_H
