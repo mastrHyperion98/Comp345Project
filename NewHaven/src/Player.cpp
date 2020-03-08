@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "GBMap.h"
 Player::Player(){
     village = new VGMap();
     resource_score = new ResourceScore();
@@ -48,7 +48,7 @@ bool Player::buildVillage(Building & building, int position){
     if(building.isFlipped())
         cost = building.getBuildingNumber();
     else
-        cost = village->getCircle(position).getVCost();
+        cost = village->getPositionCost(position);
 
     ResourceTypes type=building.getBuildingType();
     if(resource_score->hasResources(type, cost)) {
@@ -60,13 +60,15 @@ bool Player::buildVillage(Building & building, int position){
 }
 
 bool Player::placeHarvestTile(HarvestTile& tile, int position) {
-
+    // later this will be called from the singleton Game Controller
+    if(GBMap::current_map != nullptr)
+         GBMap::current_map->placeHarvestTile(position, tile);
 }
-
+// Cannot be implemented yet. Requires  BuildingDeck to be static
 void Player::drawBuilding() {
 
 }
-
+// Cannot be implemented yet. Requires HarvestDeck to be static
 void Player::drawHarvestTile() {
     
 }

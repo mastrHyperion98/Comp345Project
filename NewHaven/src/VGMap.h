@@ -47,6 +47,7 @@ public:
     void PrintConnectedGraph();
     bool isPlayed(int position);
     bool setBuilding(int position, Building *building);
+    int getPositionCost(int position);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();

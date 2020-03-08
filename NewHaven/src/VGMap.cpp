@@ -360,3 +360,7 @@ Circle & Circle::operator=(const Circle &circle){
     }
     return *this;
 }
+
+int VGMap::getPositionCost(int position){
+    return *(*village_board)[position].vCost;
+}
