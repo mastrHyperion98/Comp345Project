@@ -34,10 +34,10 @@ GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)){
         throw 1;
 }
 bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
- if(NodeID > *SIZE || NodeID < 0)
+ if(NodeID > *SIZE || NodeID < 0|| &tile == nullptr)
      return false;
     // should use the operator overload
-    (*board)[NodeID].tile = new HarvestTile(tile);
+    (*board)[NodeID].tile = &tile;
     *(*board)[NodeID].isPlayed = true;
     return true;
 }

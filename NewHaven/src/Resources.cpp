@@ -48,7 +48,7 @@ HarvestTile::~HarvestTile()
 
 HarvestTile& HarvestTile::operator=(const HarvestTile& tile)
 {
-	if (this == &tile || &tile == nullptr)						//Checking for self-assignment
+	if (this == &tile)						//Checking for self-assignment
 		return *this;
 
 	delete[] tileContent;					//Delete old data that will be discarded
@@ -218,11 +218,10 @@ Building& Building::operator=(const Building& building)
 {
 	if (this == &building)						//Checking for self-assignment
 		return *this;
-	if(&building != nullptr) {
+	
         *buildingType = *building.buildingType;        //We copy all the member data
         *buildingNumber = *building.buildingNumber;
         *faceUp = *building.faceUp;
-    }
 	return *this;							//We return the updated object for chain operations
 }
 
