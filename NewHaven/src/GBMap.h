@@ -25,6 +25,7 @@ public:
     ~GBMap();
     const int* const CONFIG;
     const int * const SIZE;
+    static GBMap *current_map;
     bool placeHarvestTile(int NodeID,HarvestTile &tile);
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
