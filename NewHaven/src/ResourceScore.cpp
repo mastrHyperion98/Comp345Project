@@ -165,3 +165,23 @@ void ResourceScore::printScore()
 		std::cout << '\n' << i.first << ":\t" << i.second << '\n';
 	}
 }
+
+bool ResourceScore::consumeResources(ResourceTypes type, std::uint_least16_t amount) {
+    // check if the resource is contianed within
+    if(hasResources(type, amount)) {
+        (*score)[type] = (*score)[type] - amount;
+        return true;
+    }
+
+    return false;
+}
+
+bool ResourceScore::hasResources(ResourceTypes type, std::uint_least16_t amount){
+    // check if the resource is contianed within
+    if(score->find(type) != score->end()){
+        if ((*score)[type] >= amount){
+            return true;
+        }
+    }
+    return false;
+}

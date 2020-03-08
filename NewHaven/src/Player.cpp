@@ -34,7 +34,40 @@ Player& Player::operator=(const Player &player) {
     }
     return *this;
 }
-// I'm assuming it just wants to know the amount of resources available
+// I'm assuming it just wants to know the amount of resources available?
 void Player::resourceTracker() {
     resource_score->printScore();
 }
+
+void Player::calculateResources(ResourceTrails trail) {
+    resource_score->computeScore(trail);
+}
+
+bool Player::buildVillage(Building & building, int position){
+    std::uint_least16_t cost = 0;
+    if(building.isFlipped())
+        cost = building.getBuildingNumber();
+    else
+        cost = village->getCircle(position).getVCost();
+
+    ResourceTypes type=building.getBuildingType();
+    if(resource_score->hasResources(type, cost)) {
+        village->setBuilding(position, &building);
+        resource_score->consumeResources(type, cost);
+        return true;
+    }
+    return false;
+}
+
+bool Player::placeHarvestTile(HarvestTile& tile, int position) {
+
+}
+
+void Player::drawBuilding() {
+
+}
+
+void Player::drawHarvestTile() {
+    
+}
+
