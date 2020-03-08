@@ -15,11 +15,35 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap() {
+VGMap::VGMap(): typePlayed(new map<ResourceTypes, bool>){
+    village_board = new C_Graph;
     CreateVillageField();
+    typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
+    typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
+    typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::SHEEP, false));
+    typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WOOD, false));
 }
 // Define the deconstructor of the GameBoard Map
-VGMap::~VGMap() = default;
+VGMap::~VGMap() {
+    delete village_board;
+}
+
+VGMap::VGMap(const VGMap &map) {
+    village_board = new C_Graph(*map.village_board);
+    typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
+}
+
+VGMap & VGMap::operator=(const VGMap &map){
+    if(this == &map)
+        return *this;
+    else{
+        delete village_board;
+        village_board = new C_Graph(*map.village_board);
+        *typePlayed = *map.typePlayed;
+    }
+
+    return *this;
+}
 // Function that goes and fetches the graph
 // generate the graph
 /*
@@ -32,45 +56,45 @@ It will be created in a similar way as a 2D Matrix.
 void VGMap::CreateVillageField() {
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
-        (*village_board)[vPosition].setPosition(vPosition);
+        (*village_board)[vPosition].position = new int(vPosition);
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (vPosition > 0 && vPosition % 5 != 0)
             add_edge(vPosition, vPosition - 1, *village_board);
 
 
         if (vPosition>=0 && vPosition<5) {
-            (*village_board)[vPosition].setVCost(6);
-            (*village_board)[vPosition].setRow(0);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(6);
+            (*village_board)[vPosition].row = new int(0);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
 
         else if (vPosition>=5 && vPosition<10) {
-            (*village_board)[vPosition].setVCost(5);
-            (*village_board)[vPosition].setRow(1);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(5);
+            (*village_board)[vPosition].row = new int(1);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
 
         else if (vPosition>=10 && vPosition<15) {
-            (*village_board)[vPosition].setVCost(4);
-            (*village_board)[vPosition].setRow(2);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(4);
+            (*village_board)[vPosition].row = new int(2);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
 
         else if (vPosition>=15 && vPosition<20) {
-            (*village_board)[vPosition].setVCost(3);
-            (*village_board)[vPosition].setRow(3);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(3);
+            (*village_board)[vPosition].row = new int(3);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
         else if (vPosition>=20 && vPosition<25) {
-            (*village_board)[vPosition].setVCost(2);
-            (*village_board)[vPosition].setRow(4);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(2);
+            (*village_board)[vPosition].row = new int(4);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
 
         else if (vPosition>=25 && vPosition<30) {
-            (*village_board)[vPosition].setVCost(1);
-            (*village_board)[vPosition].setRow(5);
-            (*village_board)[vPosition].setCol(vPosition % 5);
+            (*village_board)[vPosition].vCost = new int(1);
+            (*village_board)[vPosition].row = new int(5);
+            (*village_board)[vPosition].column = new int(vPosition % 5);
         }
     }
 
@@ -121,7 +145,7 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if ((*board)[next_element].getColumn() == column && !*(*board)[next_element].isVisited) {
+            if (*(*board)[next_element].column == column && !*(*board)[next_element].isVisited) {
                 // if the next_element is in the same column then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
@@ -177,7 +201,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if ((*board)[next_element].getRow() == row && !*(*board)[next_element].isVisited) {
+            if (*(*board)[next_element].row == row && !*(*board)[next_element].isVisited) {
                 // if the next_element is in the same row then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
@@ -201,11 +225,11 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     return graph;
 }
 
-Circle VGMap::getCircle(int position) {
+bool VGMap::isPlayed(int position) {
     if(position < 30 && position >= 0)
-       return (*village_board)[position];
+       return *(*village_board)[position].isPlayed;
     else
-        throw 2;
+        return false;
 }
 
 void VGMap::resetVisited() {
@@ -213,79 +237,126 @@ void VGMap::resetVisited() {
          *(*village_board)[i].isVisited = false;
     }
 }
+bool VGMap::setBuilding(int position, Building *building) {
+    if(building->getBuildingNumber() == *(*village_board)[position].vCost || !building->isFlipped()){
+        if( building->getBuildingType() == ResourceTypes::WOOD && ! (*typePlayed)[ResourceTypes::WOOD]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            (*typePlayed)[ResourceTypes::WOOD] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::WOOD &&  (*typePlayed)[ResourceTypes::WOOD]){
+            // check adjacency
+            if(isAdjacentType(ResourceTypes::WOOD, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+        }
+        else if( building->getBuildingType() == ResourceTypes::STONE && ! (*typePlayed)[ResourceTypes::STONE]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            (*typePlayed)[ResourceTypes::STONE] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::STONE &&  (*typePlayed)[ResourceTypes::STONE]){
+            if(isAdjacentType(ResourceTypes::STONE, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
 
-void VGMap::flipMapBuilding(int position) {
-    (*village_board)[position].flipBuilding();
+        }
+        else if( building->getBuildingType() == ResourceTypes::SHEEP && ! (*typePlayed)[ResourceTypes::SHEEP]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            (*typePlayed)[ResourceTypes::SHEEP] = true;
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::SHEEP &&  (*typePlayed)[ResourceTypes::SHEEP]){
+            if(isAdjacentType(ResourceTypes::SHEEP, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+
+        }
+        else if( building->getBuildingType() == ResourceTypes::WHEAT && ! (*typePlayed)[ResourceTypes::WHEAT]){
+            (*village_board)[position].building = building;
+            *(*village_board)[position].isPlayed = true;
+            (*typePlayed)[ResourceTypes::WHEAT] = true;
+
+            return true;
+        }
+        else if(building->getBuildingType() == ResourceTypes::WHEAT &&  (*typePlayed)[ResourceTypes::WHEAT]){
+            if(isAdjacentType(ResourceTypes::WHEAT, position)){
+                (*village_board)[position].building = building;
+                *(*village_board)[position].isPlayed = true;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
-void VGMap::setBuilding(int position, Building *building) {
-    (*village_board)[position].setBuilding(building);
+
+bool VGMap::isAdjacentType(ResourceTypes type, int position) {
+    // can only be called internally no need to verify the bounds of position
+    vertex_v root = village_board->vertex_set()[position];
+    C_Graph::adjacency_iterator start, end;
+    tie(start, end) = adjacent_vertices(root, *village_board);
+    for (; start != end; ++start) {
+        // create the next element
+        if((*village_board)[*start].building != nullptr && type == (*village_board)[*start].building->getBuildingType())
+            return true;
+        }
+    return false;
 }
 Circle::Circle(){
-
+    row = nullptr;
+    column = nullptr;
+    vCost = nullptr;
+    building = nullptr;
+    position = nullptr;
+    isVisited = new bool(false);
+    isPlayed = new bool(false);
 }
 
 Circle::Circle(const Circle &circle){
     if(circle.building != nullptr){
-        building = new Building(*circle.building);
+         building = circle.building;
     } else
         building = nullptr;
     row = new int(*circle.row);
+    position = new int(*circle.position);
     column = new int(*circle.column);
     vCost = new int(*circle.vCost);
     isVisited = new bool(*circle.isVisited);
     isPlayed = new bool(*circle.isPlayed);
 }
 
-Circle::~Circle() = default;
-int Circle::getRow() const{
-    return *row;
+Circle::~Circle(){
+    delete row;
+    delete column;
+    delete vCost;
+    delete isVisited;
+    delete position;
+    delete isPlayed;
 }
 
-int Circle::getColumn() const{
-    return *column;
-}
-
-int Circle::getPosition() const{
-    return *position;
-}
-
-int Circle::getVCost() const{
-    return *vCost;
-}
-
-Building* Circle::getBuilding() const{
-    return building;
-}
-
-void Circle::setCol(int col) {
-    column = new int(col);
-}
-
-void Circle::setRow(int row) {
-    this->row = new int(row);
-}
-
-void Circle::setVCost(int cost) {
-    vCost = new int(cost);
-}
-
-void Circle::setBuilding(Building * building) {
-    if(!*isPlayed) {
-        this->building = new Building(*building);
-        *this->isPlayed = true;
-        return;
+// override assignment operator
+Circle & Circle::operator=(const Circle &circle){
+    if (this == &circle)
+        return *this;
+    else {
+        *row = *circle.row;
+        *column = *circle.column;
+        *vCost = *circle.vCost;
+        *isVisited = *circle.isVisited;
+        *isPlayed = *circle.isPlayed;
+        // we dont create copies of buildings. We will clear it with the decks
+        building = circle.building;
+       *position = *circle.position;
     }
-    throw 1;
-}
-
-void Circle::setPosition(int pos) {
-    position = new int(pos);
-}
-bool Circle::getIsPlayed() const {
-    return *isPlayed;
-}
-
-void Circle::flipBuilding() {
-    this->building->flipCard();
+    return *this;
 }
