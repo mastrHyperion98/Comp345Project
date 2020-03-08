@@ -7,6 +7,7 @@
 #define NEWHAVEN_GBMAP_H
 #include "boost/graph/adjacency_list.hpp"
 #include <deque>
+#include <vector>
 #include "Resources.h"
 #include "Square.h"
 
@@ -25,18 +26,20 @@ public:
     ~GBMap();
     const int* const CONFIG;
     const int * const SIZE;
-    static GBMap *current_map;
     bool placeHarvestTile(int NodeID,HarvestTile &tile);
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
     void printIndexConfiguration();
+    bool addBuildingToBoard(Building &building);
+    Building* drawBuildingFromBoard(int position);
 private:
-
     GameBoard* board;
+    std::vector<Building*>* buildings;
     bool createBoard();
     inline void resetVisitedNodes();
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;
     inline int getVertexPosition(ResourceTrails graph, int position) const;
 };
 
+static GBMap *current_map;
 #endif //NEWHAVEN_GBMAP_H

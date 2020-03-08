@@ -10,7 +10,7 @@
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
 
-GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))){
+GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
     current_map = this;
     // populate board
@@ -18,7 +18,7 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
         // create a proper exception maybe
         throw 1;
 }
-GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))){
+GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     current_map = this;
@@ -26,12 +26,12 @@ GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new co
 GBMap::~GBMap(){
     delete CONFIG;
     delete SIZE;
-    delete current_map;
     delete board;
+    delete buildings;
     // set to nullptr since it is static and belongs to the class.
     current_map = nullptr;
 }
-GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)){
+GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
     board = new GameBoard();
     // populate board
     if(!createBoard())
@@ -219,4 +219,22 @@ void GBMap::printIndexConfiguration() {
         config.append(" -  20 21 22 23 24 -\n");
         cout << config;
     }
+}
+bool GBMap::addBuildingToBoard(Building &building) {
+    // max of 5 buildings on the board.
+    if (buildings->size() < 5){
+        buildings->push_back(&building);
+        return true;
+    }
+    // return false if we can not add a building to the board
+    return false;
+}
+Building* GBMap::drawBuildingFromBoard(int position) {
+    if(position <= buildings->size()){
+        Building *my_building = buildings->at(position);
+        // remove from the board
+        buildings->erase(buildings->begin() + position);
+        return my_building;
+        }
+    return nullptr;
 }
