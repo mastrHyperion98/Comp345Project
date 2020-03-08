@@ -230,7 +230,7 @@ bool GBMap::addBuildingToBoard(Building &building) {
     return false;
 }
 Building* GBMap::drawBuildingFromBoard(int position) {
-    if(position <= buildings->size()){
+    if(position < buildings->size()){
         Building *my_building = buildings->at(position);
         // remove from the board
         buildings->erase(buildings->begin() + position);
