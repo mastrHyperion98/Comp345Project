@@ -1,8 +1,17 @@
 #include "ResourceScore.h"
-
+#include <map>
 ResourceScore::ResourceScore(): score{ new std::map<ResourceTypes, std::uint_least16_t> }
 {}
+ResourceScore::ResourceScore(const ResourceScore& scores){
+    score = score = new std::map<ResourceTypes, std::uint_least16_t>(*scores.score);
+}
+ResourceScore& ResourceScore::operator=(const ResourceScore& scores){
+    if(&scores == this)
+        return *this;
+    score = new std::map<ResourceTypes, std::uint_least16_t>(*scores.score);
 
+    return *this;
+}
 ResourceScore::~ResourceScore()
 {
 	delete score;

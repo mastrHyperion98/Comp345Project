@@ -11,6 +11,8 @@ private:
 
 public:
 	ResourceScore();
+    ResourceScore(const ResourceScore& scores);
+    ResourceScore& operator=(const ResourceScore& scores);
 	~ResourceScore();
 
     std::map<ResourceTypes, std::uint_least16_t>* score;	//Map to store the score for each resource type
