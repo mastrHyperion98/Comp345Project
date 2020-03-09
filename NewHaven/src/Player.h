@@ -11,15 +11,15 @@ public:
     ~Player();
     Player &operator = (const Player &player);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the game_board
-    bool placeHarvestTile(HarvestTile&, int);
+    int placeHarvestTile();
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
-    inline void drawBuilding();
+    void drawBuilding(Building& building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
-    inline void drawHarvestTile();
+    void drawHarvestTile(HarvestTile& tile);
     // im assuming this prints out the available resources;
-    inline void resourceTracker();
-    bool buildVillage(Building&, int);
-    inline void calculateResources(ResourceTrails);
+    ResourceScore resourceTracker();
+    bool buildVillage();
+    void calculateResources(ResourceTrails);
 
 private:
     VGMap *village;

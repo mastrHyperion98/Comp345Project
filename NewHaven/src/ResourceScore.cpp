@@ -2,13 +2,13 @@
 #include <map>
 ResourceScore::ResourceScore(): score{ new std::map<ResourceTypes, std::uint_least16_t> }
 {}
-ResourceScore::ResourceScore(const ResourceScore& scores){
-    score = score = new std::map<ResourceTypes, std::uint_least16_t>(*scores.score);
+ResourceScore::ResourceScore(const ResourceScore& scores): score{ new std::map<ResourceTypes, std::uint_least16_t> }{
+    *score =*scores.score;
 }
 ResourceScore& ResourceScore::operator=(const ResourceScore& scores){
     if(&scores == this)
         return *this;
-    score = new std::map<ResourceTypes, std::uint_least16_t>(*scores.score);
+    *score = *scores.score;
 
     return *this;
 }
@@ -29,7 +29,7 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 
 	for (std::uint_fast8_t i = 0; i < 4; i++)
 	{
-		((*score)[tileCluster[0].getTile()->getTileContent()[i]])++;	//Adding starting tile resources to the score
+		((*score)[tileCluster[0].tile->getTileContent()[i]])++;	//Adding starting tile resources to the score
 	}
 
 	ResourceTrails::vertex_iterator v_start, v_end;
@@ -47,12 +47,12 @@ void ResourceScore::computeScore(ResourceTrails tileCluster)
 		for (tie(v_start, v_end) = vertices(tileCluster); v_start != v_end;)
 		{
 			sourceSquare = tileCluster[i == 0 ? *(*v_direction) : *(*v_direction) - 1];	//If it's the second iteration, we can't use v_end as the index because it's out of bound. v_end - 1 is in bound.
-			sourcePos = sourceSquare.getPosition();
+			sourcePos = *sourceSquare.position;
 
 			for (tie(e_start, e_end) = adjacent_vertices(i == 0 ? *(*v_direction) : *(*v_direction) - 1, tileCluster); e_start != e_end; ++e_start)
 			{
 				targetSquare = tileCluster[*e_start];
-				targetPos = targetSquare.getPosition();
+				targetPos = *targetSquare.position;
 
 				if (targetPos == sourcePos - 1)		//Target is on the left
 				{
@@ -94,7 +94,7 @@ void ResourceScore::adjacentTile(const Square& sourceSquare, const Square& targe
 	If they are it means there's the potential to add one or the other to the score.
 	If they were both visited, there's nothing else to do there.
 	*/
-	ResourceTypes* sourceContent{ sourceSquare.getTile()->getTileContent() }, * targetContent{ targetSquare.getTile()->getTileContent() };
+	ResourceTypes* sourceContent{ sourceSquare.tile->getTileContent() }, * targetContent{ targetSquare.tile->getTileContent() };
 	
 	for (std::uint_fast8_t i = 0; i < 2; i++)
 	{

@@ -34,9 +34,10 @@ Player& Player::operator=(const Player &player) {
     }
     return *this;
 }
-// I'm assuming it just wants to know the amount of resources available?
-void Player::resourceTracker() {
-    resource_score->printScore();
+// I'm assuming it just wants to return the resource_tracker
+ResourceScore Player::resourceTracker() {
+    // return a copy of the resource score;
+    return *resource_score;
 }
 
 void Player::calculateResources(ResourceTrails trail) {
@@ -59,17 +60,52 @@ bool Player::buildVillage(Building & building, int position){
     return false;
 }
 
-bool Player::placeHarvestTile(HarvestTile& tile, int position) {
-    // later this will be called from the singleton Game Controller
-    if(GBMap::current_map != nullptr)
-         GBMap::current_map->placeHarvestTile(position, tile);
-}
-// Cannot be implemented yet. Requires  BuildingDeck to be static
-void Player::drawBuilding() {
+int Player::placeHarvestTile(HarvestTile& tile, int position) {
 
+    // print hand
+    for(int i = 0; i < my_hand->harvestTiles->size(); i++){
+        cout << "tile index: " << i << " content\t" <<  (*my_hand->harvestTiles)[i]->getTileContent()[0] << " , "
+        << (*my_hand->harvestTiles)[i]->getTileContent()[1] << " , "<< (*my_hand->harvestTiles)[i]->getTileContent()[2]
+        << " , " << (*my_hand->harvestTiles)[i]->getTileContent()[3] << endl;
+    }
+
+    int index_tile;
+    int pos;
+    cout <<  "Tile index to place: ";
+    cin >> index_tile;
+    POSITION:
+    cout <<  "position index to place tile: ";
+    cin >> pos;
+
+    // later this will be called from the singleton Game Controller
+    if(GBMap::current_map != nullptr) {
+        if(GBMap::current_map->placeHarvestTile(pos, *(*my_hand->harvestTiles)[index_tile])) {
+            my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + index_tile);
+            return pos;
+        }
+        else{
+            cout << "This position is incorrect. Please select another position" << endl;
+            goto POSITION;
+        }
+    }
+    return -1;
 }
-// Cannot be implemented yet. Requires HarvestDeck to be static
-void Player::drawHarvestTile() {
-    
+/*
+ * NON FINAL IMPLEMENTATION:
+ *
+ * For drawBuilding we need to draw for the number of Resource Marker on the 0 (zero) space of the Resource Track.
+ * However, since we havent decided or discussed user inputs yet then for the moment I'm leaving this as it is.
+ * Since we need to process whether the user will draw from the board or the deck, in the case where they draw more than
+ * one.
+ */
+void Player::drawBuilding(Building& building) {
+    my_hand->buildings->push_back(&building);
+}
+/*
+ * NON FINAL IMPLEMENTATION -- IDEALLY WE WANT TO DRAW DIRECTLY FROM THE HARVEST DECK WITHOUT HAVING TO PASS ARGUMENTS
+ * HarvestDeck has to be static within the Game Controller
+ */
+void Player::drawHarvestTile(HarvestTile& tile) {
+    my_hand->harvestTiles->push_back(&tile);
 }
 

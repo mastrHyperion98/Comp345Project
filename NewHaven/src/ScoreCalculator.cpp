@@ -19,13 +19,25 @@ ScoreCalculator::ScoreCalculator(){
     row_scores->insert(pair<int, int>(4, 2));
     row_scores->insert(pair<int, int>(5, 1));
 }
-/*
+
 ScoreCalculator::~ScoreCalculator() {
     delete column_scores;
     delete row_scores;
     delete NUM_ROWS;
     delete NUM_COLS;
-}*/
+}
+
+ScoreCalculator::ScoreCalculator(const ScoreCalculator &cal){
+    column_scores = new map<int,int>(*cal.column_scores);
+    row_scores = new map<int,int>(*cal.row_scores);
+}
+ScoreCalculator & ScoreCalculator::operator = (ScoreCalculator & cal){
+    *column_scores = *cal.column_scores;
+    *row_scores =*cal.row_scores;
+
+    return *this;
+}
+
 
 int ScoreCalculator::getScore( VGMap village_map) const{
 int score = 0;

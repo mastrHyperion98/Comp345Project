@@ -42,5 +42,4 @@ private:
     inline int getVertexPosition(ResourceTrails graph, int position) const;
 };
 
-
 #endif //NEWHAVEN_GBMAP_H
