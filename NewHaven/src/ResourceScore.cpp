@@ -188,6 +188,7 @@ bool ResourceScore::consumeResources(ResourceTypes type, std::uint_least16_t amo
 bool ResourceScore::hasResources(ResourceTypes type, std::uint_least16_t amount){
     // check if the resource is contianed within
     if(score->find(type) != score->end()){
+
         if ((*score)[type] >= amount){
             return true;
         }

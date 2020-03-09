@@ -44,23 +44,54 @@ void Player::calculateResources(ResourceTrails trail) {
     resource_score->computeScore(trail);
 }
 
-bool Player::buildVillage(Building & building, int position){
-    std::uint_least16_t cost = 0;
-    if(building.isFlipped())
-        cost = building.getBuildingNumber();
-    else
-        cost = village->getPositionCost(position);
+bool Player::buildVillage(){
 
+    SELECT:
+    for(int i = 0; i < my_hand->buildings->size(); i++){
+        cout << "building index: " << i << " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
+        << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
+    }
+
+    int index;
+    int pos;
+    cout <<  "Building index to play: ";
+    cin >> index;
+    POSITION:
+    cout <<  "position index to place tile: ";
+    cin >> pos;
+
+    if(index < 0 || index > my_hand->buildings->size()){
+        cout << "Incorrect Index. There are no building at that index. Please try again." << endl;
+        goto SELECT;
+    }
+    std::uint_least16_t cost = 0;
+    if((*my_hand->buildings)[index]->isFlipped())
+        cost = (*my_hand->buildings)[index]->getBuildingNumber();
+    else
+        cost = village->getPositionCost(pos);
+
+    if(cost == -1){
+        cout << "Incorrect Position. Please try again" << endl;
+        goto POSITION;
+    }
+    Building building = *(*my_hand->buildings)[index];
     ResourceTypes type=building.getBuildingType();
     if(resource_score->hasResources(type, cost)) {
-        village->setBuilding(position, &building);
-        resource_score->consumeResources(type, cost);
-        return true;
+        if(village->setBuilding(pos, &building)) {
+            resource_score->consumeResources(type, cost);
+            my_hand->buildings->erase(my_hand->buildings->begin() + index);
+            return true;
+        }
+        else{
+            cout << "ERROR cannot play resource" << endl;
+        }
+    }{
+        cout << "Cannot play building: Insufficient resources" << endl;
     }
     return false;
 }
 
-int Player::placeHarvestTile(HarvestTile& tile, int position) {
+int Player::placeHarvestTile() {
 
     // print hand
     for(int i = 0; i < my_hand->harvestTiles->size(); i++){
