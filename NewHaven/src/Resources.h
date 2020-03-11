@@ -1,72 +1,96 @@
 #pragma once
-#include<ostream>
+#include <ostream>
 #include <cstdint>
+#include <vector>
 
-enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };
+enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };	//These are the resources for the tiles
 
-std::ostream& operator<<(std::ostream& output, const ResourceTypes resource);
+std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource); //Define what printing the resource enum do
 
 struct HarvestTile
 {
 private:
-	ResourceTypes* const tileContent{ new ResourceTypes[4] };
-	std::uint_least8_t* const position{ new std::uint_least8_t[2] };
+	ResourceTypes* tileContent;	//Array of resource types
 
-	void generateResources();
 public:
-	HarvestTile();
+
+	HarvestTile(ResourceTypes*);
+    HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
 
-	ResourceTypes* getTileContent();
-	std::uint_least8_t* getPosition();
+	HarvestTile& operator=(const HarvestTile&);
+
+	ResourceTypes* getTileContent() const;	//Returns a copy of the tileContent array
+
 	void rotateTileClockwise();
-	void rotateTileCounterClockwise();
+	void rotateTileCounterClockwise();	//For tile rotation
 };
 
 struct HarvestDeck
 {
 private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
-	std::uint_least8_t* const deckSize{new std::uint_least8_t(*MAX_DECK_SIZE)};
-	HarvestTile* const deckContent { new HarvestTile[*MAX_DECK_SIZE] };
+	std::uint_least8_t* deckSize;
+	std::vector<HarvestTile*>* deckContent; //Array of harvest tile objects
 	
 public:
 	HarvestDeck();
 	~HarvestDeck();
 
-	std::uint_least8_t getDeckSize();
-	HarvestTile* draw();
-};
-/*
-struct BuildingDeck
-{
-private:
-	
-	
-public:
-	BuildingDeck();
+	std::uint_least8_t getDeckSize() const;
 
-	void draw();
+	HarvestTile* draw() const;	//Return a pointer to a harvest tile in deckContent
 };
-*/
-/*
+
 struct Building
 {
 private:
-
+	ResourceTypes* buildingType;	//Determines resource
+	std::uint_least8_t* buildingNumber;
+	bool* faceUp;	//Either the card is flipped or not
 
 public:
-	Building();
+	Building(ResourceTypes = ResourceTypes::SHEEP, std::uint_least8_t = 1);
+	Building(const Building &building);
+	~Building();
 
+	Building& operator=(const Building&);
+
+	bool isFlipped() const;		//Return the state of the card, flipped or not
+	ResourceTypes getBuildingType() const;
+	std::uint_least8_t getBuildingNumber() const;
+
+	bool flipCard();
+};
+
+struct BuildingDeck
+{
+private:
+	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
+	std::uint_least8_t* deckSize;
+	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
+	
+public:
+	BuildingDeck();
+	~BuildingDeck();
+
+	std::uint_least8_t getDeckSize() const;
+
+	Building* draw() const;
 };
 
 struct Hand
 {
 private:
 
-
 public:
 	Hand();
-	void exchange();
+	~Hand();
+	/*
+	Every player is supposed to have a hand.
+	It's contains a vector for tiles and building cards.
+	*/
+    std::vector<HarvestTile*>* harvestTiles;
+    HarvestTile* shipment;
+    std::vector<Building*>* buildings;
 };
-*/
