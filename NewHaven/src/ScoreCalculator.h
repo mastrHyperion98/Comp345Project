@@ -17,7 +17,10 @@ using namespace boost;
 class ScoreCalculator {
 public:
     ScoreCalculator();
-    //~ScoreCalculator();
+    ScoreCalculator(const ScoreCalculator &cal);
+    ScoreCalculator & operator = (ScoreCalculator & cal);
+    ~ScoreCalculator();
+
     int getScore(VGMap village_map) const;
     const int *NUM_ROWS = new int(6);
     const int *NUM_COLS = new int(5);

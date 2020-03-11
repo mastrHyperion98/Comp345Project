@@ -24,6 +24,7 @@ public:
     GBMap(int configuration);
     GBMap(const GBMap &map);
     ~GBMap();
+    static GBMap *current_map;
     const int* const CONFIG;
     const int * const SIZE;
     bool placeHarvestTile(int NodeID,HarvestTile &tile);
@@ -41,5 +42,4 @@ private:
     inline int getVertexPosition(ResourceTrails graph, int position) const;
 };
 
-static GBMap *current_map;
 #endif //NEWHAVEN_GBMAP_H

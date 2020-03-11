@@ -187,7 +187,7 @@ HarvestTile* HarvestDeck::draw() const
 	}
 }
 
-Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber, std::uint_least8_t position) :
+Building::Building(ResourceTypes buildingType, std::uint_least8_t buildingNumber) :
 	buildingType{ new ResourceTypes(buildingType) },
 	buildingNumber{ new std::uint_least8_t(buildingNumber) },
 	faceUp{ new bool(true) }

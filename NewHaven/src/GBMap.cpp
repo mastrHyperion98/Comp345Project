@@ -10,6 +10,8 @@
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
 
+GBMap* GBMap::current_map;
+
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
     current_map = this;
@@ -39,7 +41,7 @@ GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new s
         throw 1;
 }
 bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
- if(NodeID > *SIZE || NodeID < 0|| &tile == nullptr)
+ if(NodeID > *SIZE || NodeID < 0|| &tile == nullptr ||*(*board)[NodeID].isPlayed )
      return false;
     // should use the operator overload
     (*board)[NodeID].tile = &tile;
