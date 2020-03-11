@@ -12,7 +12,7 @@ if(WIN32)
 if(UNIX)
     #Execute Unix only command
     endif(UNIX)
-
+include_directories(src)
 add_executable(VGMap test/VGMapDriver.cpp src/VGMap.cpp src/Resources.cpp)
 add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp)
 add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/VGMapLoader.cpp src/VGMap.cpp src/GBMapLoader.cpp src/GBMap.cpp src/Square.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp src/Resources.cpp)
