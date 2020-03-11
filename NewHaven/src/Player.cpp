@@ -102,8 +102,15 @@ int Player::placeHarvestTile() {
 
     int index_tile;
     int pos;
+    TILE:
     cout <<  "Tile index to place: ";
     cin >> index_tile;
+
+    if(index_tile < 0 || index_tile >= my_hand->harvestTiles->size()) {
+        cout << "That is not a valid tile" << endl;
+        goto TILE;
+
+    }
     POSITION:
     cout <<  "position index to place tile: ";
     cin >> pos;
