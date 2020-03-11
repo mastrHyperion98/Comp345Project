@@ -85,7 +85,8 @@ bool Player::buildVillage(){
         else{
             cout << "ERROR cannot play resource" << endl;
         }
-    }{
+    }
+    else{
         cout << "Cannot play building: Insufficient resources" << endl;
     }
     return false;
