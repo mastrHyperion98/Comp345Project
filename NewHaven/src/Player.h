@@ -1,21 +1,30 @@
 #include "VGMap.h"
 #include "Resources.h"
 #include "ResourceScore.h"
+#include "ScoreCalculator.h"
 
 struct Player
 {
 public:
     Player();
+    Player(const Player &player);
     ~Player();
+    Player &operator = (const Player &player);
+    // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the game_board
+    int placeHarvestTile();
+    // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
+    void drawBuilding(Building& building);
+    // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
+    void drawHarvestTile(HarvestTile& tile);
+    // im assuming this prints out the available resources;
+    ResourceScore resourceTracker();
+    bool buildVillage();
+    void calculateResources(ResourceTrails);
 
-    VGMap* villageGameBoard;
-    Hand* hand;
-    std::map<ResourceTypes, std::uint_least16_t>* score;
+private:
+    VGMap *village;
+    ResourceScore *resource_score;
+    ScoreCalculator *vb_score;
+    Hand *my_hand;
 
-    void placeHarvestTile();
-    void drawBuilding(BuildingDeck* buildingDeck);
-    void drawHarvestTile(HarvestDeck* harvestDeck);
-    void resourceTracker(ResourceScore* resourceScore);
-    void buildVillage();
-    void calculateResources(ResourceScore* resourceScore);
 };
