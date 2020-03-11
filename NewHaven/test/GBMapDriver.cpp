@@ -32,15 +32,11 @@ int main() {
     goto input_configuration;
 }
     cout << "\n***PRINT GRAPH***\n" << endl;
-    map->printGraph();
+    map->printBoard();
     cout << "\n***Print Connected Components***\n" << endl;
-    map->printConnectedGraph();
-
     // loop and create a trail of 5 resources that the user can place
     HarvestTile* tile = {new HarvestTile[5]};
     cout << "TESTING HARVEST TRAILS AND PLAYER OWNED RESOURCES FOR A TURN: ALL SQUARES ARE CURRENTLY EMPTY\n";
-    map->printIndexConfiguration();
-
     for(int i = 0; i < 5; i++) {
         int position;
         while (cout << "PLAY A HARVEST TILE AT SQUARE #: " && !( cin >>  position)) {
@@ -54,18 +50,19 @@ int main() {
         }
         // loop through the entire resource trail and show the Square position and
         // show the out going edges
-            (*map).setTile(position, &tile[i]);
-            ResourceTrails trail = map->getConnectedGraph(position);
+            (*map).placeHarvestTile(position, tile[i]);
+            ResourceTrails *trail = map->getResourcedGraph(position);
             ResourceTrails::vertex_iterator vertexIt, vertexEnd;
             ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
-            tie(vertexIt, vertexEnd) = vertices(trail);
+            tie(vertexIt, vertexEnd) = vertices(*trail);
             for (; vertexIt != vertexEnd; ++vertexIt) {
-                cout << trail[*vertexIt].getPosition() << " is connected with ";
-                tie(neighbourIt, neighbourEnd) = adjacent_vertices(*vertexIt, trail);
+                cout << *(*trail)[*vertexIt].position << " is connected with ";
+                tie(neighbourIt, neighbourEnd) = adjacent_vertices(*vertexIt, *trail);
                 for (; neighbourIt != neighbourEnd; ++neighbourIt)
-                    cout << trail[*neighbourIt].getPosition() << " ";
+                    cout << *(*trail)[*neighbourIt].position << " ";
                 cout << "\n";
             }
+            delete trail;
         }catch(int e){
             if(e==1)
                 cout << "\nERROR: Tile " << position << " already contains a tile!" << endl;
@@ -74,7 +71,6 @@ int main() {
             i--;
         }
     }
-    cout << (*map->getSquare(0)->getTile()).getTileContent()[2];
     delete map;
     delete[] tile;
     return 0;

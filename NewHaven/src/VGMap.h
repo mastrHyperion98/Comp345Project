@@ -9,6 +9,7 @@
 #include "boost/graph/adjacency_list.hpp"
 #include "Resources.h"
 #include <string>
+#include <map>
 
 // Our vertex Data Circle that will contain all our needed information
 class Circle{
@@ -16,33 +17,21 @@ public:
     // our public properties and methods
     bool *isVisited = new bool(false);
     Circle();
+    Circle(const Circle &circle);
+    Circle &operator=(const Circle &circle);
     ~Circle();
-    int getRow() const;
-    int getColumn() const;
-    int getVCost() const;
-    int getPosition() const;
-    void setRow(int row);
-    void setCol(int col);
-    void setPosition(int pos);
-    void setBuilding(Building * building);
-    void setVCost(int cost);
-    Building getBuilding() const;
-    bool getIsPlayed() const;
-
-    // our private properties and functions
-private:
-    int *position = nullptr;
-    int *row = nullptr;
-    int *column = nullptr;
-    int *vCost = nullptr;
-    Building* building = nullptr;
-    bool *isPlayed = new bool(false);
+    int *position;
+    int *row;
+    int *column;
+    int *vCost;
+    Building* building;
+    bool *isPlayed;
 };
 
 // define our village board graph
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Circle> Graph;
+typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Circle> C_Graph;
 // define our vertex descriptor
-typedef boost::graph_traits<Graph>::vertex_descriptor vertex_v;
+typedef boost::graph_traits<C_Graph>::vertex_descriptor vertex_v;
 // define the graph we will be using for computing scores
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Circle> ConnectedCircles;
 
@@ -51,17 +40,23 @@ class VGMap {
 public:
     // class constructor
     VGMap();
-    ~VGMap();;
+    VGMap(const VGMap &map);
+    VGMap &operator=(const VGMap &map);
+    ~VGMap();
     void PrintGraph();
     void PrintConnectedGraph();
-    Circle getCircle(int position);
-    void setBuilding(int position, Building *building);
+    bool isPlayed(int position);
+    bool setBuilding(int position, Building *building);
+    int getPositionCost(int position);
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
 private:
     void CreateVillageField();
-    Graph *village_board = new Graph;
+    C_Graph *village_board;
+    map<ResourceTypes, bool> *typePlayed;
+    bool isAdjacentType(ResourceTypes type, int position);
+
 };
 
 #endif //NEWHAVEN_VGMAP_H
