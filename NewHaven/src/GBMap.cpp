@@ -12,6 +12,7 @@
 
 GBMap* GBMap::current_map;
 
+
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
     current_map = this;
@@ -97,7 +98,7 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
     } // end of while loop
     // reset all the vertices isVisited to false;
     resetVisitedNodes();
-
+    closeLoop(connectedGraph);
     return connectedGraph;
 }
 
@@ -239,4 +240,30 @@ Building* GBMap::drawBuildingFromBoard(int position) {
         return my_building;
         }
     return nullptr;
+}
+
+void GBMap::closeLoop(ResourceTrails *trail){
+    int num_vertices = boost::num_vertices(*trail);
+    NodeID trail_id = num_vertices-1;
+    int position = *(*trail)[num_vertices-1].position;
+    NodeID id = -1;
+
+    for(int i = 0; i < *SIZE; i++){
+        if(*(*board)[i].position == position)
+            id = i;
+    }
+    if(id == -1)
+        return;
+    // from main board find adjacen
+    GameBoard::adjacency_iterator neighbourIt, neighbourEnd;
+    tie(neighbourIt, neighbourEnd) = adjacent_vertices(id, *board);
+    for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+        // check if position is in trail
+        int pos = *(*board)[*neighbourIt].position;
+        // iterate through
+        for(int j = 0; j < num_vertices; j++){
+            if(*(*trail)[j].position == pos)
+                add_edge(trail_id, j, *trail);
+        }
+    }
 }

@@ -2,7 +2,7 @@
 #include "Resources.h"
 #include "ResourceScore.h"
 #include "ScoreCalculator.h"
-
+#include "ResourceCalculator.h"
 struct Player
 {
 public:
@@ -19,11 +19,11 @@ public:
     // im assuming this prints out the available resources;
     ResourceScore resourceTracker();
     bool buildVillage();
-    void calculateResources(ResourceTrails);
+    int* calculateResources(ResourceTrails);
 
 private:
     VGMap *village;
-    ResourceScore *resource_score;
+    ResourceCalculator *resource_score;
     ScoreCalculator *vb_score;
     Hand *my_hand;
 

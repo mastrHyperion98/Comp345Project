@@ -40,6 +40,7 @@ private:
     inline void resetVisitedNodes();
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;
     inline int getVertexPosition(ResourceTrails graph, int position) const;
+    void closeLoop(ResourceTrails *trail);
 };
 
 #endif //NEWHAVEN_GBMAP_H
