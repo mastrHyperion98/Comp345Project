@@ -53,27 +53,51 @@ bool Player::buildVillage(){
     }
 
     int index;
-    int pos;
-    cout <<  "Building index to play: ";
-    cin >> index;
-    POSITION:
-    cout <<  "position index to place tile: ";
-    cin >> pos;
+    bool valid= false;
 
-    if(index < 0 || index > my_hand->buildings->size()){
-        cout << "Incorrect Index. There are no building at that index. Please try again." << endl;
-        goto SELECT;
+    do {cout <<  "Building index to play: ";
+        cin >> index;
+        if(cin.good()){
+            valid = true;
+        }
+        else {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout << "Invalid input; please re-enter." << endl;
+        }
     }
+    while(index < 0 || index > my_hand->buildings->size() || valid == false);
+
+    POSITION:
+    int pos;
+    bool pValid = false;
+
+    do {cout<<"position index to place tile: ";
+
+            cin >> pos;
+            if (cin.good()) {
+                pValid = true;
+            }
+            else {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid pos; please re-enter" << endl;
+            }
+        }
+    while(pValid == false);
+
     std::uint_least16_t cost = 0;
     if((*my_hand->buildings)[index]->isFlipped())
         cost = (*my_hand->buildings)[index]->getBuildingNumber();
-    else
+    else {
         cost = village->getPositionCost(pos);
+    }
 
     if(cost == -1){
         cout << "Incorrect Position. Please try again" << endl;
         goto POSITION;
     }
+
     Building building = *(*my_hand->buildings)[index];
     ResourceTypes type=building.getBuildingType();
     if(resource_score->hasResources(type, cost)) {
@@ -83,6 +107,8 @@ bool Player::buildVillage(){
             return true;
         }
         else{
+            cin.clear(); // reset failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             cout << "ERROR cannot play resource" << endl;
         }
     }
@@ -108,6 +134,8 @@ int Player::placeHarvestTile() {
     cin >> index_tile;
 
     if(index_tile < 0 || index_tile >= my_hand->harvestTiles->size()) {
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "That is not a valid tile" << endl;
         goto TILE;
 
@@ -123,6 +151,8 @@ int Player::placeHarvestTile() {
             return pos;
         }
         else{
+            cin.clear(); // reset failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             cout << "This position is incorrect. Please select another position" << endl;
             goto POSITION;
         }
