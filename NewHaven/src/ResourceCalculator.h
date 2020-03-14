@@ -18,7 +18,7 @@ public:
     int *resources;
 private:
     struct Quad{
-        bool *isMatching = {new bool[4]};
+        bool *isMatching = {new bool[4]{false,false,false,false}};
         // prevent infinite loop
         int const *MAX_VISIT = new int(4);
         int *current_visit_count = new int(0);
