@@ -12,7 +12,7 @@
 #include "Square.h"
 
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Square> ResourceTrails;
+typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::bidirectionalS, Square> ResourceTrails;
 typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
 
 
@@ -40,7 +40,6 @@ private:
     inline void resetVisitedNodes();
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;
     inline int getVertexPosition(ResourceTrails graph, int position) const;
-    void closeLoop(ResourceTrails *trail);
 };
 
 #endif //NEWHAVEN_GBMAP_H
