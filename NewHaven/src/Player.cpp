@@ -109,6 +109,7 @@ bool Player::buildVillage(){
     }
 
     else if (flipped == 1) {
+        (*my_hand->buildings)[index]->flipCard();
         cost = village->getPositionCost(pos);
         village->setBuilding(pos, &building);
             resource_score->consumeResources(type, cost);
