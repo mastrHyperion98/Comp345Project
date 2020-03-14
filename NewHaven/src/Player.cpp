@@ -86,11 +86,34 @@ bool Player::buildVillage(){
         }
     while(pValid == false);
 
+    Building building = *(*my_hand->buildings)[index];
+    ResourceTypes type=building.getBuildingType();
+
+    int flipped;
+
+    cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): " << endl;
+    cin >> flipped;
+    while(cin.fail() || flipped > 1){
+            cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): "
+                 << endl;
+            cin.clear();
+            std::cin.ignore(256, '\n');
+            cin >> flipped;
+    }
+
     std::uint_least16_t cost = 0;
-    if((*my_hand->buildings)[index]->isFlipped())
+
+    if (flipped == 0) {
+        (*my_hand->buildings)[index]->isFlipped();
         cost = (*my_hand->buildings)[index]->getBuildingNumber();
-    else {
+    }
+
+    else if (flipped == 1) {
         cost = village->getPositionCost(pos);
+        village->setBuilding(pos, &building);
+            resource_score->consumeResources(type, cost);
+            my_hand->buildings->erase(my_hand->buildings->begin() + index);
+            return true;
     }
 
     if(cost == -1){
@@ -98,8 +121,8 @@ bool Player::buildVillage(){
         goto POSITION;
     }
 
-    Building building = *(*my_hand->buildings)[index];
-    ResourceTypes type=building.getBuildingType();
+//    Building building = *(*my_hand->buildings)[index];
+//    ResourceTypes type=building.getBuildingType();
     if(resource_score->hasResources(type, cost)) {
         if(village->setBuilding(pos, &building)) {
             resource_score->consumeResources(type, cost);
