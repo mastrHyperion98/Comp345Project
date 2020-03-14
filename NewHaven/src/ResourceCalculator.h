@@ -7,7 +7,8 @@
 #include <map>
 #include "GBMap.h"
 #include "deque"
-
+#include <boost/graph/reverse_graph.hpp>
+using ReversedGraph = boost::reverse_graph<ResourceTrails,ResourceTrails&>;
 using namespace std;
 class ResourceCalculator {
 public:
@@ -32,7 +33,7 @@ private:
     const int *SHEEP = new int(1);
     const int *WOOD = new int(2);
     const int *STONE = new int(3);
-    void backstepping(NodeID position, map<NodeID, Quad> map, ResourceTrails &graph);
+    void backstepping(NodeID position, map<NodeID, Quad> map, ReversedGraph &trail,  ResourceTrails &graph);
 
 };
 

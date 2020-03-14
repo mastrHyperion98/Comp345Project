@@ -150,8 +150,9 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     }
     // perform  backstepping ( from num_vertices - 2 to (num_vertices/2 - 2)
     // efficiency of N/2
+    ReversedGraph reverse = boost::make_reverse_graph(trail);// constant time efficiency
     for(int j = num_vertices-1; j >= 0 || (j >= (num_vertices/2 - 1)); j--)
-        backstepping(j, map, trail);
+        backstepping(j, map, reverse,trail);
     return resources;
 }
 // compute Inner
@@ -276,11 +277,9 @@ inline void ResourceCalculator::addResources(ResourceTypes type){
     else if(type == ResourceTypes::WOOD)
         resources[*WOOD] =  resources[*WOOD] + 1;
 }
-using ReversedGraph = boost::reverse_graph<ResourceTrails,ResourceTrails&>;
-// constant time efficiency
-void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, ResourceTrails &graph) {
 
-    ReversedGraph trail = boost::make_reverse_graph(graph);// constant time efficiency
+// constant time efficiency
+void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, ReversedGraph &trail, ResourceTrails &graph) {
     Quad root_quad = map[position];
     auto vertices = graph.vertex_set();
     NodeID root = vertices[position];
