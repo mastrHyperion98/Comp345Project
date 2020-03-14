@@ -45,8 +45,6 @@ void Player::calculateResources(ResourceTrails trail) {
 }
 
 bool Player::buildVillage(){
-
-    SELECT:
     for(int i = 0; i < my_hand->buildings->size(); i++){
         cout << "building index: " << i << " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
         << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
@@ -54,7 +52,6 @@ bool Player::buildVillage(){
 
     int index;
     bool valid= false;
-
     do {cout <<  "Building index to play: ";
         cin >> index;
         if(cin.good()){
@@ -65,15 +62,12 @@ bool Player::buildVillage(){
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
             cout << "Invalid input; please re-enter." << endl;
         }
-    }
-    while(index < 0 || index > my_hand->buildings->size() || valid == false);
+    }  while(index < 0 || index > my_hand->buildings->size() || !valid);
 
-    POSITION:
+
     int pos;
     bool pValid = false;
-
     do {cout<<"position index to place tile: ";
-
             cin >> pos;
             if (cin.good()) {
                 pValid = true;
@@ -83,8 +77,7 @@ bool Player::buildVillage(){
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Invalid pos; please re-enter" << endl;
             }
-        }
-    while(pValid == false || pos < 0 || pos >= 30);
+        } while(!pValid || pos < 0 || pos >= 30);
 
     Building building = *(*my_hand->buildings)[index];
     ResourceTypes type=building.getBuildingType();
@@ -144,33 +137,28 @@ int Player::placeHarvestTile() {
 
     int index_tile;
     int pos;
-    TILE:
-    cout <<  "Tile index to place: ";
-    cin >> index_tile;
 
-    if(index_tile < 0 || index_tile >= my_hand->harvestTiles->size()) {
+    while((cout <<  "Tile index to place: " && !(cin >> index_tile))||index_tile < 0 || index_tile >= my_hand->harvestTiles->size()){
+          cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "That is not a valid tile index" << endl;
+    }
+
+    POSITION:
+    while((cout <<  "position index to place tile: " && !( cin >> pos)) || pos < 0
+    || pos >= (25 + (10 * *GBMap::current_map->CONFIG))){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        cout << "That is not a valid tile" << endl;
-        goto TILE;
-
+        cout << "That is not a valid tile index" << endl;
     }
-    POSITION:
-    cout <<  "position index to place tile: ";
-    cin >> pos;
-
-
 
     // later this will be called from the singleton Game Controller
     if(GBMap::current_map != nullptr) {
         if(GBMap::current_map->placeHarvestTile(pos, *(*my_hand->harvestTiles)[index_tile])) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + index_tile);
             return pos;
-        }
-        else{
-            cin.clear(); // reset failbit
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cout << "This position is incorrect. Please select another position" << endl;
+        } else{
+            cout << "Position Index is invalid. It has already been played!"<<endl;
             goto POSITION;
         }
     }
