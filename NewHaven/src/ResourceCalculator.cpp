@@ -57,7 +57,6 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
             Quad next_quad;
             NodeID next_element = vertices[*neighbourIt];
             ResourceTypes *next_resources = (*trail[next_element].tile).getTileContent();
-
             int direction = *trail[root].position - *trail[next_element].position;
             if(direction == *DOWN){
                 // compare index 2 of root to index 0 of next element
@@ -72,11 +71,6 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                     next_quad.isMatching[1] = true;
                     addResources( next_resources[1]);
                 }
-                /*
-                 * Now we need to check within the element itself if other of its own nodes connect
-                 */
-                setQuadInner(next_quad, next_resources, direction);
-                *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *UP){
                 // compare index 2 of root to index 0 of next element
@@ -91,11 +85,6 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                     next_quad.isMatching[3] = true;
                     addResources( next_resources[3]);
                 }
-                /*
-                 * Now we need to check within the element itself if other of its own nodes connect
-                 */
-                setQuadInner(next_quad, next_resources, direction);
-                *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *LEFT){
                 // compare index 2 of root to index 0 of next element
@@ -110,11 +99,6 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                     next_quad.isMatching[3] = true;
                     addResources( next_resources[3]);
                 }
-                /*
-                 * Now we need to check within the element itself if other of its own nodes connect
-                 */
-                setQuadInner(next_quad, next_resources, direction);
-                *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             }
             else if(direction == *RIGHT){
                 // compare index 2 of root to index 0 of next element
@@ -129,13 +113,9 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
                     next_quad.isMatching[2] = true;
                     addResources(next_resources[2]);
                 }
-                /*
-                 * Now we need to check within the element itself if other of its own nodes connect
-                 */
-                setQuadInner(next_quad, next_resources, direction);
-                *next_quad.current_visit_count = *next_quad.current_visit_count +1;
-
             }
+            setQuadInner(next_quad, next_resources, direction);
+            *next_quad.current_visit_count = *next_quad.current_visit_count +1;
             // check if the quad for said vertex exists if it does verify count
             if(map.find(next_element) == map.end()) {
                 map.insert(pair<NodeID, Quad>(next_element, next_quad));
@@ -279,17 +259,15 @@ inline void ResourceCalculator::addResources(ResourceTypes type){
 }
 
 // constant time efficiency
-void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, ReversedGraph &trail, ResourceTrails &graph) {
-    Quad root_quad = map[position];
+void ResourceCalculator::backstepping(NodeID root, map<NodeID, Quad> map, ReversedGraph &trail, ResourceTrails &graph) {
+    Quad root_quad = map[root];
     auto vertices = graph.vertex_set();
-    NodeID root = vertices[position];
     // now we build the queues
     ReversedGraph::adjacency_iterator neighbourIt, neighbourEnd;
     tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail);
     ResourceTypes *root_resources = (*trail[root].tile).getTileContent();
     for (; neighbourIt != neighbourEnd; ++neighbourIt) {
         // get ourselves our vertex
-
         NodeID next_element = vertices[*neighbourIt];
         Quad next_quad = map[next_element];
         ResourceTypes *next_resources = (*trail[next_element].tile).getTileContent();
@@ -305,10 +283,6 @@ void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, Re
                 next_quad.isMatching[1] = true;
                 addResources(next_resources[1]);
             }
-            /*
-             * Now we need to check within the element itself if other of its own nodes connect
-             */
-            setQuadInner(next_quad, next_resources, direction);
         }
         else if(direction == *UP){
             // compare index 2 of root to index 0 of next element
@@ -320,10 +294,6 @@ void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, Re
                 next_quad.isMatching[3] = true;
                 addResources(next_resources[3]);
             }
-            /*
-             * Now we need to check within the element itself if other of its own nodes connect
-             */
-            setQuadInner(next_quad, next_resources, direction);
         }
         else if(direction == *LEFT){
             // compare index 2 of root to index 0 of next element
@@ -335,10 +305,6 @@ void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, Re
                 next_quad.isMatching[3] = true;
                 addResources(next_resources[3]);
             }
-            /*
-             * Now we need to check within the element itself if other of its own nodes connect
-             */
-            setQuadInner(next_quad, next_resources, direction);
         }
         else if(direction == *RIGHT){
             // compare index 2 of root to index 0 of next element
@@ -350,12 +316,8 @@ void ResourceCalculator::backstepping(NodeID position, map<NodeID, Quad> map, Re
                 next_quad.isMatching[2] = true;
                 addResources( next_resources[2]);
             }
-            /*
-             * Now we need to check within the element itself if other of its own nodes connect
-             */
-            setQuadInner(next_quad, next_resources, direction);
         }
-
+        setQuadInner(next_quad, next_resources, direction);
         delete next_resources;
     }
 }

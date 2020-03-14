@@ -33,7 +33,7 @@ private:
     const int *SHEEP = new int(1);
     const int *WOOD = new int(2);
     const int *STONE = new int(3);
-    void backstepping(NodeID position, map<NodeID, Quad> map, ReversedGraph &trail,  ResourceTrails &graph);
+    void backstepping(NodeID root, map<NodeID, Quad> map, ReversedGraph &trail,  ResourceTrails &graph);
 
 };
 
