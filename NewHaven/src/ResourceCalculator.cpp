@@ -149,7 +149,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
         queue.pop_front();
     }
     // perform  backstepping ( from num_vertices - 2 to (num_vertices/2 - 2)
-    // efficiency of N/2
+    // efficiency of N/2 operations
     ReversedGraph reverse = boost::make_reverse_graph(trail);// constant time efficiency
     for(int j = num_vertices-1; j >= 0 || (j >= (num_vertices/2 - 1)); j--)
         backstepping(j, map, reverse,trail);

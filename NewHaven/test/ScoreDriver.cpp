@@ -120,7 +120,7 @@ int main()
            int* re = calculator.computeResources(
                     *map.getResourcedGraph(root)); //13 is the root tile, can be changed to any other valid tile.
             cout << '\n';
-            cout << re[0] << "\t" << re[1]<< "\t" << re[2] << "\t" << re[3] << endl;
+            cout << "WT: " << re[0] << "\t" << "SH: " << re[1]<< "\t" << "WD: " << re[2] << "\t" << "ST: " << re[3] << endl;
         }
     }
 
@@ -149,7 +149,7 @@ int main()
             int* re = calculator.computeResources(
                     *map2.getResourcedGraph(root)); //13 is the root tile, can be changed to any other valid tile.
             cout << '\n';
-            cout << re[0] << "\t" << re[1]<< "\t" << re[2] << "\t" << re[3] << endl;
+            cout << "WT: " << re[0] << "\t" << "SH: " << re[1]<< "\t" << "WD: " << re[2] << "\t" << "ST: " << re[3] << endl;
         }
     }
 
