@@ -84,7 +84,7 @@ bool Player::buildVillage(){
                 cout << "Invalid pos; please re-enter" << endl;
             }
         }
-    while(pValid == false);
+    while(pValid == false || pos < 0 || pos >= 30);
 
     Building building = *(*my_hand->buildings)[index];
     ResourceTypes type=building.getBuildingType();
@@ -93,7 +93,7 @@ bool Player::buildVillage(){
 
     cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): " << endl;
     cin >> flipped;
-    while(cin.fail() || flipped > 1){
+    while(cin.fail() || flipped > 1 || flipped < 0){
             cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): "
                  << endl;
             cin.clear();
@@ -107,19 +107,10 @@ bool Player::buildVillage(){
         (*my_hand->buildings)[index]->isFlipped();
         cost = (*my_hand->buildings)[index]->getBuildingNumber();
     }
-
+    // just need to assign cost
     else if (flipped == 1) {
         (*my_hand->buildings)[index]->flipCard();
         cost = village->getPositionCost(pos);
-        village->setBuilding(pos, &building);
-            resource_score->consumeResources(type, cost);
-            my_hand->buildings->erase(my_hand->buildings->begin() + index);
-            return true;
-    }
-
-    if(cost == -1){
-        cout << "Incorrect Position. Please try again" << endl;
-        goto POSITION;
     }
 
 //    Building building = *(*my_hand->buildings)[index];
@@ -133,7 +124,7 @@ bool Player::buildVillage(){
         else{
             cin.clear(); // reset failbit
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cout << "ERROR cannot play resource" << endl;
+            cout << "ERROR cannot play building in that position. Costs do not match!" << endl;
         }
     }
     else{
@@ -167,6 +158,8 @@ int Player::placeHarvestTile() {
     POSITION:
     cout <<  "position index to place tile: ";
     cin >> pos;
+
+
 
     // later this will be called from the singleton Game Controller
     if(GBMap::current_map != nullptr) {
