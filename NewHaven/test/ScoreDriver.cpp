@@ -77,14 +77,14 @@ int main()
     This printing part is where I printed the tiles for a visual support. We print line by line every row of the connected tiles seperating every string with a tab.
     When there is no tile, we create the blank space with 3 consecutive tabs.
     */
-/*
-    std::cout << '\n' << t0[0] << '\t' << t0[1] << '\t' << t1[0] << '\t' << t1[1] << '\t' << t2[0] << '\t' << t2[1] << '\t' << t3[0] << '\t' << t3[1] << '\t' << t3_1[0] << '\t' << t3_1[1] <<
-              '\n' << t0[3] << '\t' << t0[2] << '\t' << t1[3] << '\t' << t1[2] << '\t' << t2[3] << '\t' << t2[2] << '\t' << t3[3] << '\t' << t3[2] << '\t' << t3_1[3] << '\t' << t3_1[2] <<
-              "\n\n" << t3_2[0] << '\t' << t3_2[1] << '\t' << t4[0] << '\t' << t4[1] << '\t' << '\t' << "\t*" << t5[0] << "\t" << t5[1] << '\t' << t6[0] << '\t' << t6[1] <<
-              '\n' << t3_2[3] << '\t' << t3_2[2] << '\t' << t4[3] << '\t' << t4[2] << '\t' << '\t' << '\t' << t5[3] << '\t' << t5[2] << '\t' << t6[3] << '\t' << t6[2] <<
-              "\n\n" << '\t' << '\t' << t7[0] << '\t' << t7[1] << '\t' << t8[0] << '\t' << t8[1] << '\t' << t9[0] << '\t' << t9[1] << '\t' << t9_1[0] << '\t' << t9_1[1] <<
-              '\n' << '\t' << '\t' << t7[3] << '\t' << t7[2] << '\t' << t8[3] << '\t' << t8[2] << '\t' << t9[3] << '\t' << t9[2] << '\t' << t9_1[3] << '\t' << t9_1[2] << "\n\n";
-*/
+
+    std::cout << '\n' << "ST\tSH\tSH\tSH\tSH\tSH" << '\n'
+                      << "ST\tWD\tWD\tST\tWD\tSH" << '\n'
+                      << "ST\tWD\t \t \t*SH\tSH" << '\n'
+                      << "SH\tWD\t \t \tSH\tWD" << '\n'
+                      << "ST\tWD\tWD\tWD\tWD\tWD" << '\n'
+                      << "SH\tWD\tSH\tST\tSH\tST" << '\n' << endl;
+
     /*
     Created a rootConnected attribute to the HarvestTile. I also created a visitedResource attribute. They're both an array of 4 elements like tileContent. In both cases, every element of the array represents a resource in the tileContent array.
     All resources of the starting tile are rooted. That means that we will only add to the score the resources equal and adjacent to them. Once an adjacent resource is added to the score, we make it visited as to not count it twice.
