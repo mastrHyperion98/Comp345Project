@@ -136,7 +136,7 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     return resources;
 }
 // compute Inner
-inline void ResourceCalculator::setQuadInner(Quad quad, ResourceTypes* resource, int direction){
+void ResourceCalculator::setQuadInner(Quad quad, ResourceTypes* resource, int direction){
     /*
      * check if 0 and 2 matches, 0 and 1, 1 and 3 and 3 and 2 in that order
      */

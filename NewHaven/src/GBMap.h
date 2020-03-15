@@ -33,8 +33,9 @@ public:
     void printIndexConfiguration();
     bool addBuildingToBoard(Building &building);
     Building* drawBuildingFromBoard(int position);
-private:
     GameBoard* board;
+private:
+
     std::vector<Building*>* buildings;
     bool createBoard();
     inline void resetVisitedNodes();

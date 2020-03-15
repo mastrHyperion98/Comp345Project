@@ -23,7 +23,7 @@ private:
         int const *MAX_VISIT = new int(4);
         int *current_visit_count = new int(0);
     };
-    inline void setQuadInner(Quad quad, ResourceTypes* resource, int direction);
+    void setQuadInner(Quad quad, ResourceTypes* resource, int direction);
     inline void addResources(ResourceTypes type);
     const int  *DOWN = new int(-5);
     const int *UP = new int(5);
