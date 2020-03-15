@@ -75,6 +75,10 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
             NodeID next_element = vertices[*neighbourIt];
             // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
             // search its neighbours
+          /*  if(*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
+                int v_position = getVertexPosition(*connectedGraph, *(*board)[next_element].position);
+                add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
+            }*/
             if (!*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
                 if( !vertexContainedInQueue(queue, next_element))
                     queue.push_back(next_element);
@@ -84,17 +88,15 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
                     (*connectedGraph)[vertex1] = Square((* board)[next_element]);
                     root_queue.push_back(vertex1);
                     add_edge(root, vertex1, *connectedGraph);
-                    if(root != 0)
-                        add_edge(vertex1, root, *connectedGraph);
                 }
                     // we need to go fetch the vertexID for the element with the required position to complete our trail
                 else{
                     int v_position = getVertexPosition(*connectedGraph, *(*board)[next_element].position);
                     add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
-                    if(root != 0)
-                        add_edge((*connectedGraph).vertex_set()[v_position], root, *connectedGraph);
                 }
             }
+
+
         }
         // remove the top of the queue
         queue.pop_front();

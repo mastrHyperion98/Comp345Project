@@ -18,12 +18,18 @@ public:
     int *resources;
 private:
     struct Quad{
-        bool *isMatching = {new bool[4]{false,false,false,false}};
+        Quad();
+        Quad(const Quad&);
+        ~Quad();
+        Quad &operator=(const Quad & quad);
+        bool *isMatching;
         // prevent infinite loop
-        int const *MAX_VISIT = new int(4);
-        int *current_visit_count = new int(0);
+       const int * const MAX_VISIT = new const int(4);
+       int *current_visit_count;
     };
-    void setQuadInner(Quad quad, ResourceTypes* resource, int direction);
+    typedef std::map<NodeID, Quad*> Map;
+    typedef std::pair<NodeID, Quad*> Pair;
+    void setQuadInner(Quad *quad, ResourceTypes* resource, int direction);
     inline void addResources(ResourceTypes type);
     const int  *DOWN = new int(-5);
     const int *UP = new int(5);
@@ -33,7 +39,7 @@ private:
     const int *SHEEP = new int(1);
     const int *WOOD = new int(2);
     const int *STONE = new int(3);
-    void backstepping(NodeID root, map<NodeID, Quad> map, ReversedGraph &trail,  ResourceTrails &graph);
+    void backstepping(NodeID root, Map *map,ResourceTrails);
 
 };
 
