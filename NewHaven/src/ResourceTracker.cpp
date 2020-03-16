@@ -102,11 +102,7 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
             }
             if(*next_quad->current_visit_count <= *next_quad->MAX_VISIT)
                     queue.push_back(next_element);
-
-
-            delete next_resources;
         }
-        delete root_resources;
         queue.pop_front();
     }
     // perform  backstepping ( from num_vertices - 2 to (num_vertices/2 - 2)
@@ -115,6 +111,18 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
       backstepping(j, &map, trail);
 
    // delete and repoint all entries in the map to null_pointer
+    // Create a map iterator and point to beginning of map
+   Map::iterator it = map.begin();
+
+    // Iterate over the map using Iterator till end.
+    while (it != map.end())
+    {
+        // delete the quad
+        delete it->second;
+        // assign nullptr
+        it->second = nullptr;
+        it++;
+    }
     return;
 }
 // compute Inner
@@ -328,8 +336,6 @@ bool ResourceTracker::hasResources(ResourceTypes type, std::uint_least16_t amoun
     }
     return false;
 }
-
-
 ResourceTracker::Quad::Quad(): isMatching{new bool[4]{false, false, false, false}}{
     current_visit_count = new int(0);
 }
