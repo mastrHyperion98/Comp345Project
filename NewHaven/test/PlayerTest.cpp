@@ -28,5 +28,6 @@ int main(){
     player.resourceTracker().printScore();
     for(int i = 0; i < 3; i++){
         player.buildVillage();
+        player.resourceTracker().printScore();
     }
 }

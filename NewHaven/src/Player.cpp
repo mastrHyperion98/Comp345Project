@@ -1,17 +1,10 @@
 #include "Player.h"
 #include "GBMap.h"
-Player::Player(){
-    village = new VGMap();
-    resource_score = new ResourceScore();
-    vb_score = new ScoreCalculator();
-    my_hand = new Hand();
+Player::Player():village{new VGMap()}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
 }
 
-Player::Player(const Player &player) {
-    village = new VGMap(*player.village);
-    resource_score = new ResourceScore(*player.resource_score);
-    vb_score = new ScoreCalculator(*player.vb_score);
-    my_hand = new Hand(*player.my_hand);
+Player::Player(const Player &player): resource_score{new ResourceTracker(*player.resource_score)},
+village{new VGMap(*player.village)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
 }
 
 Player::~Player(){
@@ -35,7 +28,7 @@ Player& Player::operator=(const Player &player) {
     return *this;
 }
 // I'm assuming it just wants to return the resource_tracker
-ResourceScore Player::resourceTracker() {
+ResourceTracker Player::resourceTracker() {
     // return a copy of the resource score;
     return *resource_score;
 }
