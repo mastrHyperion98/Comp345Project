@@ -32,7 +32,6 @@ private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(60) };
 	std::uint_least8_t* deckSize;
 	std::vector<HarvestTile*>* deckContent; //Array of harvest tile objects
-	std::vector<HarvestTile*>* poolContent;
 	
 public:
 	HarvestDeck();
@@ -70,6 +69,7 @@ private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
 	std::uint_least8_t* deckSize;
 	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
+	std::vector<Building*>* poolContent;	//Array of buildings to represent the pool
 	
 public:
 	BuildingDeck();

@@ -237,11 +237,13 @@ bool Building::flipCard()
 	return *faceUp;
 }
 
-BuildingDeck::BuildingDeck():
+BuildingDeck::BuildingDeck() :
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
-	deckContent{ new std::vector<Building*> }
+	deckContent{ new std::vector<Building*> },
+	poolContent{ new std::vector<Building*> }
 {
 	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
+	poolContent->reserve(5);
 
 	ResourceTypes buildingType;
 
@@ -276,6 +278,11 @@ BuildingDeck::BuildingDeck():
 			}
 		}
 	}
+
+	for (std::uint_fast8_t i = 0; i < 5; i++)
+	{
+		poolContent->push_back(draw());
+	}
 }
 
 BuildingDeck::~BuildingDeck()
@@ -283,6 +290,7 @@ BuildingDeck::~BuildingDeck()
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
+	delete poolContent;
 }
 
 std::uint_least8_t BuildingDeck::getDeckSize() const
