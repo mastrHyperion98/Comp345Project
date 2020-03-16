@@ -24,7 +24,7 @@ private:
         Quad &operator=(const Quad & quad);
         bool *isMatching;
         // prevent infinite loop
-       const int * const MAX_VISIT = new const int(4);
+       const int * const MAX_VISIT = new const int(100);
        int *current_visit_count;
     };
     typedef std::map<NodeID, Quad*> Map;
