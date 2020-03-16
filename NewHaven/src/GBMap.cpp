@@ -75,11 +75,11 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
             NodeID next_element = vertices[*neighbourIt];
             // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
             // search its neighbours
-          /*  if(*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
+           if(*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
                 int v_position = getVertexPosition(*connectedGraph, *(*board)[next_element].position);
                 add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
-            }*/
-            if (!*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
+            }
+           else if (!*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
                 if( !vertexContainedInQueue(queue, next_element))
                     queue.push_back(next_element);
 

@@ -39,7 +39,7 @@ private:
     const int *SHEEP = new int(1);
     const int *WOOD = new int(2);
     const int *STONE = new int(3);
-    void backstepping(NodeID root, Map *map,ResourceTrails);
+    void backstepping(NodeID root, Map *map,ResourceTrails&);
 
 };
 
