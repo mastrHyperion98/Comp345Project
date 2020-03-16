@@ -240,10 +240,10 @@ bool Building::flipCard()
 BuildingDeck::BuildingDeck() :
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new std::vector<Building*> },
-	poolContent{ new std::vector<Building*> }
+	buildingPoolContent{ new std::vector<Building*> }
 {
 	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
-	poolContent->reserve(5);
+	buildingPoolContent->reserve(5);
 
 	ResourceTypes buildingType;
 
@@ -281,7 +281,7 @@ BuildingDeck::BuildingDeck() :
 
 	for (std::uint_fast8_t i = 0; i < 5; i++)
 	{
-		poolContent->push_back(draw());
+		buildingPoolContent->push_back(draw());
 	}
 }
 
@@ -290,7 +290,7 @@ BuildingDeck::~BuildingDeck()
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
-	delete poolContent;
+	delete buildingPoolContent;
 }
 
 std::uint_least8_t BuildingDeck::getDeckSize() const
@@ -308,6 +308,29 @@ Building* BuildingDeck::draw() const
 	else
 	{
 		return nullptr;
+	}
+}
+
+Building* BuildingDeck::buildingPoolDraw(const std::uint_least8_t& index)
+{
+	if (buildingPoolContent->size() && index >= 0 && index < buildingPoolContent->size())
+	{
+		Building* pickedCard{ buildingPoolContent->at(index) };
+		buildingPoolContent->erase(buildingPoolContent->begin() + index);
+
+		return pickedCard;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void BuildingDeck::fillBuildingPool()
+{
+	for (std::uint_fast8_t i = 0; i < 5 - buildingPoolContent->size(); i++)
+	{
+		buildingPoolContent->push_back(draw());
 	}
 }
 
