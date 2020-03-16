@@ -131,8 +131,8 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     // perform  backstepping ( from num_vertices - 2 to (num_vertices/2 - 2)
     // efficiency of N/2 operations
     ReversedGraph reverse = boost::make_reverse_graph(trail);// constant time efficiency
-  /* for(int j = num_vertices-1; j >= 0; j--)
-      backstepping(j, &map, trail);*/
+   for(int j = num_vertices-1; j >= 0; j--)
+      backstepping(j, &map, trail);
 
    // delete and repoint all entries in the map to null_pointer
     return resources;
@@ -277,24 +277,24 @@ void ResourceCalculator::backstepping(NodeID root, Map *map, ResourceTrails &tra
         int direction = *trail[root].position - *trail[next_element].position;
         if(direction == *DOWN){
             // compare index 2 of root to index 0 of next element
-            if(root_resources[2] == next_resources[0] && !next_quad->isMatching[0] && root_quad->isMatching[2]){
+            if(root_resources[3] == next_resources[0] && !next_quad->isMatching[0] && root_quad->isMatching[3]){
                 next_quad->isMatching[0] = true;
                 addResources( next_resources[0]);
             }
-            if(root_resources[3] == next_resources[1] && !next_quad->isMatching[1]  && root_quad->isMatching[3]){
+            if(root_resources[2] == next_resources[1] && !next_quad->isMatching[1]  && root_quad->isMatching[2]){
                 next_quad->isMatching[1] = true;
                 addResources(next_resources[1]);
             }
         }
         else if(direction == *UP){
             // compare index 2 of root to index 0 of next element
-            if(root_resources[0] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[0]){
-                next_quad->isMatching[2] = true;
-                addResources( next_resources[2]);
-            }
-            if(root_resources[1] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[1]){
+            if(root_resources[0] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[0]){
                 next_quad->isMatching[3] = true;
-                addResources(next_resources[3]);
+                addResources( next_resources[3]);
+            }
+            if(root_resources[1] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[1]){
+                next_quad->isMatching[2] = true;
+                addResources(next_resources[2]);
             }
         }
         else if(direction == *LEFT){
@@ -303,9 +303,9 @@ void ResourceCalculator::backstepping(NodeID root, Map *map, ResourceTrails &tra
                 next_quad->isMatching[1] = true;
                 addResources( next_resources[1]);
             }
-            if(root_resources[2] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[2]){
-                next_quad->isMatching[3] = true;
-                addResources(next_resources[3]);
+            if(root_resources[3] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[3]){
+                next_quad->isMatching[2] = true;
+                addResources(next_resources[2]);
             }
         }
         else if(direction == *RIGHT){
@@ -314,9 +314,9 @@ void ResourceCalculator::backstepping(NodeID root, Map *map, ResourceTrails &tra
                 next_quad->isMatching[0] = true;
                 addResources( next_resources[0]);
             }
-            if(root_resources[3] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[3]){
-                next_quad->isMatching[2] = true;
-                addResources( next_resources[2]);
+            if(root_resources[2] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[2]){
+                next_quad->isMatching[3] = true;
+                addResources( next_resources[3]);
             }
         }
         setQuadInner(next_quad, next_resources, direction);
