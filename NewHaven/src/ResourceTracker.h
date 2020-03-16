@@ -13,6 +13,8 @@ public:
     std::map<ResourceTypes, std::uint_least16_t>* score;
     ResourceTracker();
     ~ResourceTracker();
+    ResourceTracker(const ResourceTracker& tracker);
+    ResourceTracker& operator=(const ResourceTracker& scores);
     void computeScore(ResourceTrails trail);
     void printScore();
     bool consumeResources(ResourceTypes, std::uint_least16_t);

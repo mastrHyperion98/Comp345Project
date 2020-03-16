@@ -13,7 +13,23 @@
 
 ResourceTracker::ResourceTracker(): score{new std::map<ResourceTypes, std::uint_least16_t> }{
 }
-ResourceTracker::~ResourceTracker() = default;
+ResourceTracker::~ResourceTracker(){
+    delete score;
+    delete DOWN;
+    delete UP;
+    delete LEFT;
+    delete RIGHT;
+    
+}
+ResourceTracker::ResourceTracker(const ResourceTracker& scores): score{ new std::map<ResourceTypes, std::uint_least16_t> }{
+    *score =*scores.score;
+}
+ResourceTracker& ResourceTracker::operator=(const ResourceTracker& scores){
+    if(&scores == this)
+        return *this;
+    *score = *scores.score;
+    return *this;
+}
 void ResourceTracker::computeScore(ResourceTrails trail) {
     score->clear();
     // setup -- first step is to add the elements of the main root to the total for each resources
@@ -123,7 +139,6 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
         it->second = nullptr;
         it++;
     }
-    return;
 }
 // compute Inner
 void ResourceTracker::setQuadInner(Quad *quad, ResourceTypes* resource, int direction){
