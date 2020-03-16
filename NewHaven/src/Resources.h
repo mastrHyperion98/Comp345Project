@@ -10,10 +10,10 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource); /
 struct HarvestTile
 {
 private:
-
+    ResourceTypes* tileContent;	//Array of resource types
 
 public:
-    ResourceTypes* tileContent;	//Array of resource types
+
 	HarvestTile(ResourceTypes*);
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();

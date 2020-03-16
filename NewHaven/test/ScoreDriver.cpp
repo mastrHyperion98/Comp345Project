@@ -1,7 +1,6 @@
 #include <iostream>
 #include "../src/GBMap.h"
 #include "../src/Resources.h"
-#include "../src/ResourceScore.h"
 #include "../src/VGMap.h"
 #include "../src/Resources.h"
 #include "ResourceTracker.h"

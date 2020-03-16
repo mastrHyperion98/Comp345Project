@@ -40,29 +40,27 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
     NodeID root = vertices[0];
     // Add the starting resources from the root to the count?
     queue.push_back(root);
-    ResourceTypes *r_resources = (*trail[root].tile).getTileContent();
+    ResourceTypes *r_resources{(*trail[root].tile).getTileContent()};
     Quad *quad = new Quad();
             for(int i = 0; i < 4; i++){
-               ResourceTypes resource = r_resources[i];
+               ResourceTypes resource{r_resources[i]};
                addResources(resource);
                 quad->isMatching[i] = true;
             }
             (*quad->current_visit_count)++;
             map.insert(Pair(root, quad));
-    // delete r_resources
-    delete r_resources;
     while(!queue.empty()){
         root = queue.front();
-        Quad *root_quad = map[root];
+        Quad *root_quad{map[root]};
         // now we build the queues
         ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
-        tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail);
-        ResourceTypes *root_resources = (*trail[root].tile).getTileContent();
-        for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+
+        ResourceTypes *root_resources{(*trail[root].tile).getTileContent()};
+        for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail); neighbourIt != neighbourEnd; ++neighbourIt) {
             // get ourselves our vertex
             Quad *next_quad;
-            NodeID next_element = vertices[*neighbourIt];
-            ResourceTypes *next_resources = (*trail[next_element].tile).getTileContent();
+            NodeID next_element{vertices[*neighbourIt]};
+            ResourceTypes *next_resources{(*trail[next_element].tile).getTileContent()};
             // compare index 2 of root to index 0 of next element
             if(map.find(next_element) != map.end())
                 next_quad = map[next_element];
@@ -128,7 +126,7 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
 
    // delete and repoint all entries in the map to null_pointer
     // Create a map iterator and point to beginning of map
-   Map::iterator it = map.begin();
+   Map::iterator it{map.begin()};
 
     // Iterate over the map using Iterator till end.
     while (it != map.end())
@@ -261,16 +259,15 @@ inline void ResourceTracker::addResources(ResourceTypes type){
 
 // constant time efficiency
 void ResourceTracker::backstepping(NodeID root, Map *map, ResourceTrails &trail) {
-    Quad *root_quad = (*map)[root];
-    auto vertices = trail.vertex_set();
+    Quad *root_quad{(*map)[root]};
+    auto vertices{trail.vertex_set()};
     // now we build the queues
    ResourceTrails ::adjacency_iterator neighbourIt, neighbourEnd;
-    tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail);
-    ResourceTypes *root_resources = (*trail[root].tile).getTileContent();
-    for (; neighbourIt != neighbourEnd; ++neighbourIt) {
+    ResourceTypes *root_resources{(*trail[root].tile).getTileContent()};
+    for ( tie(neighbourIt, neighbourEnd) = adjacent_vertices(root, trail); neighbourIt != neighbourEnd; ++neighbourIt) {
         // get ourselves our vertex
-        NodeID next_element = vertices[*neighbourIt];
-        Quad *next_quad = (*map)[next_element];
+        NodeID next_element{vertices[*neighbourIt]};
+        Quad *next_quad{(*map)[next_element]};
         ResourceTypes *next_resources = (*trail[next_element].tile).getTileContent();
 
         int direction = *trail[root].position - *trail[next_element].position;

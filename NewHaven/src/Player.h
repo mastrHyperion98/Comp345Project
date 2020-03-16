@@ -16,7 +16,7 @@ public:
     void drawBuilding(Building& building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
     void drawHarvestTile(HarvestTile& tile);
-    // im assuming this prints out the available resources;
+    // Returns the ResourceTracker object held by the player
     ResourceTracker resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);

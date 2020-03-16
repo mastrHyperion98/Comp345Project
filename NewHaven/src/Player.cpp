@@ -9,7 +9,7 @@ Player::Player(){
 
 Player::Player(const Player &player) {
     village = new VGMap(*player.village);
-    //resource_score = new ResourceScore(*player.resource_score);
+    resource_score = new ResourceTracker(*player.resource_score);
     vb_score = new ScoreCalculator(*player.vb_score);
     my_hand = new Hand(*player.my_hand);
 }
