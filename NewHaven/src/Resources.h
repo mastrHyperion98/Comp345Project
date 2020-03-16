@@ -39,7 +39,7 @@ public:
 
 	std::uint_least8_t getDeckSize() const;
 
-	HarvestTile* draw() const;	//Return a pointer to a harvest tile in deckContent
+	HarvestTile* draw();	//Return a pointer to a harvest tile in deckContent
 };
 
 struct Building
@@ -76,7 +76,7 @@ public:
 
 	std::uint_least8_t getDeckSize() const;
 
-	Building* draw() const;
+	Building* draw();
 };
 
 struct Hand

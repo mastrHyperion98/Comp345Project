@@ -174,7 +174,7 @@ std::uint_least8_t HarvestDeck::getDeckSize() const
 	return *deckSize;
 }
 
-HarvestTile* HarvestDeck::draw() const
+HarvestTile* HarvestDeck::draw()
 {
 	std::srand(time(NULL) + std::rand());	//Different seed every execution
 
@@ -298,7 +298,7 @@ std::uint_least8_t BuildingDeck::getDeckSize() const
 	return *deckSize;
 }
 
-Building* BuildingDeck::draw() const
+Building* BuildingDeck::draw()
 {
 	std::srand(time(NULL) + std::rand());	//Different seed every execution
 
