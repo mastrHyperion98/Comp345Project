@@ -18,6 +18,7 @@ add_executable(GameBoardMapTest test/GBMapDriver.cpp src/GBMap.cpp src/Resources
 add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/VGMapLoader.cpp src/VGMap.cpp src/GBMapLoader.cpp src/GBMap.cpp src/Square.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp src/Resources.cpp)
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp)
 add_executable(PlayerTest test/PlayerTest.cpp src/Player.cpp src/GBMap.cpp src/Square.cpp src/Resources.cpp src/ResourceScore.cpp src/VGMap.cpp src/ScoreCalculator.cpp)
+add_executable(Part-3_5 test/Part-3 src/Part-3_5.cpp)
 target_link_libraries (PlayerTest ${Boost_LIBRARIES})
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
 target_link_libraries (VGMap ${Boost_LIBRARIES})
