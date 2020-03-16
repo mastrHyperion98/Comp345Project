@@ -183,3 +183,8 @@ void Player::drawHarvestTile(HarvestTile& tile) {
     my_hand->harvestTiles->push_back(&tile);
 }
 
+void Player::drawBuildingPool(Building& building)
+{
+    my_hand->buildings->push_back(&building);
+}
+

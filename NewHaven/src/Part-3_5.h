@@ -1,4 +1,4 @@
 #pragma once
-#include "./ResourceScore.h"
+#include "./Player.h"
 
-void DrawBuilding(const ResourceScore&);
+void DrawBuilding(const Player&);

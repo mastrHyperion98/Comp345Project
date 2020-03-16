@@ -42,7 +42,7 @@ int main()
     std::uint_least8_t bPosition;
     bool side;
     
-    for (std::uint_fast8_t i = 0; i < 144; i++)
+    while (bDeck.getDeckSize() > 0)
     {
         building = bDeck.draw();
         bDeckSize = bDeck.getDeckSize();
