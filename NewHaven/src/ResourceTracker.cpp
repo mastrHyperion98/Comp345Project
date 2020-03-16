@@ -50,31 +50,10 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
             // compare index 2 of root to index 0 of next element
             if(map.find(next_element) != map.end())
                 next_quad = map[next_element];
-
             else
                 next_quad = new Quad();
             int direction = *trail[root].position - *trail[next_element].position;
-            if(direction == *DOWN){
-                if(root_resources[3] == next_resources[0] && !next_quad->isMatching[0] && root_quad->isMatching[3]){
-                    next_quad->isMatching[0] = true;
-                    addResources(next_resources[0]);
-                }
-                if(root_resources[2] == next_resources[1] && !next_quad->isMatching[1]  && root_quad->isMatching[2]){
-                    next_quad->isMatching[1] = true;
-                    addResources( next_resources[1]);
-                }
-            }
-            else if(direction == *UP){
-                if(root_resources[0] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[0]){
-                    next_quad->isMatching[3] = true;
-                    addResources( next_resources[3]);
-                }
-                if(root_resources[1] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[1]){
-                    next_quad->isMatching[2] = true;
-                    addResources( next_resources[2]);
-                }
-            }
-            else if(direction == *LEFT){
+            if(direction == *LEFT){
                 if(root_resources[0] == next_resources[1] && !next_quad->isMatching[1] && root_quad->isMatching[0]){
                     next_quad->isMatching[1] = true;
                     addResources(next_resources[1]);
@@ -94,6 +73,27 @@ void ResourceTracker::computeScore(ResourceTrails trail) {
                     addResources(next_resources[3]);
                 }
             }
+            else if(direction <= *DOWN){
+                if(root_resources[3] == next_resources[0] && !next_quad->isMatching[0] && root_quad->isMatching[3]){
+                    next_quad->isMatching[0] = true;
+                    addResources(next_resources[0]);
+                }
+                if(root_resources[2] == next_resources[1] && !next_quad->isMatching[1]  && root_quad->isMatching[2]){
+                    next_quad->isMatching[1] = true;
+                    addResources( next_resources[1]);
+                }
+            }
+            else if(direction >= *UP){
+                if(root_resources[0] == next_resources[3] && !next_quad->isMatching[3] && root_quad->isMatching[0]){
+                    next_quad->isMatching[3] = true;
+                    addResources( next_resources[3]);
+                }
+                if(root_resources[1] == next_resources[2] && !next_quad->isMatching[2] && root_quad->isMatching[1]){
+                    next_quad->isMatching[2] = true;
+                    addResources( next_resources[2]);
+                }
+            }
+
             setQuadInner(next_quad, next_resources, direction);
             (*next_quad->current_visit_count)++;
             // check if the quad for said vertex exists if it does verify count

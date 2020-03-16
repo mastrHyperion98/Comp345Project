@@ -37,10 +37,6 @@ private:
     const int *UP = new int(5);
     const int  *LEFT = new int(1);
     const int  *RIGHT = new int(-1);
-    const int *WHEAT = new int(0);
-    const int *SHEEP = new int(1);
-    const int *WOOD = new int(2);
-    const int *STONE = new int(3);
     void backstepping(NodeID root, Map *map,ResourceTrails&);
 
 };
