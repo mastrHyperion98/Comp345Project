@@ -2,20 +2,21 @@
 // Created by hyperion on 2020-02-27.
 //
 
-#ifndef NEWHAVEN_RESOURCECALCULATOR_H
-#define NEWHAVEN_RESOURCECALCULATOR_H
+#ifndef NEWHAVEN_RESOURCETRACKER_H
+#define NEWHAVEN_RESOURCETRACKER_H
 #include <map>
 #include "GBMap.h"
 #include "deque"
-#include <boost/graph/reverse_graph.hpp>
-using ReversedGraph = boost::reverse_graph<ResourceTrails,ResourceTrails&>;
 using namespace std;
-class ResourceCalculator {
+class ResourceTracker {
 public:
-    ResourceCalculator();
-    ~ResourceCalculator();
-    int* computeResources(ResourceTrails trail);
-    int *resources;
+    std::map<ResourceTypes, std::uint_least16_t>* score;
+    ResourceTracker();
+    ~ResourceTracker();
+    void computeScore(ResourceTrails trail);
+    void printScore();
+    bool consumeResources(ResourceTypes, std::uint_least16_t);
+    bool hasResources(ResourceTypes, std::uint_least16_t);
 private:
     struct Quad{
         Quad();
@@ -26,6 +27,7 @@ private:
         // prevent infinite loop
        const int * const MAX_VISIT = new const int(100);
        int *current_visit_count;
+
     };
     typedef std::map<NodeID, Quad*> Map;
     typedef std::pair<NodeID, Quad*> Pair;
@@ -44,4 +46,4 @@ private:
 };
 
 
-#endif //NEWHAVEN_RESOURCECALCULATOR_H
+#endif //NEWHAVEN_RESOURCETRACKER_H

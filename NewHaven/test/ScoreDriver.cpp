@@ -4,7 +4,7 @@
 #include "../src/ResourceScore.h"
 #include "../src/VGMap.h"
 #include "../src/Resources.h"
-#include "ResourceCalculator.h"
+#include "ResourceTracker.h"
 
 using namespace std;
 using namespace boost;
@@ -78,7 +78,7 @@ int main()
     rooted property and the only resources that can be counted to the score are rooted ones.
     */
 
-    ResourceCalculator calculator;
+    ResourceTracker calculator;
     map.printIndexConfiguration();
     cout << "\n***The Asterisk denotes the position 13!***\n" << endl;
     int root;
@@ -98,10 +98,9 @@ int main()
             i--;
         }
         if (valid_root) {
-            int* re = calculator.computeResources(
+            calculator.computeScore(
                     *map.getResourcedGraph(root)); //13 is the root tile, can be changed to any other valid tile.
-            cout << '\n';
-            cout << "WT: " << re[0] << "\t" << "SH: " << re[1]<< "\t" << "WD: " << re[2] << "\t" << "ST: " << re[3] << endl;
+           calculator.printScore();
         }
     }
 }

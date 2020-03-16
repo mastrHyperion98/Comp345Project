@@ -2,7 +2,7 @@
 #include "GBMap.h"
 Player::Player(){
     village = new VGMap();
-    resource_score = new ResourceCalculator();
+    resource_score = new ResourceTracker();
     vb_score = new ScoreCalculator();
     my_hand = new Hand();
 }

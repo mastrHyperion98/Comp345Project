@@ -2,39 +2,20 @@
 // Created by hyperion on 2020-02-27.
 //
 
-#include "ResourceCalculator.h"
+#include "ResourceTracker.h"
 #include "../src/GBMap.h"
 #include "../src/Square.h"
 #include "../src/Resources.h"
 #include <map>
 #include <deque>
-#include <boost/graph/reverse_graph.hpp>
 #include "boost/graph/adjacency_list.hpp"
 #include "boost/graph/graph_utility.hpp"
 
-ResourceCalculator::ResourceCalculator() {
-    resources = new int[4];
-    resources[0] = 0;
-    resources[1] = 0;
-    resources[2] = 0;
-    resources[3] = 0;
+ResourceTracker::ResourceTracker(): score{new std::map<ResourceTypes, std::uint_least16_t> }{
 }
-ResourceCalculator::~ResourceCalculator() = default;
-int* ResourceCalculator::computeResources(ResourceTrails trail) {
-    resources[0] = 0;
-    resources[1] = 0;
-    resources[2] = 0;
-    resources[3] = 0;/*
-    ResourceTrails::vertex_iterator vertexIt, vertexEnd;
-    ResourceTrails::adjacency_iterator neighbourIt, neighbourEnd;
-    tie(vertexIt, vertexEnd) = vertices(trail);
-    for (; vertexIt != vertexEnd; ++vertexIt) {
-        cout << *(trail)[*vertexIt].position << " is connected with ";
-        tie(neighbourIt, neighbourEnd) = adjacent_vertices(*vertexIt, trail);
-        for (; neighbourIt != neighbourEnd; ++neighbourIt)
-            cout << *(trail)[*neighbourIt].position << " ";
-        cout << "\n";
-    }*/
+ResourceTracker::~ResourceTracker() = default;
+void ResourceTracker::computeScore(ResourceTrails trail) {
+    score->clear();
     // setup -- first step is to add the elements of the main root to the total for each resources
     deque<NodeID> queue;
     Map map;
@@ -130,15 +111,14 @@ int* ResourceCalculator::computeResources(ResourceTrails trail) {
     }
     // perform  backstepping ( from num_vertices - 2 to (num_vertices/2 - 2)
     // efficiency of N/2 operations
-    ReversedGraph reverse = boost::make_reverse_graph(trail);// constant time efficiency
    for(int j = num_vertices-1; j >= 0; j--)
       backstepping(j, &map, trail);
 
    // delete and repoint all entries in the map to null_pointer
-    return resources;
+    return;
 }
 // compute Inner
-void ResourceCalculator::setQuadInner(Quad *quad, ResourceTypes* resource, int direction){
+void ResourceTracker::setQuadInner(Quad *quad, ResourceTypes* resource, int direction){
     /*
      * check if 0 and 2 matches, 0 and 1, 1 and 3 and 3 and 2 in that order
      */
@@ -249,19 +229,15 @@ void ResourceCalculator::setQuadInner(Quad *quad, ResourceTypes* resource, int d
     }
 }
 
-inline void ResourceCalculator::addResources(ResourceTypes type){
-    if(type == ResourceTypes::WHEAT)
-       resources[*WHEAT] =  resources[*WHEAT] + 1;
-    else if(type == ResourceTypes::SHEEP)
-        resources[*SHEEP] =  resources[*SHEEP] + 1;
-    else if(type == ResourceTypes::STONE)
-        resources[*STONE] =  resources[*STONE] + 1;
-    else if(type == ResourceTypes::WOOD)
-        resources[*WOOD] =  resources[*WOOD] + 1;
+inline void ResourceTracker::addResources(ResourceTypes type){
+        if(score->find(type) == score->end())
+            score->insert(pair<ResourceTypes, std::uint_least16_t>(type, 1));
+        else
+            (*score)[type] = (*score)[type] + 1;
 }
 
 // constant time efficiency
-void ResourceCalculator::backstepping(NodeID root, Map *map, ResourceTrails &trail) {
+void ResourceTracker::backstepping(NodeID root, Map *map, ResourceTrails &trail) {
     Quad *root_quad = (*map)[root];
     auto vertices = trail.vertex_set();
     // now we build the queues
@@ -324,17 +300,47 @@ void ResourceCalculator::backstepping(NodeID root, Map *map, ResourceTrails &tra
     }
 }
 
-ResourceCalculator::Quad::Quad():isMatching{new bool[4]{false,false,false,false}}{
+void ResourceTracker::printScore()
+{
+    for (std::pair<ResourceTypes, std::uint_least16_t> i : *score)	//Printing score
+    {
+        std::cout << '\n' << i.first << ":\t" << i.second << '\n';
+    }
+}
+
+bool ResourceTracker::consumeResources(ResourceTypes type, std::uint_least16_t amount) {
+    // check if the resource is contianed within
+    if(hasResources(type, amount)) {
+        (*score)[type] = (*score)[type] - amount;
+        return true;
+    }
+
+    return false;
+}
+
+bool ResourceTracker::hasResources(ResourceTypes type, std::uint_least16_t amount){
+    // check if the resource is contianed within
+    if(score->find(type) != score->end()){
+
+        if ((*score)[type] >= amount){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+ResourceTracker::Quad::Quad(): isMatching{new bool[4]{false, false, false, false}}{
     current_visit_count = new int(0);
 }
 
-ResourceCalculator::Quad::Quad(const Quad &quad):isMatching{new bool[4]{false,false,false,false}}{
+ResourceTracker::Quad::Quad(const Quad &quad): isMatching{new bool[4]{false, false, false, false}}{
     current_visit_count = new int(*quad.current_visit_count);
     for(int i = 0; i < 4; i++)
         isMatching[i] = quad.isMatching[i];
 }
 
-ResourceCalculator::Quad & ResourceCalculator::Quad::operator=(const Quad &quad) {
+ResourceTracker::Quad & ResourceTracker::Quad::operator=(const Quad &quad) {
     if(this == &quad)
         return *this;
     *current_visit_count = *quad.current_visit_count;
@@ -344,7 +350,7 @@ ResourceCalculator::Quad & ResourceCalculator::Quad::operator=(const Quad &quad)
      return *this;
 }
 
-ResourceCalculator::Quad::~Quad(){
+ResourceTracker::Quad::~Quad(){
     delete[] isMatching;
     delete current_visit_count;
     delete MAX_VISIT;
