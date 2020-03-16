@@ -35,13 +35,13 @@ Player& Player::operator=(const Player &player) {
     return *this;
 }
 // I'm assuming it just wants to return the resource_tracker
-ResourceScore Player::resourceTracker() {
+ResourceTracker Player::resourceTracker() {
     // return a copy of the resource score;
-    return ResourceScore();
+    return *resource_score;
 }
 
-int* Player::calculateResources(ResourceTrails trail) {
-   return resource_score->computeResources(trail);
+void Player::calculateResources(ResourceTrails trail) {
+    resource_score->computeScore(trail);
 }
 
 bool Player::buildVillage(){
@@ -123,7 +123,7 @@ bool Player::buildVillage(){
     else{
         cout << "Cannot play building: Insufficient resources" << endl;
     }
-    return false;*/
+    return false;
 }
 
 int Player::placeHarvestTile() {

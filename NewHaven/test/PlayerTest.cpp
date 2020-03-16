@@ -21,15 +21,13 @@ int main(){
     player.drawBuilding(building2);
     player.drawBuilding(building3);
     int pos = player.placeHarvestTile();
-    int re = player.calculateResources(*map.getResourcedGraph(pos));
-    cout << re[0] << "\t" << re[1]<< "\t" << re[2] << "\t" << re[3] << endl;
-    pos = player.placeHarvestTile();
-    delete re;
-    re = nullptr;
-    re = player.calculateResources(*map.getResourcedGraph(pos));
-    cout << re[0] << "\t" << re[1]<< "\t" << re[2] << "\t" << re[3] << endl;
+    player.calculateResources(*map.getResourcedGraph(pos));
     player.resourceTracker().printScore();
-    /*for(int i = 0; i < 3; i++){
+    pos = player.placeHarvestTile();
+    player.calculateResources(*map.getResourcedGraph(pos));
+    player.resourceTracker().printScore();
+    for(int i = 0; i < 3; i++){
         player.buildVillage();
-    }*/
+        player.resourceTracker().printScore();
+    }
 }

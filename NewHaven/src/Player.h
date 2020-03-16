@@ -17,9 +17,9 @@ public:
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
     void drawHarvestTile(HarvestTile& tile);
     // im assuming this prints out the available resources;
-    ResourceScore resourceTracker();
+    ResourceTracker resourceTracker();
     bool buildVillage();
-    int* calculateResources(ResourceTrails);
+    void calculateResources(ResourceTrails);
 
 private:
     VGMap *village;
