@@ -176,10 +176,18 @@ std::uint_least8_t HarvestDeck::getDeckSize() const
 
 HarvestTile* HarvestDeck::draw() const
 {
+	std::srand(time(NULL) + std::rand());	//Different seed every execution
+
 	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
+		int cardIndex = std::rand() % *deckSize;
+		HarvestTile* pickedCard{ deckContent->at(cardIndex) };
+
+		deckContent->push_back(pickedCard);
+		deckContent->erase(deckContent->begin() + cardIndex);
 		(*deckSize)--;
-		return deckContent->at(*deckSize);
+
+		return pickedCard;
 	}
 	else
 	{
@@ -292,10 +300,18 @@ std::uint_least8_t BuildingDeck::getDeckSize() const
 
 Building* BuildingDeck::draw() const
 {
-	if (*deckSize > 0)
+	std::srand(time(NULL) + std::rand());	//Different seed every execution
+
+	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
+		int cardIndex = std::rand() % *deckSize;
+		Building* pickedCard{ deckContent->at(cardIndex) };
+
+		deckContent->push_back(pickedCard);
+		deckContent->erase(deckContent->begin() + cardIndex);
 		(*deckSize)--;
-		return deckContent->at(*deckSize);
+
+		return pickedCard;
 	}
 	else
 	{
