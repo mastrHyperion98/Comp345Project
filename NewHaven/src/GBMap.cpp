@@ -12,6 +12,7 @@
 
 GBMap* GBMap::current_map;
 
+
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
     current_map = this;
@@ -51,12 +52,12 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
 ResourceTrails * GBMap::getResourcedGraph(int position) {
     // create a copy of the game_board
     // and use the copy throughout
-    ResourceTrails *connectedGraph = new ResourceTrails;
-    auto vertices = (*board).vertex_set();
-    NodeID first_v = vertices[position];
-    NodeID root = add_vertex(*connectedGraph);
+    ResourceTrails* connectedGraph{ new ResourceTrails };
+    auto vertices{ (*board).vertex_set() };
+    NodeID first_v{ vertices[position] };
+    NodeID root{ add_vertex(*connectedGraph) };
     // copy the squares! IMPORTANT!
-    (*connectedGraph)[root] = Square((*board)[first_v]);
+    (*connectedGraph)[root] = (*board)[first_v];
     deque<NodeID> queue;
     deque<NodeID> root_queue;
     queue.push_back(first_v);
@@ -65,31 +66,37 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
     while(!queue.empty()) {
         GameBoard::adjacency_iterator neighbourIt, neighbourEnd;
         // origin of the current search
-        NodeID origin = queue.front();
+        NodeID origin{ queue.front() };
         root = root_queue.front();
 
         for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board); neighbourIt != neighbourEnd; ++neighbourIt) {
             *(*board)[origin].isVisited = true;
             // next_element
-            NodeID next_element = vertices[*neighbourIt];
+            NodeID next_element{ vertices[*neighbourIt] };
             // if the element has not been visited yet and is a playedTile add to the new graph and add to queue to
             // search its neighbours
-            if (!*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
+           if(*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
+               int v_position{ getVertexPosition(*connectedGraph, *(*board)[next_element].position) };
+                add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
+            }
+           else if (!*(*board)[next_element].isVisited && *(*board)[next_element].isPlayed){
                 if( !vertexContainedInQueue(queue, next_element))
                     queue.push_back(next_element);
 
                 if(getVertexPosition(*connectedGraph, *(*board)[next_element].position) < 0){
-                    NodeID vertex1 = add_vertex(*connectedGraph);
-                    (*connectedGraph)[vertex1] = Square((* board)[next_element]);
+                    NodeID vertex1{ add_vertex(*connectedGraph) };
+                    (*connectedGraph)[vertex1] = (* board)[next_element];
                     root_queue.push_back(vertex1);
                     add_edge(root, vertex1, *connectedGraph);
                 }
                     // we need to go fetch the vertexID for the element with the required position to complete our trail
                 else{
-                    int v_position = getVertexPosition(*connectedGraph, *(*board)[next_element].position);
+                    int v_position{ getVertexPosition(*connectedGraph, *(*board)[next_element].position) };
                     add_edge(root, (*connectedGraph).vertex_set()[v_position], *connectedGraph);
                 }
             }
+
+
         }
         // remove the top of the queue
         queue.pop_front();
@@ -97,7 +104,6 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
     } // end of while loop
     // reset all the vertices isVisited to false;
     resetVisitedNodes();
-
     return connectedGraph;
 }
 

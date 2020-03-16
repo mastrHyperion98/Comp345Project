@@ -2,7 +2,7 @@
 #include "Resources.h"
 #include "ResourceScore.h"
 #include "ScoreCalculator.h"
-
+#include "ResourceTracker.h"
 struct Player
 {
 public:
@@ -16,14 +16,14 @@ public:
     void drawBuilding(Building& building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
     void drawHarvestTile(HarvestTile& tile);
-    // im assuming this prints out the available resources;
-    ResourceScore resourceTracker();
+    // Returns the ResourceTracker object held by the player
+    ResourceTracker resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);
 
 private:
     VGMap *village;
-    ResourceScore *resource_score;
+    ResourceTracker *resource_score;
     ScoreCalculator *vb_score;
     Hand *my_hand;
 
