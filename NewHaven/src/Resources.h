@@ -76,6 +76,7 @@ public:
 	~BuildingDeck();
 
 	std::uint_least8_t getDeckSize() const;
+	std::uint_least8_t getBuildingPoolSize() const;
 
 	Building* draw() const;
 	Building* buildingPoolDraw(const std::uint_least8_t&);

@@ -19,6 +19,7 @@ add_executable(MapLoaderTest test/MapLoaderDriver.cpp src/VGMapLoader.cpp src/VG
 add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp src/ResourceTracker.cpp)
 add_executable(ScoreTest test/ScoreDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp src/VGMap.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp)
 add_executable(PlayerTest test/PlayerTest.cpp src/Player.cpp src/GBMap.cpp src/Square.cpp src/Resources.cpp src/VGMap.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp)
+add_executable(Part-3_5 test/Part-3 src/Part-3_5.cpp)
 target_link_libraries (PlayerTest ${Boost_LIBRARIES})
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
 target_link_libraries (VGMap ${Boost_LIBRARIES})

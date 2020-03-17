@@ -298,6 +298,11 @@ std::uint_least8_t BuildingDeck::getDeckSize() const
 	return *deckSize;
 }
 
+std::uint_least8_t BuildingDeck::getBuildingPoolSize() const
+{
+	return buildingPoolContent->size();
+}
+
 Building* BuildingDeck::draw() const
 {
 	if (*deckSize > 0)

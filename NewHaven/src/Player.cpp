@@ -165,19 +165,19 @@ int Player::placeHarvestTile() {
  * Since we need to process whether the user will draw from the board or the deck, in the case where they draw more than
  * one.
  */
-void Player::drawBuilding(Building& building) {
-    my_hand->buildings->push_back(&building);
+void Player::drawBuilding(Building* building) {
+    my_hand->buildings->push_back(building);
 }
 /*
  * NON FINAL IMPLEMENTATION -- IDEALLY WE WANT TO DRAW DIRECTLY FROM THE HARVEST DECK WITHOUT HAVING TO PASS ARGUMENTS
  * HarvestDeck has to be static within the Game Controller
  */
-void Player::drawHarvestTile(HarvestTile& tile) {
-    my_hand->harvestTiles->push_back(&tile);
+void Player::drawHarvestTile(HarvestTile* tile) {
+    my_hand->harvestTiles->push_back(tile);
 }
 
-void Player::drawBuildingPool(Building& building)
+void Player::drawBuildingPool(Building* building)
 {
-    my_hand->buildings->push_back(&building);
+    my_hand->buildings->push_back(building);
 }
 
