@@ -1,8 +1,8 @@
 #include "VGMap.h"
 #include "Resources.h"
-#include "ResourceScore.h"
 #include "ScoreCalculator.h"
 #include "ResourceTracker.h"
+
 struct Player
 {
 public:

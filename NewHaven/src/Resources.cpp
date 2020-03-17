@@ -104,7 +104,7 @@ HarvestDeck::HarvestDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new std::vector<HarvestTile*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	 //+1 for the card swapping during draw
 	/*
 	In VS, the file path is relative to the build directory, not the source file directory.
 	The build directory is represented where the debug condition is true.
@@ -242,7 +242,7 @@ BuildingDeck::BuildingDeck() :
 	deckContent{ new std::vector<Building*> },
 	buildingPoolContent{ new std::vector<Building*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	//We allocate space without filling it up yet, +1 for the card swapping during draw
 	buildingPoolContent->reserve(5);
 
 	ResourceTypes buildingType;
@@ -279,10 +279,7 @@ BuildingDeck::BuildingDeck() :
 		}
 	}
 
-	for (std::uint_fast8_t i = 0; i < 5; i++)
-	{
-		buildingPoolContent->push_back(draw());
-	}
+	fillBuildingPool();
 }
 
 BuildingDeck::~BuildingDeck()
@@ -333,7 +330,7 @@ Building* BuildingDeck::buildingPoolDraw(const std::uint_least8_t& index)
 
 void BuildingDeck::fillBuildingPool()
 {
-	for (std::uint_fast8_t i = 0; i < 5 - buildingPoolContent->size(); i++)
+	while (buildingPoolContent->size() < 5)
 	{
 		buildingPoolContent->push_back(draw());
 	}

@@ -1,5 +1,4 @@
 #include "./Part-3_5.h"
-#include "./Player.h"
 #include <iostream>
 
 BuildingDeck bd;
@@ -15,11 +14,12 @@ void DrawBuilding(Player& player)
 	}
 		
 	bool loopPool{ true };
-	char input{ 'y' };
-	std::uint_fast8_t buildingIndex;
 
 	for (std::uint_fast8_t i = 0; i < buildingCountToDraw; i++)
 	{
+		std::uint_fast16_t buildingIndex;
+		char input;
+
 		if (loopPool)
 		{
 			std::cout << "\nEnter building card index to draw from the pool: ";
@@ -28,16 +28,18 @@ void DrawBuilding(Player& player)
 			{
 				std::cin >> buildingIndex;
 				std::cout << '\n';
-
-				if (buildingIndex < 0 || buildingIndex > bd.getBuildingPoolSize())
-					throw std::exception();
 				
+				if (std::cin.fail() || buildingIndex <= 0 || buildingIndex > bd.getBuildingPoolSize())
+					throw std::exception();
+
 				loopPool = false;
-				player.drawBuildingPool(bd.buildingPoolDraw(buildingIndex));
+				player.drawBuildingPool(bd.buildingPoolDraw(buildingIndex - 1));
 				continue;
 			}
-			catch (const std::exception & e)
+			catch (const std::exception&)
 			{
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				std::cout << "\nThe input was invalid, please enter a valid index.\n";
 				i--;
 				continue;
@@ -52,11 +54,16 @@ void DrawBuilding(Player& player)
 
 			if (input == 'y' || input == 'Y')
 			{
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				loopPool = true;
+				i--;
 				continue;
 			}
 			else if (input == 'n' || input == 'N')
 			{
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 				loopPool = false;
 			}
 			else
@@ -66,6 +73,9 @@ void DrawBuilding(Player& player)
 		}
 		catch (const std::exception& e)
 		{
+
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			std::cout << "\nInvalid input, try again.\n";
 			i--;
 			continue;
