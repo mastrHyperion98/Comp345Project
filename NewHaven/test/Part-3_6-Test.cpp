@@ -3,4 +3,6 @@
 int main()
 {
 	EndOfTurn(Player());
+
+	return 0;
 }
