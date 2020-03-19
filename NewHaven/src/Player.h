@@ -12,6 +12,8 @@ public:
     Player &operator = (const Player &player);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the game_board
     int placeHarvestTile();
+    // Used for shipment tile
+    int placeShipmentTile();
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
     void drawBuilding(Building& building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
