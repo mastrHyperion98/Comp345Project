@@ -56,10 +56,10 @@ bool GBMapLoader::loadConfig(std::string filepath) {
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
-GBMap GBMapLoader::generateMap() {
+GBMap* GBMapLoader::generateMap() {
     if(game_board_configuration != -1){
         GBMap gb_map(game_board_configuration);
-        return gb_map;
+        return &gb_map;
     }
     else{
         throw BoardConfigurationNotLoaded();
