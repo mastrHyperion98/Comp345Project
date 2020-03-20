@@ -104,7 +104,7 @@ HarvestDeck::HarvestDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new std::vector<HarvestTile*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	 //+1 for the card swapping during draw
 	/*
 	In VS, the file path is relative to the build directory, not the source file directory.
 	The build directory is represented where the debug condition is true.
@@ -245,11 +245,13 @@ bool Building::flipCard()
 	return *faceUp;
 }
 
-BuildingDeck::BuildingDeck():
+BuildingDeck::BuildingDeck() :
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
-	deckContent{ new std::vector<Building*> }
+	deckContent{ new std::vector<Building*> },
+	buildingPoolContent{ new std::vector<Building*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	//We allocate space without filling it up yet, +1 for the card swapping during draw
+	buildingPoolContent->reserve(5);
 
 	ResourceTypes buildingType;
 
@@ -284,6 +286,8 @@ BuildingDeck::BuildingDeck():
 			}
 		}
 	}
+
+	fillBuildingPool();
 }
 
 BuildingDeck::~BuildingDeck()
@@ -291,11 +295,17 @@ BuildingDeck::~BuildingDeck()
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
+	delete buildingPoolContent;
 }
 
 std::uint_least8_t BuildingDeck::getDeckSize() const
 {
 	return *deckSize;
+}
+
+std::uint_least8_t BuildingDeck::getBuildingPoolSize() const
+{
+	return buildingPoolContent->size();
 }
 
 Building* BuildingDeck::draw()
@@ -316,6 +326,29 @@ Building* BuildingDeck::draw()
 	else
 	{
 		return nullptr;
+	}
+}
+
+Building* BuildingDeck::buildingPoolDraw(const std::uint_least8_t& index)
+{
+	if (buildingPoolContent->size() && index >= 0 && index < buildingPoolContent->size())
+	{
+		Building* pickedCard{ buildingPoolContent->at(index) };
+		buildingPoolContent->erase(buildingPoolContent->begin() + index);
+
+		return pickedCard;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void BuildingDeck::fillBuildingPool()
+{
+	while (buildingPoolContent->size() < 5)
+	{
+		buildingPoolContent->push_back(draw());
 	}
 }
 

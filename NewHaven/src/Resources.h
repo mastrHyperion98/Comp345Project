@@ -69,14 +69,18 @@ private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
 	std::uint_least8_t* deckSize;
 	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
+	std::vector<Building*>* buildingPoolContent;	//Array of buildings to represent the pool
 	
 public:
 	BuildingDeck();
 	~BuildingDeck();
 
 	std::uint_least8_t getDeckSize() const;
+	std::uint_least8_t getBuildingPoolSize() const;
 
 	Building* draw();
+	Building* buildingPoolDraw(const std::uint_least8_t&);
+	void fillBuildingPool();
 };
 
 struct Hand
