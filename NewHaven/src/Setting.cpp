@@ -55,7 +55,7 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
 }
 
-void Setting::resourceTracker() {
+void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
     for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
         it->resourceTracker().score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
@@ -73,7 +73,6 @@ int Setting::promptNumberPlayers() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
         std::cout << "Invalid input; please re-enter.\n";
     }
-
     return number_of_players;
 }
 
@@ -101,4 +100,10 @@ inline HarvestTile* Setting::drawHarvestTile() {
     if(h_deck == nullptr)
         return nullptr;
     return h_deck->draw();
+}
+
+inline int Setting::getNumberPlayers() {
+    if(players== nullptr)
+        return 0;
+    return players->size();
 }
