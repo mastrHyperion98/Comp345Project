@@ -3,3 +3,8 @@
 //
 
 #include "Setting.h"
+
+int main(){
+    Setting setting;
+    setting.initSetting();
+};

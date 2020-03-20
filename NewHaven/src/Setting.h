@@ -17,6 +17,7 @@ public:
     inline static HarvestTile* drawHarvestTile();
     static GBMap *board;
     static vector<Player>* players;
+    bool static initSetting();
 private:
     static HarvestDeck *h_deck;
     static BuildingDeck *b_deck;
@@ -26,7 +27,7 @@ private:
     static void setupPlayers(const int numberOfPlayers);
     static void loadGameBoard(const std::string filepath);
     static VGMap loadVillageMap(const std::string filepath);
-    int promptNumberPlayers();
+    static int promptNumberPlayers();
 };
 
 

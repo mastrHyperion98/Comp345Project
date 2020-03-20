@@ -14,7 +14,7 @@ Setting::Setting(){
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
-    players = nullptr;
+    players = new vector<Player>;
 }
 
 Setting::~Setting() {
@@ -26,12 +26,11 @@ Setting::~Setting() {
 
 void Setting::setupPlayers(const int numberOfPlayers) {
     std::cout << "CREATING " << numberOfPlayers << " PLAYERS!" << endl;
-    vector<Player> player_list;
+    players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
-        Player player;
-        player_list.push_back(player);
+        Player *player = new Player();
+        players->push_back(*player);
     }
-    players = new vector<Player>(player_list);
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
 
@@ -42,6 +41,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         cout << "LOADING SUCCESSFUL" << endl;
         board = loader.generateMap();
     }
+    else
     cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
 }
 
@@ -68,7 +68,8 @@ void Setting::resourceTracker(){
 
 int Setting::promptNumberPlayers() {
     int number_of_players;
-    while (cout << "Enter the number of players (2, 3 or 4): " && !(cin >> number_of_players)) {
+    while ((cout << "Enter the number of players (2, 3 or 4): " && !(cin >> number_of_players))
+    || number_of_players < 2 || number_of_players >4) {
         std::cin.clear(); //clear bad input flag
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
         std::cout << "Invalid input; please re-enter.\n";
@@ -106,4 +107,35 @@ inline int Setting::getNumberPlayers() {
     if(players== nullptr)
         return 0;
     return players->size();
+}
+
+bool Setting::initSetting() {
+    string files[3] = {"../config/GBMapConfig_0.config",
+                       "../config/GBMapConfig_1.config",
+                       "../config/GBMapConfig_2.config" };
+    int number_players = promptNumberPlayers();
+    switch(number_players){
+        case 2:
+            loadGameBoard(files[0]);break;
+        case 3:
+            loadGameBoard(files[1]);break;
+        case 4:
+            loadGameBoard(files[2]);break;
+        default:
+            loadGameBoard(files[0]);break;
+    }
+    setupPlayers(number_players);
+    resourceTracker();
+    createBuildingDeck();
+    createHarvestDeck();
+    for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
+        cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
+        for(int i = 0; i < 5; i++)
+             it->drawBuilding(drawBuilding());
+        for(int j = 0; j < 2; j++)
+            it->drawHarvestTile(drawHarvestTile());
+        it->setShipmentTile(drawHarvestTile());
+
+        cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
+    }
 }
