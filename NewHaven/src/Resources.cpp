@@ -362,7 +362,8 @@ Hand::Hand():
 
 Hand::~Hand()
 {
-	delete harvestTiles;
+    // do not delete the tiles references they will be deleted by the decks
+	/*delete harvestTiles;
 	delete shipment;
-	delete buildings;
+	delete buildings;*/
 }

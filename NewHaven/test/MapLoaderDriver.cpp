@@ -35,13 +35,7 @@ int main(){
 
  string files[8] = {"../config/GBMapConfig_0.config",
                  "../config/GBMapConfig_1.config",
-                 "../config/GBMapConfig_2.config",
-                 "../config/GBMapConfig_3.config",
-                 "../config/GBMapConfig_4.config",
-                 "../config/GBMapConfig_5.config",
-                 "../config/GBMapConfig_6.config",
-                 "../config/GBMapConfig_7.config"
- };
+                 "../config/GBMapConfig_2.config" };
   //loops through all the files for the gameboard and test all of them
  for(int i = 0; i < 8; i++){
      cout << "Attempting to load game board configuration file: " << files[i] << endl;

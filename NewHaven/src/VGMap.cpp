@@ -26,6 +26,7 @@ VGMap::VGMap(): typePlayed(new map<ResourceTypes, bool>){
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {
     delete village_board;
+    delete typePlayed;
 }
 
 VGMap::VGMap(const VGMap &map) {
@@ -38,7 +39,7 @@ VGMap & VGMap::operator=(const VGMap &map){
         return *this;
     else{
         delete village_board;
-        village_board = new C_Graph(*map.village_board);
+        *village_board = *map.village_board;
         *typePlayed = *map.typePlayed;
     }
 
@@ -323,10 +324,7 @@ Circle::Circle(){
 }
 
 Circle::Circle(const Circle &circle){
-    if(circle.building != nullptr){
-         building = circle.building;
-    } else
-        building = nullptr;
+    building = circle.building;
     row = new int(*circle.row);
     position = new int(*circle.position);
     column = new int(*circle.column);
@@ -349,14 +347,14 @@ Circle & Circle::operator=(const Circle &circle){
     if (this == &circle)
         return *this;
     else {
-        *row = *circle.row;
-        *column = *circle.column;
-        *vCost = *circle.vCost;
+        row = new int(*circle.row);
+        column = new int(*circle.column);
+        vCost = new int(*circle.vCost);
         *isVisited = *circle.isVisited;
         *isPlayed = *circle.isPlayed;
         // we dont create copies of buildings. We will clear it with the decks
         building = circle.building;
-       *position = *circle.position;
+        position = new int(*circle.position);
     }
     return *this;
 }
