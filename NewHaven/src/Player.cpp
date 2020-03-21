@@ -181,8 +181,3 @@ void Player::drawBuildingPool(Building* building)
     my_hand->buildings->push_back(building);
 }
 
-
-void Player::setShipmentTile(HarvestTile* tile){
-    if(my_hand->shipment == nullptr)
-        my_hand->shipment = tile;
-}
