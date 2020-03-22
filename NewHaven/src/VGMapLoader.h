@@ -10,10 +10,10 @@
 class VGMapLoader {
 public:
     bool loadVConfig(std::string filepath);
-    VGMap generateVMap();
+    VGMap* generateVMap(string);
 
 private:
-    int VBoard_num_of_players = -1;
+    int *VBoard_num_of_players = -1;
 
 };
 

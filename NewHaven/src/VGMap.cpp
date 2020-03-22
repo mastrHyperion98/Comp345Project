@@ -15,12 +15,12 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)}{
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}{
+    CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::SHEEP, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WOOD, false));
-
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {

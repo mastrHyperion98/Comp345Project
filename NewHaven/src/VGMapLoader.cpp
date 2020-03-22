@@ -55,10 +55,10 @@ bool VGMapLoader::loadVConfig(std::string filepath) {
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
-VGMap VGMapLoader::generateVMap() {
-    if(VBoard_num_of_players != -1){
-            VGMap vg_map;
-            return vg_map;
+VGMap VGMapLoader::generateVMap(string name) {
+    if(*VBoard_num_of_players != -1){
+            VGMap vg_map(name);
+            return *vg_map;
     }
     else{
         throw BoardConfigurationNotLoaded();
