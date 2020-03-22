@@ -12,22 +12,25 @@ class Setting {
 public:
     Setting();
     ~Setting();
-    inline static int getNumberPlayers();
-    inline static Building* drawBuilding();
-    inline static HarvestTile* drawHarvestTile();
-    static GBMap *board;
-    static vector<Player>* players;
-    bool static initSetting();
+    Setting(const Setting& setting);
+    Setting &operator=(const Setting& settings);
+    inline int getNumberPlayers();
+    inline Building* drawBuilding();
+    inline HarvestTile* drawHarvestTile();
+    static Setting *current;
+    GBMap *board;
+    vector<Player>* players;
+    void initSetting();
 private:
-    static HarvestDeck *h_deck;
-    static BuildingDeck *b_deck;
-    static void resourceTracker();
-    inline static void createHarvestDeck();
-    inline static void createBuildingDeck();
-    static void setupPlayers(const int numberOfPlayers);
-    static void loadGameBoard(const std::string filepath);
-    static VGMap loadVillageMap(const std::string filepath);
-    static int promptNumberPlayers();
+    HarvestDeck *h_deck;
+    BuildingDeck *b_deck;
+    void resourceTracker();
+    inline void createHarvestDeck();
+    inline void createBuildingDeck();
+    void setupPlayers(const int numberOfPlayers);
+    void loadGameBoard(const std::string filepath);
+    VGMap loadVillageMap(const std::string filepath);
+    int promptNumberPlayers();
 };
 
 

@@ -360,10 +360,25 @@ Hand::Hand():
 	harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
+Hand::Hand(const Hand &hand):harvestTiles{new std::vector<HarvestTile*>(*hand.harvestTiles)},
+shipment{hand.shipment},
+buildings{new std::vector<Building*>(*hand.buildings)}{
+    harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
+}
+
+Hand& Hand::operator=(const Hand &hand) {
+    if(this == &hand)
+        return *this;
+
+    *harvestTiles = *hand.harvestTiles;
+    shipment = hand.shipment;
+    *buildings = *hand.buildings;
+    return *this;
+}
 Hand::~Hand()
 {
     // do not delete the tiles references they will be deleted by the decks
-	/*delete harvestTiles;
-	delete shipment;
-	delete buildings;*/
+	delete harvestTiles;
+	//delete shipment;
+	delete buildings;
 }

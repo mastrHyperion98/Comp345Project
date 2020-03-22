@@ -4,32 +4,58 @@
 #include "Setting.h"
 #include "GBMapLoader.h"
 #include "VGMapLoader.h"
+#include "../Exceptions/InvalidConfigurationException.h"
+#include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "iostream"
-HarvestDeck* Setting::h_deck;
-BuildingDeck* Setting::b_deck;
-GBMap* Setting::board;
-vector<Player>* Setting::players;
+
+Setting* Setting::current;
 
 Setting::Setting(){
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
-    players = new vector<Player>;
+    players = nullptr;
+    current = this;
 }
 
+Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
+    board{new GBMap(*setting.board)}, players{new vector<Player>(*setting.players)}{
+    // singleton design we dont need any other reference but the current one
+    delete current;
+    current = this;
+}
+
+Setting& Setting::operator=(const Setting& setting){
+    if(this == &setting)
+        return *this;
+
+    // cannot assume that the value ares nullptr and cant use assignment operator for Harvest/Building deck since implicitly deleted
+   delete h_deck;
+   delete b_deck;
+   delete board;
+   delete players;
+    h_deck = new HarvestDeck(*setting.h_deck);
+    b_deck = new BuildingDeck(*setting.b_deck);
+    board = new GBMap(*setting.board);
+    players = new vector<Player>(*setting.players);
+    current = this;
+    return *this;
+};
 Setting::~Setting() {
     delete h_deck;
     delete b_deck;
     delete board;
     delete players;
+    current = nullptr;
 }
 
 void Setting::setupPlayers(const int numberOfPlayers) {
     std::cout << "CREATING " << numberOfPlayers << " PLAYERS!" << endl;
+    if(players == nullptr)
+        players = new vector<Player>;
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
-        Player *player = new Player();
-        players->push_back(*player);
+        players->push_back(Player());
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
@@ -37,12 +63,14 @@ void Setting::setupPlayers(const int numberOfPlayers) {
 void Setting::loadGameBoard(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     GBMapLoader loader;
-    if(loader.loadConfig(filepath)) {
+    if(loader.loadConfig(filepath) && board == nullptr) {
         cout << "LOADING SUCCESSFUL" << endl;
         board = loader.generateMap();
     }
-    else
+    else{
     cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
+    throw BoardConfigurationNotLoaded();
+    }
 }
 
 VGMap Setting::loadVillageMap(const std::string filepath) {
@@ -50,18 +78,19 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
     VGMapLoader loader;
     if(loader.loadVConfig(filepath)) {
         cout << "LOADING SUCCESSFUL" << endl;
-        VGMap map = loader.generateVMap();
+        return loader.generateVMap();
     }
     cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
+    throw InvalidConfigurationException();
 }
 
 void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
     for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
-        it->resourceTracker().score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
-        it->resourceTracker().score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
-        it->resourceTracker().score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
-        it->resourceTracker().score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WOOD,0));
+        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
+        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
+        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
+        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WOOD,0));
     }
     cout << "GAME RESOURCE MARKERS SET SUCCESSFULLY" << endl;
 }
@@ -79,14 +108,21 @@ int Setting::promptNumberPlayers() {
 
 inline void Setting::createHarvestDeck() {
     cout << "CREATING HARVEST DECK!" << endl;
-    h_deck = new HarvestDeck();
-    cout << "HARVEST DECK CREATED SUCCESFULLY!" << endl;
+    if(h_deck == nullptr) {
+        h_deck = new HarvestDeck();
+        cout << "HARVEST DECK CREATED SUCCESSFULLY!" << endl;
+    } else
+        cout << "ERROR HARVEST DECK HAS ALREADY BEEN CREATED!";
 }
 
 inline void Setting::createBuildingDeck() {
     cout << "CREATING BUILDING DECK!" << endl;
-    b_deck = new BuildingDeck();
-    cout << "BUILDING DECK CREATED SUCCESFULLY!" << endl;
+    if(b_deck == nullptr) {
+        b_deck = new BuildingDeck();
+        cout << "BUILDING DECK CREATED SUCCESSFULLY!" << endl;
+    }
+    else
+        cout << "ERROR BUILDING DECK HAS ALREADY BEEN CREATED!" << endl;
 }
 
 inline Building* Setting::drawBuilding() {
@@ -109,11 +145,11 @@ inline int Setting::getNumberPlayers() {
     return players->size();
 }
 
-bool Setting::initSetting() {
+void Setting::initSetting() {
     string files[3] = {"../config/GBMapConfig_0.config",
                        "../config/GBMapConfig_1.config",
                        "../config/GBMapConfig_2.config" };
-    int number_players = promptNumberPlayers();
+    int number_players{promptNumberPlayers()};
     switch(number_players){
         case 2:
             loadGameBoard(files[0]);break;

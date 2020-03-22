@@ -28,9 +28,9 @@ Player& Player::operator=(const Player &player) {
     return *this;
 }
 // I'm assuming it just wants to return the resource_tracker
-ResourceTracker Player::resourceTracker() {
+ResourceTracker* Player::resourceTracker() {
     // return a copy of the resource score;
-    return *resource_score;
+    return resource_score;
 }
 
 void Player::calculateResources(ResourceTrails trail) {
