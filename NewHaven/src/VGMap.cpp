@@ -15,22 +15,24 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(): typePlayed(new map<ResourceTypes, bool>){
-    village_board = new C_Graph;
-    CreateVillageField();
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)}{
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::SHEEP, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WOOD, false));
+
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {
     delete village_board;
+    delete name;
 }
 
 VGMap::VGMap(const VGMap &map) {
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
+    // here we can use operator overload
+    *name = *map.name;
 }
 
 VGMap & VGMap::operator=(const VGMap &map){
@@ -40,6 +42,7 @@ VGMap & VGMap::operator=(const VGMap &map){
         delete village_board;
         village_board = new C_Graph(*map.village_board);
         *typePlayed = *map.typePlayed;
+        *name = *map.name;
     }
 
     return *this;
