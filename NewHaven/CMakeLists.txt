@@ -20,6 +20,7 @@ add_executable(ResourcesTest test/ResourcesDriver.cpp src/Resources.cpp src/Reso
 add_executable(ScoreTest test/ScoreDriver.cpp src/GBMap.cpp src/Resources.cpp src/Square.cpp src/VGMap.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp)
 add_executable(PlayerTest test/PlayerTest.cpp src/Player.cpp  src/Resources.cpp src/VGMap.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp)
 add_executable(Part-3_5-Test test/Part-3_5-Test.cpp src/Part-3_5.cpp src/Player.cpp src/Resources.cpp src/VGMap.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp src/GBMap.cpp src/Square.cpp)
+add_executable(Part1 test/Part1Driver.cpp src/Setting.cpp src/Resources.cpp src/VGMap.cpp src/Player.cpp src/GBMap.cpp src/GBMapLoader.cpp src/Square.cpp src/ResourceTracker.cpp src/ScoreCalculator.cpp src/VGMapLoader.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp)
 add_executable(Part-3_6-Test test/Part-3_6-Test.cpp src/Part-3_6.cpp src/Player.cpp src/GBMap.cpp src/Square.cpp src/Resources.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp src/VGMap.cpp)
 target_link_libraries (PlayerTest ${Boost_LIBRARIES})
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
