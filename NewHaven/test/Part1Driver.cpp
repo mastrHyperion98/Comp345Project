@@ -7,4 +7,5 @@
 int main(){
     Setting setting;
     setting.current->initSetting();
+
 };

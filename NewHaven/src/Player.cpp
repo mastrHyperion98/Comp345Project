@@ -1,10 +1,12 @@
 #include "Player.h"
 
-Player::Player():village{new VGMap()}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+Player::Player(): village{nullptr}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+
 }
 
-Player::Player(const Player &player): resource_score{new ResourceTracker(*player.resource_score)},
-village{new VGMap(*player.village)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+Player::Player(const Player &player): resource_score{new ResourceTracker(*player.resource_score)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+    if(player.village !=nullptr)
+        village = new VGMap(*player.village);
 }
 
 Player::~Player(){
@@ -185,4 +187,9 @@ void Player::drawBuildingPool(Building* building)
 void Player::setShipmentTile(HarvestTile* tile){
     if(my_hand->shipment == nullptr)
         my_hand->shipment = tile;
+}
+
+
+void Player::setVillage(VGMap& v_map) {
+    village = &v_map;
 }

@@ -29,6 +29,7 @@ VGMap::~VGMap() {
 }
 
 VGMap::VGMap(const VGMap &map) {
+    if(map.village_board !=nullptr)
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
     // here we can use operator overload

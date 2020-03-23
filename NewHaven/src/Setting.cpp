@@ -73,7 +73,7 @@ void Setting::loadGameBoard(const std::string filepath) {
     }
 }
 
-VGMap Setting::loadVillageMap(const std::string filepath) {
+VGMap* Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
     if(loader.loadVConfig(filepath)) {
@@ -149,6 +149,12 @@ void Setting::initSetting() {
     string files[3] = {"../config/GBMapConfig_0.config",
                        "../config/GBMapConfig_1.config",
                        "../config/GBMapConfig_2.config" };
+
+    string v_files[4] = {"../config/VGMapNum_0.config",
+                         "../config/VGMapNum_1.config",
+                         "../config/VGMapNum_2.config",
+                         "../config/VGMapNum_3.config"
+    };
     int number_players{promptNumberPlayers()};
     switch(number_players){
         case 2:
@@ -161,6 +167,11 @@ void Setting::initSetting() {
             loadGameBoard(files[0]);break;
     }
     setupPlayers(number_players);
+    int file_index = 0;
+    for(std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it){
+        it->setVillage(*loadVillageMap(v_files[file_index]));
+        file_index++;
+    }
     resourceTracker();
     createBuildingDeck();
     createHarvestDeck();
