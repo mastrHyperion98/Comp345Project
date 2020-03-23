@@ -22,6 +22,10 @@ public:
     ResourceScore resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);
+    // Used to set the shipment tile in Player's hand
+    void setShipmentTile(HarvestTile& shipmentTile);
+    // Getter for shipment tile
+    HarvestTile* getShipmentTile();
 
 private:
     VGMap *village;

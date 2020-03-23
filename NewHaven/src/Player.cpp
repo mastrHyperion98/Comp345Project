@@ -152,6 +152,14 @@ int Player::placeShipmentTile() {
     return -1;
 }
 
+void Player::setShipmentTile(HarvestTile& shipmentTile){
+    my_hand->shipment = &shipmentTile;
+}
+
+HarvestTile* Player::getShipmentTile(){
+    return my_hand->shipment;
+}
+
 /*
  * NON FINAL IMPLEMENTATION:
  *
@@ -170,4 +178,3 @@ void Player::drawBuilding(Building& building) {
 void Player::drawHarvestTile(HarvestTile& tile) {
     my_hand->harvestTiles->push_back(&tile);
 }
-

@@ -18,16 +18,16 @@ int main(){
     auto *player = new Player(); // Initiate player
 
     // Start of the game, each player should have 6 buildings and 2 Harvest Tiles
-    for (int i = 0; i < 5; i ++)
+    for (int i = 0; i < 6; i ++)
         (*player).drawBuilding(*bDeck->draw()); // Player draws a building from the deck
     for (int i = 0; i < 2; i++)
         (*player).drawHarvestTile(*hDeck->draw()); //Player draws a harvest tile from the deck
 
     // This tile is kept FACE DOWN until played.
-    HarvestTile *shipmentTilePtr;
-    HarvestTile shipmentTile = *hDeck->draw();
+    HarvestTile* shipmentTilePtr;
+    (*player).setShipmentTile(*hDeck->draw());
 
-    shipmentTilePtr = &shipmentTile;
+    shipmentTilePtr = (*player).getShipmentTile();
 
     // Testing output of shipment tile
     for (std::uint_fast8_t i = 0; i < 4; i++)
@@ -89,6 +89,12 @@ int main(){
         // Point the shipment tile to the temporary resource tile player chose
         shipmentTilePtr = tempShipmentTile;
 
+        for (std::uint_fast8_t i = 0; i < 4; i++)
+        {
+            cout << (*shipmentTilePtr).getTileContent()[i] << "\t";
+        }
+        cout << endl;
+
         // Places the shipment tile at the appropriate position.
         (*player).placeShipmentTile();
 
@@ -100,6 +106,12 @@ int main(){
         // the intiial round, then convert it to normal for the start of the next round.
         // I'll leave this here for this driver for now.
         // Point the shipment tile back to the original tile
-        *shipmentTilePtr = shipmentTile;
+        shipmentTilePtr = (*player).getShipmentTile();
+
+        for (std::uint_fast8_t i = 0; i < 4; i++)
+        {
+            cout << (*shipmentTilePtr).getTileContent()[i] << "\t";
+        }
+        cout << endl;
     }
 }
