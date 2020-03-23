@@ -14,7 +14,7 @@ public:
     GBMap* generateMap();
 
 private:
-    int game_board_configuration = -1;
+    int *game_board_configuration = new int(-1);
 
 };
 
