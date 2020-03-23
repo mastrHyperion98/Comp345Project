@@ -51,6 +51,7 @@ public:
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
+    string getName();
 private:
     string *name;
     void CreateVillageField();

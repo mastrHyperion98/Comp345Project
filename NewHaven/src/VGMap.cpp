@@ -369,3 +369,7 @@ int VGMap::getPositionCost(int position){
         return *(*village_board)[position].vCost;
     return -1;
 }
+
+string VGMap::getName(){
+    return *name;
+}
