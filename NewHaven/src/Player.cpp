@@ -5,8 +5,10 @@ Player::Player(): village{nullptr}, resource_score{new ResourceTracker()}, vb_sc
 }
 
 Player::Player(const Player &player): resource_score{new ResourceTracker(*player.resource_score)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
-    if(player.village !=nullptr)
+    if (player.village != nullptr)
         village = new VGMap(*player.village);
+    else
+        village = nullptr;
 }
 
 Player::~Player(){
