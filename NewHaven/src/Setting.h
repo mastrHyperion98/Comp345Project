@@ -20,7 +20,7 @@ public:
     static Setting *current;
     GBMap *board;
     vector<Player>* players;
-    void initSetting();
+    bool initSetting();
 private:
     HarvestDeck *h_deck;
     BuildingDeck *b_deck;

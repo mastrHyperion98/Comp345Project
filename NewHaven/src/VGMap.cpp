@@ -35,6 +35,8 @@ VGMap::VGMap(const VGMap &map) {
     // here we can use operator overload
     if(map.name!=nullptr)
     name = new string(*map.name);
+    else
+        name = nullptr;
 }
 
 VGMap & VGMap::operator=(const VGMap &map){

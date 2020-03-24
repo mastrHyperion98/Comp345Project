@@ -63,25 +63,35 @@ void Setting::setupPlayers(const int numberOfPlayers) {
 void Setting::loadGameBoard(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     GBMapLoader loader;
-    if(loader.loadConfig(filepath) && board == nullptr) {
-        cout << "LOADING SUCCESSFUL" << endl;
-        board = loader.generateMap();
-    }
-    else{
-    cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
-    throw BoardConfigurationNotLoaded();
+    try {
+        if (loader.loadConfig(filepath) && board == nullptr) {
+            cout << "LOADING SUCCESSFUL" << endl;
+            board = loader.generateMap();
+        }
+    }catch(InvalidConfigurationException ex){
+        cout << "LOADING FAILED" << endl;
+        throw ex;
+    }catch(BoardConfigurationNotLoaded ex){
+        cout << "LOADING FAILED" << endl;
+        throw ex;
     }
 }
 
 VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
-    if(loader.loadVConfig(filepath)) {
-        cout << "LOADING SUCCESSFUL" << endl;
-        return loader.generateVMap();
+    try {
+        if (loader.loadVConfig(filepath)) {
+            cout << "LOADING SUCCESSFUL" << endl;
+            return loader.generateVMap();
+        }
+    }catch(InvalidConfigurationException ex){
+        cout << "LOADING FAILED" << endl;
+        throw InvalidConfigurationException();
+    }catch(BoardConfigurationNotLoaded ex){
+        cout << "LOADING FAILED" << endl;
+        throw BoardConfigurationNotLoaded();
     }
-    cout << "LOADING FAILED! AN ERROR HAS OCCURRED" << endl;
-    throw InvalidConfigurationException();
 }
 
 void Setting::resourceTracker(){
@@ -145,7 +155,20 @@ inline int Setting::getNumberPlayers() {
     return players->size();
 }
 
-void Setting::initSetting() {
+bool Setting::initSetting() {
+
+
+#ifdef _DEBUG
+    string files[3] = {"../../../config/GBMapConfig_0.config",
+                       "../../../config/GBMapConfig_1.config",
+                       "../../../config/GBMapConfig_2.config" };
+
+    string v_files[4] = {"../../../config/VGMapNum_0.config",
+                         "../../../config/VGMapNum_1.config",
+                         "../../../config/VGMapNum_2.config",
+                         "../../../config/VGMapNum_3.config"
+    };
+#else
     string files[3] = {"../config/GBMapConfig_0.config",
                        "../config/GBMapConfig_1.config",
                        "../config/GBMapConfig_2.config" };
@@ -155,34 +178,50 @@ void Setting::initSetting() {
                          "../config/VGMapNum_2.config",
                          "../config/VGMapNum_3.config"
     };
-    int number_players{promptNumberPlayers()};
-    switch(number_players){
-        case 2:
-            loadGameBoard(files[0]);break;
-        case 3:
-            loadGameBoard(files[1]);break;
-        case 4:
-            loadGameBoard(files[2]);break;
-        default:
-            loadGameBoard(files[0]);break;
-    }
-    setupPlayers(number_players);
-    int file_index = 0;
-    for(std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it){
-        it->setVillage(loadVillageMap(v_files[file_index]));
-        file_index++;
-    }
-    resourceTracker();
-    createBuildingDeck();
-    createHarvestDeck();
-    for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
-        cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
-        for(int i = 0; i < 5; i++)
-             it->drawBuilding(drawBuilding());
-        for(int j = 0; j < 2; j++)
-            it->drawHarvestTile(drawHarvestTile());
-        it->setShipmentTile(drawHarvestTile());
+#endif // DEBUG
 
-        cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
+    int number_players{promptNumberPlayers()};
+    try {
+        switch (number_players) {
+            case 2:
+                loadGameBoard(files[0]);
+                break;
+            case 3:
+                loadGameBoard(files[1]);
+                break;
+            case 4:
+                loadGameBoard(files[2]);
+                break;
+            default:
+                loadGameBoard(files[0]);
+                break;
+        }
+        setupPlayers(number_players);
+        int file_index = 0;
+        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
+            it->setVillage(loadVillageMap(v_files[file_index]));
+            file_index++;
+        }
+        resourceTracker();
+        createBuildingDeck();
+        createHarvestDeck();
+        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
+            cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
+            for (int i = 0; i < 5; i++)
+                it->drawBuilding(drawBuilding());
+            for (int j = 0; j < 2; j++)
+                it->drawHarvestTile(drawHarvestTile());
+            it->setShipmentTile(drawHarvestTile());
+
+            cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
+        }
+    }catch(InvalidConfigurationException ex){
+        cerr << ex.what() << endl;
+        return false;
     }
+    catch(BoardConfigurationNotLoaded ex){
+        cerr << ex.what() << endl;
+        return false;
+    }
+    return true;
 }

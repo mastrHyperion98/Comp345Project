@@ -46,10 +46,10 @@ bool VGMapLoader::loadVConfig(std::string filepath) {
         return false;
     }
     else {
-        cerr << "ERROR: File either does not exist or cannot open file";
+        cerr << "ERROR: File either does not exist or cannot open file" << endl;
         // close the reader before returning
         reader.close();
-        return false;
+        throw BoardConfigurationNotLoaded();
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
