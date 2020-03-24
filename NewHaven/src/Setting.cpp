@@ -15,6 +15,7 @@ Setting::Setting(){
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
+    delete current;
     current = this;
 }
 
@@ -29,12 +30,6 @@ Setting& Setting::operator=(const Setting& setting){
     if(this == &setting)
         return *this;
 
-    // cannot assume that the value ares nullptr and cant use assignment operator for Harvest/Building deck since implicitly deleted
-   delete h_deck;
-   delete b_deck;
-   delete board;
-   delete players;
-
    if(setting.h_deck != nullptr)
     h_deck = new HarvestDeck(*setting.h_deck);
    if(setting.b_deck != nullptr)
@@ -43,7 +38,6 @@ Setting& Setting::operator=(const Setting& setting){
     board = new GBMap(*setting.board);
    if(setting.players != nullptr)
     players = new vector<Player>(*setting.players);
-
     current = this;
     return *this;
 };
