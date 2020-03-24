@@ -20,6 +20,8 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
     if(!createBoard())
         // create a proper exception maybe
         throw 1;
+    // assign
+    assignDefaultTiles();
 }
 GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
     // call the copy constructor of the GameBoard
@@ -245,4 +247,60 @@ Building* GBMap::drawBuildingFromBoard(int position) {
         return my_building;
         }
     return nullptr;
+}
+
+void GBMap::assignDefaultTiles() {
+    /*
+     * Create 4 tiles
+     */
+    ResourceTypes *type1{new ResourceTypes[4]
+    {ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD}};
+    ResourceTypes *type2{new ResourceTypes[4]
+    {ResourceTypes::WHEAT, ResourceTypes ::SHEEP, ResourceTypes::WHEAT, ResourceTypes::WOOD}};
+    ResourceTypes *type3{new ResourceTypes[4]
+    {ResourceTypes::SHEEP, ResourceTypes ::STONE, ResourceTypes::SHEEP, ResourceTypes::WHEAT}};
+    ResourceTypes *type4{new ResourceTypes[4]
+    {ResourceTypes::STONE, ResourceTypes ::STONE, ResourceTypes::WOOD, ResourceTypes::WHEAT}};
+    HarvestTile tl{type1};
+    HarvestTile tr{type2};
+    HarvestTile bl{type3};
+    HarvestTile br{type4};
+    switch((*CONFIG)){
+        case 0:
+            /*
+             * config 0 --- 0   4 20 24
+             */
+            placeHarvestTile(0, tl);
+            placeHarvestTile(4,tr);
+            placeHarvestTile(20, bl);
+            placeHarvestTile(24, br);
+            break;
+        case 1:
+            /*
+             * config 1 --- 5   9 25 29
+             */
+            placeHarvestTile(5, tl);
+            placeHarvestTile(9,tr);
+            placeHarvestTile(25, bl);
+            placeHarvestTile(29, br);
+            break;
+        case 2:
+            /*
+                 * config 1 --- 6   10 34 38
+                 */
+            placeHarvestTile(6, tl);
+            placeHarvestTile(10,tr);
+            placeHarvestTile(34, bl);
+            placeHarvestTile(38, br);
+            break;
+        default:
+            /*
+             * config 0 --- 0   4 20 24
+             */
+            placeHarvestTile(0, tl);
+            placeHarvestTile(4,tr);
+            placeHarvestTile(20, bl);
+            placeHarvestTile(24, br);
+            break;
+    }
 }
