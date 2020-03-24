@@ -1,7 +1,7 @@
 #include "VGMap.h"
 #include "Resources.h"
-#include "ResourceScore.h"
 #include "ScoreCalculator.h"
+#include "ResourceTracker.h"
 
 struct Player
 {
@@ -15,21 +15,18 @@ public:
     // Used for shipment tile
     int placeShipmentTile();
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
-    void drawBuilding(Building& building);
+    void drawBuilding(Building* building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
-    void drawHarvestTile(HarvestTile& tile);
-    // im assuming this prints out the available resources;
-    ResourceScore resourceTracker();
+    void drawHarvestTile(HarvestTile* tile);
+    void drawBuildingPool(Building*);
+    // Returns the ResourceTracker object held by the player
+    ResourceTracker* resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);
-    // Used to set the shipment tile in Player's hand
-    void setShipmentTile(HarvestTile& shipmentTile);
-    // Getter for shipment tile
-    HarvestTile* getShipmentTile();
-
+    void setVillage(VGMap);
 private:
     VGMap *village;
-    ResourceScore *resource_score;
+    ResourceTracker *resource_score;
     ScoreCalculator *vb_score;
     Hand *my_hand;
 

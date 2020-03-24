@@ -12,7 +12,7 @@
 #include "Square.h"
 
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
-typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Square> ResourceTrails;
+typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::bidirectionalS, Square> ResourceTrails;
 typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
 
 
@@ -33,8 +33,9 @@ public:
     void printIndexConfiguration();
     bool addBuildingToBoard(Building &building);
     Building* drawBuildingFromBoard(int position);
-private:
     GameBoard* board;
+private:
+
     std::vector<Building*>* buildings;
     bool createBoard();
     inline void resetVisitedNodes();

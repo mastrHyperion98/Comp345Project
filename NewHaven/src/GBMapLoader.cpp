@@ -42,23 +42,23 @@ bool GBMapLoader::loadConfig(std::string filepath) {
                 throw InvalidConfigurationException();
             }
             if (board_config >= 0 && board_config < 3) {
-                this->game_board_configuration = board_config;
+                *this->game_board_configuration = board_config;
                 return true;
             }
         }
             return false;
     }
     else {
-        cerr << "ERROR: File either does not exist or cannot open file";
+        cerr << "ERROR: File either does not exist or cannot open file" << endl;
         // close the reader before returning
         reader.close();
-        return false;
+        throw BoardConfigurationNotLoaded();
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
-GBMap GBMapLoader::generateMap() {
-    if(game_board_configuration != -1){
-        GBMap gb_map(game_board_configuration);
+GBMap* GBMapLoader::generateMap() {
+    if(*game_board_configuration != -1){
+        GBMap *gb_map{new GBMap(*game_board_configuration)};
         return gb_map;
     }
     else{
