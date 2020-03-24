@@ -18,10 +18,11 @@ public:
     void drawHarvestTile(HarvestTile* tile);
     void drawBuildingPool(Building*);
     // Returns the ResourceTracker object held by the player
-    ResourceTracker resourceTracker();
+    ResourceTracker* resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);
-
+    void setShipmentTile(HarvestTile* tile);
+    void setVillage(VGMap);
 private:
     VGMap *village;
     ResourceTracker *resource_score;

@@ -15,8 +15,7 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(): typePlayed(new map<ResourceTypes, bool>){
-    village_board = new C_Graph;
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}{
     CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
@@ -26,11 +25,18 @@ VGMap::VGMap(): typePlayed(new map<ResourceTypes, bool>){
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {
     delete village_board;
+    delete name;
 }
 
 VGMap::VGMap(const VGMap &map) {
+    if(map.village_board !=nullptr)
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
+    // here we can use operator overload
+    if(map.name!=nullptr)
+    name = new string(*map.name);
+    else
+        name = nullptr;
 }
 
 VGMap & VGMap::operator=(const VGMap &map){
@@ -38,8 +44,9 @@ VGMap & VGMap::operator=(const VGMap &map){
         return *this;
     else{
         delete village_board;
-        village_board = new C_Graph(*map.village_board);
+        *village_board = *map.village_board;
         *typePlayed = *map.typePlayed;
+        *name = *map.name;
     }
 
     return *this;
@@ -323,10 +330,7 @@ Circle::Circle(){
 }
 
 Circle::Circle(const Circle &circle){
-    if(circle.building != nullptr){
-         building = circle.building;
-    } else
-        building = nullptr;
+    building = circle.building;
     row = new int(*circle.row);
     position = new int(*circle.position);
     column = new int(*circle.column);
@@ -349,14 +353,14 @@ Circle & Circle::operator=(const Circle &circle){
     if (this == &circle)
         return *this;
     else {
-        *row = *circle.row;
-        *column = *circle.column;
-        *vCost = *circle.vCost;
+        row = new int(*circle.row);
+        column = new int(*circle.column);
+        vCost = new int(*circle.vCost);
         *isVisited = *circle.isVisited;
         *isPlayed = *circle.isPlayed;
         // we dont create copies of buildings. We will clear it with the decks
         building = circle.building;
-       *position = *circle.position;
+        position = new int(*circle.position);
     }
     return *this;
 }
@@ -365,4 +369,8 @@ int VGMap::getPositionCost(int position){
     if(position >= 0 && position < 30)
         return *(*village_board)[position].vCost;
     return -1;
+}
+
+string VGMap::getName(){
+    return *name;
 }
