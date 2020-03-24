@@ -182,14 +182,6 @@ int Player::placeShipmentTile() {
     return -1;
 }
 
-void Player::setShipmentTile(HarvestTile& shipmentTile){
-    my_hand->shipment = &shipmentTile;
-}
-
-HarvestTile* Player::getShipmentTile(){
-    return my_hand->shipment;
-}
-
 /*
  * NON FINAL IMPLEMENTATION:
  *
@@ -220,6 +212,9 @@ void Player::setShipmentTile(HarvestTile* tile){
         my_hand->shipment = tile;
 }
 
+HarvestTile* Player::getShipmentTile() {
+    return my_hand->shipment;
+}
 
 void Player::setVillage(VGMap v_map) {
     village = new VGMap(v_map);

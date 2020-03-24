@@ -19,13 +19,13 @@ int main(){
 
     // Start of the game, each player should have 6 buildings and 2 Harvest Tiles
     for (int i = 0; i < 6; i ++)
-        (*player).drawBuilding(*bDeck->draw()); // Player draws a building from the deck
+        (*player).drawBuilding(bDeck->draw()); // Player draws a building from the deck
     for (int i = 0; i < 2; i++)
-        (*player).drawHarvestTile(*hDeck->draw()); //Player draws a harvest tile from the deck
+        (*player).drawHarvestTile(hDeck->draw()); //Player draws a harvest tile from the deck
 
     // This tile is kept FACE DOWN until played.
     HarvestTile* shipmentTilePtr;
-    (*player).setShipmentTile(*hDeck->draw());
+    (*player).setShipmentTile(hDeck->draw());
 
     shipmentTilePtr = (*player).getShipmentTile();
 
@@ -84,7 +84,7 @@ int main(){
         HarvestTile* tempShipmentTile = new HarvestTile(shipmentResource);
 
         // Player draws this content, we have shipmentTile;
-        (*player).drawHarvestTile(*shipmentTilePtr);
+        (*player).drawHarvestTile(shipmentTilePtr);
 
         // Point the shipment tile to the temporary resource tile player chose
         shipmentTilePtr = tempShipmentTile;
