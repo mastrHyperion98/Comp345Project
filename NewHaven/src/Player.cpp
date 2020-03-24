@@ -190,6 +190,6 @@ void Player::setShipmentTile(HarvestTile* tile){
 }
 
 
-void Player::setVillage(VGMap& v_map) {
-    village = &v_map;
+void Player::setVillage(VGMap v_map) {
+    village = new VGMap(v_map);
 }

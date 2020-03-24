@@ -34,10 +34,16 @@ Setting& Setting::operator=(const Setting& setting){
    delete b_deck;
    delete board;
    delete players;
+
+   if(setting.h_deck != nullptr)
     h_deck = new HarvestDeck(*setting.h_deck);
+   if(setting.b_deck != nullptr)
     b_deck = new BuildingDeck(*setting.b_deck);
+   if(setting.board != nullptr)
     board = new GBMap(*setting.board);
+   if(setting.players != nullptr)
     players = new vector<Player>(*setting.players);
+
     current = this;
     return *this;
 };
@@ -73,7 +79,7 @@ void Setting::loadGameBoard(const std::string filepath) {
     }
 }
 
-VGMap* Setting::loadVillageMap(const std::string filepath) {
+VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
     if(loader.loadVConfig(filepath)) {
@@ -169,7 +175,7 @@ void Setting::initSetting() {
     setupPlayers(number_players);
     int file_index = 0;
     for(std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it){
-        it->setVillage(*loadVillageMap(v_files[file_index]));
+        it->setVillage(loadVillageMap(v_files[file_index]));
         file_index++;
     }
     resourceTracker();

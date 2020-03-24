@@ -10,7 +10,7 @@
 class VGMapLoader {
 public:
     bool loadVConfig(std::string filepath);
-    VGMap* generateVMap();
+    VGMap generateVMap();
 
 private:
     string *name{new string("")};

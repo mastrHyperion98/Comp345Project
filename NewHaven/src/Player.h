@@ -22,7 +22,7 @@ public:
     bool buildVillage();
     void calculateResources(ResourceTrails);
     void setShipmentTile(HarvestTile* tile);
-    void setVillage(VGMap&);
+    void setVillage(VGMap);
 private:
     VGMap *village;
     ResourceTracker *resource_score;
