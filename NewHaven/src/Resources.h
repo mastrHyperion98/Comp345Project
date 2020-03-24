@@ -89,6 +89,8 @@ private:
 
 public:
 	Hand();
+    Hand(const Hand& hand);
+    Hand& operator=(const Hand& hand);
 	~Hand();
 	/*
 	Every player is supposed to have a hand.
