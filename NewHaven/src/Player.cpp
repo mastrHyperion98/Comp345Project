@@ -16,6 +16,7 @@ Player::~Player(){
     delete resource_score;
     delete vb_score;
     delete my_hand;
+    delete id;
 }
 
 Player& Player::operator=(const Player &player) {
