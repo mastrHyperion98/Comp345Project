@@ -2,11 +2,11 @@
 #include "Resources.h"
 #include "ScoreCalculator.h"
 #include "ResourceTracker.h"
-
+#include <string>
 struct Player
 {
 public:
-    Player();
+    Player(string id);
     Player(const Player &player);
     ~Player();
     Player &operator = (const Player &player);
@@ -28,10 +28,11 @@ public:
     void setShipmentTile(HarvestTile* shipmentTile);
     // Getter for shipment tile
     HarvestTile* getShipmentTile();
+    string getID();
 private:
     VGMap *village;
     ResourceTracker *resource_score;
     ScoreCalculator *vb_score;
     Hand *my_hand;
-
+    string *id;
 };

@@ -55,7 +55,14 @@ void Setting::setupPlayers(const int numberOfPlayers) {
         players = new vector<Player>;
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
-        players->push_back(Player());
+        string id{0};
+        while ((cout << "Enter your 8-digit student ID number: " && !(cin >> id))
+               || id.length() != *ID_LENGTH) {
+            std::cin.clear(); //clear bad input flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
+            std::cout << "Invalid input; please re-enter.\n";
+        }
+        players->push_back(Player(id));
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
