@@ -33,6 +33,10 @@ GBMap::~GBMap(){
     delete SIZE;
     delete board;
     delete buildings;
+    delete tl;
+    delete tr;
+    delete bl;
+    delete br;
     // set to nullptr since it is static and belongs to the class.
     current_map = nullptr;
 }
@@ -43,11 +47,11 @@ GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new s
         // create a proper exception maybe
         throw 1;
 }
-bool GBMap::placeHarvestTile(int NodeID, HarvestTile &tile) {
+bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
  if(NodeID > *SIZE || NodeID < 0|| &tile == nullptr ||*(*board)[NodeID].isPlayed )
      return false;
     // should use the operator overload
-    (*board)[NodeID].tile = &tile;
+    (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     return true;
 }
@@ -253,18 +257,6 @@ void GBMap::assignDefaultTiles() {
     /*
      * Create 4 tiles
      */
-    ResourceTypes *type1{new ResourceTypes[4]
-    {ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD}};
-    ResourceTypes *type2{new ResourceTypes[4]
-    {ResourceTypes::WHEAT, ResourceTypes ::SHEEP, ResourceTypes::WHEAT, ResourceTypes::WOOD}};
-    ResourceTypes *type3{new ResourceTypes[4]
-    {ResourceTypes::SHEEP, ResourceTypes ::STONE, ResourceTypes::SHEEP, ResourceTypes::WHEAT}};
-    ResourceTypes *type4{new ResourceTypes[4]
-    {ResourceTypes::STONE, ResourceTypes ::STONE, ResourceTypes::WOOD, ResourceTypes::WHEAT}};
-    HarvestTile tl{type1};
-    HarvestTile tr{type2};
-    HarvestTile bl{type3};
-    HarvestTile br{type4};
     switch((*CONFIG)){
         case 0:
             /*

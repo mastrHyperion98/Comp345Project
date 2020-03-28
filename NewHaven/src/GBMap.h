@@ -27,7 +27,7 @@ public:
     static GBMap *current_map;
     const int* const CONFIG;
     const int * const SIZE;
-    bool placeHarvestTile(int NodeID,HarvestTile &tile);
+    bool placeHarvestTile(int NodeID,HarvestTile *tile);
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
     void printIndexConfiguration();
@@ -35,8 +35,11 @@ public:
     Building* drawBuildingFromBoard(int position);
     GameBoard* board;
 private:
-
     std::vector<Building*>* buildings;
+    HarvestTile *tl{new HarvestTile(new ResourceTypes[4]{ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD})};
+    HarvestTile *tr{new HarvestTile(new ResourceTypes[4]{ResourceTypes::WHEAT, ResourceTypes ::SHEEP, ResourceTypes::WHEAT, ResourceTypes::WOOD})};
+    HarvestTile *bl{new HarvestTile(new ResourceTypes[4]{ResourceTypes::SHEEP, ResourceTypes ::STONE, ResourceTypes::SHEEP, ResourceTypes::WHEAT})};
+    HarvestTile *br{new HarvestTile(new ResourceTypes[4]{ResourceTypes::STONE, ResourceTypes ::STONE, ResourceTypes::WOOD, ResourceTypes::WHEAT})};
     bool createBoard();
     inline void resetVisitedNodes();
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;

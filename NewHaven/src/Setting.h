@@ -31,6 +31,8 @@ private:
     void loadGameBoard(const std::string filepath);
     VGMap loadVillageMap(const std::string filepath);
     int promptNumberPlayers();
+    const int *const ID_LENGTH = new const int(8);
+    bool validateIDString(string id);
 };
 
 
