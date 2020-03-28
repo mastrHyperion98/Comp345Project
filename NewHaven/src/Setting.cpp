@@ -1,6 +1,7 @@
 //
 // Created by hyperion on 2020-03-17.
 //
+#include "boost/lexical_cast.hpp"
 #include "Setting.h"
 #include "GBMapLoader.h"
 #include "VGMapLoader.h"
@@ -55,11 +56,26 @@ void Setting::setupPlayers(const int numberOfPlayers) {
         players = new vector<Player>;
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
-        players->push_back(Player());
+        string id{""};
+        while ((cout << "Enter your 8-digit student ID number: " && !(cin >> id))
+               || id.length() != *ID_LENGTH || !validateIDString(id)) {
+            id.clear();
+            std::cin.clear(); //clear bad input flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
+            std::cout << "Invalid input; please re-enter.\n";
+        }
+        players->push_back(Player(id));
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
-
+bool Setting::validateIDString(string id) {
+    for(int i = 0; i < id.length(); i++){
+        int ascii = id.at(i);
+        if(ascii < int('0') || ascii > int('9'))
+            return false;
+    }
+    return true;
+}
 void Setting::loadGameBoard(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     GBMapLoader loader;
@@ -225,3 +241,4 @@ bool Setting::initSetting() {
     }
     return true;
 }
+

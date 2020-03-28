@@ -1,10 +1,10 @@
 #include "Player.h"
 
-Player::Player(): village{nullptr}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+Player::Player(string id): id{new string(id)}, village{nullptr}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
 
 }
 
-Player::Player(const Player &player): resource_score{new ResourceTracker(*player.resource_score)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+Player::Player(const Player &player): id{new string(*player.id)}, resource_score{new ResourceTracker(*player.resource_score)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
     if (player.village != nullptr)
         village = new VGMap(*player.village);
     else
@@ -16,6 +16,7 @@ Player::~Player(){
     delete resource_score;
     delete vb_score;
     delete my_hand;
+    delete id;
 }
 
 Player& Player::operator=(const Player &player) {
@@ -28,6 +29,7 @@ Player& Player::operator=(const Player &player) {
         *resource_score = *player.resource_score;
         *vb_score = *player.vb_score;
         *my_hand = *player.my_hand;
+        *id = *player.id;
     }
     return *this;
 }
@@ -220,4 +222,8 @@ HarvestTile* Player::getShipmentTile() {
 
 void Player::setVillage(VGMap v_map) {
     village = new VGMap(v_map);
+}
+
+string Player::getID(){
+    return *id;
 }
