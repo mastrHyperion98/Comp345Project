@@ -263,36 +263,52 @@ void GBMap::assignDefaultTiles() {
              * config 0 --- 0   4 20 24
              */
             placeHarvestTile(0, tl);
+            *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
+            *(*board)[4].isPlayed = true;
             placeHarvestTile(20, bl);
+            *(*board)[20].isPlayed = true;
             placeHarvestTile(24, br);
+            *(*board)[24
             break;
         case 1:
             /*
              * config 1 --- 5   9 25 29
              */
             placeHarvestTile(5, tl);
+            *(*board)[5].isPlayed = true;
             placeHarvestTile(9,tr);
+            *(*board)[9].isPlayed = true;
             placeHarvestTile(25, bl);
+            *(*board)[25].isPlayed = true;
             placeHarvestTile(29, br);
+            *(*board)[29].isPlayed = true;
             break;
         case 2:
             /*
                  * config 1 --- 6   10 34 38
                  */
             placeHarvestTile(6, tl);
+            *(*board)[6].isPlayed = true;
             placeHarvestTile(10,tr);
+            *(*board)[10].isPlayed = true;
             placeHarvestTile(34, bl);
+            *(*board)[34].isPlayed = true;
             placeHarvestTile(38, br);
+            *(*board)[38].isPlayed = true;
             break;
         default:
             /*
              * config 0 --- 0   4 20 24
              */
             placeHarvestTile(0, tl);
+            *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
+            *(*board)[4].isPlayed = true;
             placeHarvestTile(20, bl);
+            *(*board)[20].isPlayed = true;
             placeHarvestTile(24, br);
+            *(*board)[24].isPlayed = true;
             break;
     }
 }
