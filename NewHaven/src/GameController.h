@@ -18,7 +18,7 @@ public:
 private:
     Setting *game_settings;
     int *current_turn_player;
-    bool playTurn();
+    void playTurn();
     int startingPlayer();
     bool hasGameEnded();
     void endGame();

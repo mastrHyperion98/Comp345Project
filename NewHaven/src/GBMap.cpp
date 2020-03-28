@@ -269,7 +269,7 @@ void GBMap::assignDefaultTiles() {
             placeHarvestTile(20, bl);
             *(*board)[20].isPlayed = true;
             placeHarvestTile(24, br);
-            *(*board)[24
+            *(*board)[24].isPlayed = true;
             break;
         case 1:
             /*
