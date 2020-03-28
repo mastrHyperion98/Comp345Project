@@ -151,7 +151,7 @@ int Player::placeHarvestTile() {
 
     // later this will be called from the singleton Game Controller
     if(GBMap::current_map != nullptr) {
-        if(GBMap::current_map->placeHarvestTile(pos, *(*my_hand->harvestTiles)[index_tile])) {
+        if(GBMap::current_map->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile])) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + index_tile);
             return pos;
         } else{
@@ -172,7 +172,7 @@ int Player::placeShipmentTile() {
 
     // later this will be called from the singleton Game Controller
     if(GBMap::current_map != nullptr) {
-        if(GBMap::current_map->placeHarvestTile(pos, *(*my_hand->harvestTiles).back())) {
+        if(GBMap::current_map->placeHarvestTile(pos, (*my_hand->harvestTiles).back())) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->end());
             return pos;
         }
