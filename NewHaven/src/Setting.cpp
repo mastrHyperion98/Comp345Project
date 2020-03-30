@@ -21,7 +21,7 @@ Setting::Setting(){
 }
 
 Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player>(*setting.players)}{
+    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}{
     // singleton design we dont need any other reference but the current one
     delete current;
     current = this;
@@ -38,7 +38,7 @@ Setting& Setting::operator=(const Setting& setting){
    if(setting.board != nullptr)
     board = new GBMap(*setting.board);
    if(setting.players != nullptr)
-    players = new vector<Player>(*setting.players);
+    players = new vector<Player*>(*setting.players);
     current = this;
     return *this;
 };
@@ -53,7 +53,7 @@ Setting::~Setting() {
 void Setting::setupPlayers(const int numberOfPlayers) {
     std::cout << "CREATING " << numberOfPlayers << " PLAYERS!" << endl;
     if(players == nullptr)
-        players = new vector<Player>;
+        players = new vector<Player*>;
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
         string id{""};
@@ -64,7 +64,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
             std::cout << "Invalid input; please re-enter.\n";
         }
-        players->push_back(Player(id));
+        players->push_back(new Player(id));
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
@@ -112,7 +112,8 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
 
 void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
-    for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
+    for(int i = 0; i < players->size(); i++){
+        Player* it = (*players)[i];
         it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
         it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
         it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
@@ -214,14 +215,16 @@ bool Setting::initSetting() {
         }
         setupPlayers(number_players);
         int file_index = 0;
-        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
+        for(int i = 0; i < players->size(); i++){
+            Player* it = (*players)[i];
             it->setVillage(loadVillageMap(v_files[file_index]));
             file_index++;
         }
         resourceTracker();
         createBuildingDeck();
         createHarvestDeck();
-        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
+        for(int i = 0; i < players->size(); i++){
+            Player* it = (*players)[i];
             cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
             for (int i = 0; i < 5; i++)
                 it->drawBuilding(drawBuilding());

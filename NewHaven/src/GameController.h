@@ -23,6 +23,7 @@ private:
     bool hasGameEnded();
     void endGame();
     void restart();
+    inline int selectTileOption();
 };
 
 

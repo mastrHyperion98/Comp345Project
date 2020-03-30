@@ -13,7 +13,6 @@
 
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
-    current_map = this;
     // populate board
     if(!createBoard())
         // create a proper exception maybe
@@ -24,7 +23,6 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
 GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
-    current_map = this;
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -36,7 +34,6 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     // set to nullptr since it is static and belongs to the class.
-    current_map = nullptr;
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
     board = new GameBoard();

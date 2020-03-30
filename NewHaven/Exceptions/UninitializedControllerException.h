@@ -4,9 +4,9 @@
 
 #ifndef NEWHAVEN_UNINITIALIZEDCONTROLLEREXCEPTION_H
 #define NEWHAVEN_UNINITIALIZEDCONTROLLEREXCEPTION_H
+#include <exception>
 
-
-class UninitializedControllerException: public std::exception {
+class UninitializedControllerException:  public std::exception {
 public:
     virtual const char* what() const throw();
 };

@@ -19,7 +19,7 @@ public:
     inline HarvestTile* drawHarvestTile();
     static Setting *current;
     GBMap *board;
-    vector<Player>* players;
+    vector<Player*>* players;
     bool initSetting();
 private:
     HarvestDeck *h_deck;

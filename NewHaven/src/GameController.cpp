@@ -4,7 +4,8 @@
 
 #include "GameController.h"
 #include "../Exceptions/UninitializedControllerException.h"
-
+#include <iostream>
+#include <string>
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
 }
 
@@ -50,10 +51,15 @@ bool GameController::initialize() {
     return init;
 }
 
+int GameController::startingPlayer() {
+    return 0;
+}
 void GameController::playTurn(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
 
+    int tile_option = selectTileOption();
+    Player *current = (*game_settings->players)[*current_turn_player];
     /**TO-DO
      * Player Turn
      * Share The Wealth
@@ -76,4 +82,19 @@ bool GameController::hasGameEnded(){
         throw UninitializedControllerException();
 
     // return isGameBoard has only 1 tile left
+    return false;
+}
+
+inline int GameController::selectTileOption() {
+    int choice;
+    std::string prompt = "1\tPlay a Harvest tile from your possession"
+                         "\n2\tPlay with your Shipment tile."
+                         "\nChoice: ";
+    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "This is not a valid move. Select either:" << endl;
+    }
+
+    return choice;
 }
