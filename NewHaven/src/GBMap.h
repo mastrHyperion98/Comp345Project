@@ -24,7 +24,6 @@ public:
     GBMap(int configuration);
     GBMap(const GBMap &map);
     ~GBMap();
-    static GBMap *current_map;
     const int* const CONFIG;
     const int * const SIZE;
     bool placeHarvestTile(int NodeID,HarvestTile *tile);
@@ -33,8 +32,9 @@ public:
     void printIndexConfiguration();
     bool addBuildingToBoard(Building &building);
     Building* drawBuildingFromBoard(int position);
-    GameBoard* board;
+
 private:
+    GameBoard* board;
     std::vector<Building*>* buildings;
     HarvestTile *tl{new HarvestTile(new ResourceTypes[4]{ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD})};
     HarvestTile *tr{new HarvestTile(new ResourceTypes[4]{ResourceTypes::WHEAT, ResourceTypes ::SHEEP, ResourceTypes::WHEAT, ResourceTypes::WOOD})};

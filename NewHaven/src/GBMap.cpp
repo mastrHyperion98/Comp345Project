@@ -10,8 +10,6 @@
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
 
-GBMap* GBMap::current_map;
-
 
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
