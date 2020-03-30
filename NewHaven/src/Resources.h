@@ -10,10 +10,8 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource); /
 struct HarvestTile
 {
 private:
-    ResourceTypes* tileContent;	//Array of resource types
-
 public:
-
+    ResourceTypes* tileContent;	//Array of resource types
 	HarvestTile(ResourceTypes*);
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
@@ -88,15 +86,16 @@ struct Hand
 private:
 
 public:
-	Hand();
-    Hand(const Hand& hand);
-    Hand& operator=(const Hand& hand);
-	~Hand();
-	/*
-	Every player is supposed to have a hand.
-	It's contains a vector for tiles and building cards.
-	*/
-    std::vector<HarvestTile*>* harvestTiles;
-    HarvestTile* shipment;
-    std::vector<Building*>* buildings;
+Hand();
+Hand(const Hand& hand);
+Hand& operator=(const Hand& hand);
+~Hand();
+/*
+Every player is supposed to have a hand.
+It's contains a vector for tiles and building cards.
+*/
+std::vector<HarvestTile*>* harvestTiles;
+HarvestTile* shipment;
+std::vector<Building*>* buildings;
+bool *isShipmentPlayed;
 };

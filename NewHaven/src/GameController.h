@@ -24,6 +24,8 @@ private:
     void endGame();
     void restart();
     inline int selectTileOption();
+    inline int selectResourceType();
+    void playShipmentTile();
 };
 
 

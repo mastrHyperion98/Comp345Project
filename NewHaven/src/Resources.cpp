@@ -355,14 +355,17 @@ void BuildingDeck::fillBuildingPool()
 Hand::Hand():
 	harvestTiles{new std::vector<HarvestTile*>},
 	shipment{nullptr},
-	buildings{new std::vector<Building*>}
+	buildings{new std::vector<Building*>},
+    isShipmentPlayed{new bool{false}}
 {
 	harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
 Hand::Hand(const Hand &hand):harvestTiles{new std::vector<HarvestTile*>(*hand.harvestTiles)},
 shipment{hand.shipment},
-buildings{new std::vector<Building*>(*hand.buildings)}{
+buildings{new std::vector<Building*>(*hand.buildings)},
+isShipmentPlayed{new bool{*hand.isShipmentPlayed}}
+{
     harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
@@ -373,6 +376,7 @@ Hand& Hand::operator=(const Hand &hand) {
     *harvestTiles = *hand.harvestTiles;
     shipment = hand.shipment;
     *buildings = *hand.buildings;
+    *isShipmentPlayed = *isShipmentPlayed;
     return *this;
 }
 Hand::~Hand()

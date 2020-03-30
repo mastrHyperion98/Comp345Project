@@ -35,7 +35,9 @@ GameController::~GameController(){
 void GameController::start(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-
+    for(int i = 0; i < 100; i++){
+        cout << "\n"; // clear screen
+    }
     while(!hasGameEnded()){
         // PrintGameBoard
         playTurn();
@@ -49,7 +51,6 @@ bool GameController::initialize() {
     bool init = game_settings->initSetting();
     if(init)
         *current_turn_player = startingPlayer();
-
     return init;
 }
 // find the starting player by comparing their studentID
@@ -81,10 +82,13 @@ void GameController::playTurn(){
             "Enter the number for the move you'd like to make." << endl;
     int tile_option = selectTileOption();
     Player *current = (*game_settings->players)[*current_turn_player];
-    /**TO-DO
-     * Player Turn
-     * Share The Wealth
-     */
+    switch(tile_option){
+        case 1: current->placeHarvestTile();
+        break;
+        case 2: playShipmentTile();
+        break;
+        default: current->placeHarvestTile();
+    }
 }
 
 void GameController::endGame(){
@@ -118,4 +122,36 @@ inline int GameController::selectTileOption() {
     }
 
     return choice;
+}
+
+inline int GameController::selectResourceType() {
+    int choice;
+    std::string prompt =  "Which resource type would you like?"
+                                  "\n\t1 - Sheep"
+                                  "\n\t2 - Stone"
+                                  "\n\t3 - Wood\n"
+                                  "\t4 - Wheat"
+                                  "\nChoice: ";
+    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 4){
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "This is not a valid move. Select either:" << endl;
+    }
+    return choice;
+}
+
+void GameController::playShipmentTile(){
+  int choice = selectResourceType();
+  ResourceTypes type;
+  if(choice == 1)
+      type = ResourceTypes::SHEEP;
+  else if(choice == 2)
+      type= ResourceTypes::STONE;
+  else if(choice == 3)
+      type = ResourceTypes::WOOD;
+  else
+      type = ResourceTypes::WHEAT;
+
+  ResourceTypes *shipmentResources{new ResourceTypes[4]{type,type,type,type}};
+
 }
