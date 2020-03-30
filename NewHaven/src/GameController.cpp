@@ -4,8 +4,10 @@
 
 #include "GameController.h"
 #include "../Exceptions/UninitializedControllerException.h"
+#include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <string>
+#include <stdlib.h>
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
 }
 
@@ -50,14 +52,33 @@ bool GameController::initialize() {
 
     return init;
 }
-
+// find the starting player by comparing their studentID
 int GameController::startingPlayer() {
-    return 0;
+int current_index = 0;
+for(int i = 0; i < game_settings->players->size(); i++){
+    try {
+        int current_id = boost::lexical_cast<int>((*game_settings->players)[current_index]->getID());
+        int next_id = boost::lexical_cast<int>((*game_settings->players)[i]->getID());
+        if(next_id < current_id)
+            current_index = i;
+    }
+    catch (std::exception &e) {
+        /**
+         * TO-DO: REPLACE WITH A PROPER EXCEPTION TO BE CAUGHT BY THE DRIVER
+         */
+        cout << "ERROR COULD NOT DETERMINE STARTING PLAYER! ERROR IN STRING-INT CAST ID NOT NUMERIC" << endl;
+       // terminate application
+        exit(-1);
+    }
+    }
+    return current_index;
 }
 void GameController::playTurn(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
 
+    cout << "Your turn! What would you like to do? "
+            "Enter the number for the move you'd like to make." << endl;
     int tile_option = selectTileOption();
     Player *current = (*game_settings->players)[*current_turn_player];
     /**TO-DO
