@@ -93,7 +93,7 @@ void GameController::playTurn(){
         default: current->placeHarvestTile();
     }
     current->resourceTracker()->printScore();
-    // share the wealth
+    //share the wealth
 }
 
 void GameController::endGame(){

@@ -373,3 +373,11 @@ ResourceTracker::Quad::~Quad(){
     delete current_visit_count;
     delete MAX_VISIT;
 }
+
+inline void ResourceTracker::reset(){
+    score->clear();
+    score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
+    score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WOOD,0));
+    score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
+    score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
+}

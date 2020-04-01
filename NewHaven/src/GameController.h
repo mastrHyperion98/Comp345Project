@@ -28,6 +28,7 @@ private:
     inline ResourceTypes selectResourceType();
     void playShipmentTile(ResourceTypes type, Player *player);
     inline void setOriginalShipmentTile(Player *player);
+    void shareTheWealth();
 };
 
 

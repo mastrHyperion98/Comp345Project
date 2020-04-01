@@ -11,17 +11,18 @@
 
 Setting* Setting::current;
 
-Setting::Setting(){
+Setting::Setting():tracker{new ResourceTracker}{
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
     delete current;
     current = this;
+
 }
 
 Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}{
+    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.resourceTracker()};}{
     // singleton design we dont need any other reference but the current one
     delete current;
     current = this;
@@ -39,6 +40,8 @@ Setting& Setting::operator=(const Setting& setting){
     board = new GBMap(*setting.board);
    if(setting.players != nullptr)
     players = new vector<Player*>(*setting.players);
+
+   *tracker = *setting.tracker;
     current = this;
     return *this;
 };
@@ -47,6 +50,7 @@ Setting::~Setting() {
     delete b_deck;
     delete board;
     delete players;
+    delete tracker;
     current = nullptr;
 }
 
@@ -112,13 +116,7 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
 
 void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
-    for(int i = 0; i < players->size(); i++){
-        Player* it = (*players)[i];
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WOOD,0));
-    }
+    tracker->reset();
     cout << "GAME RESOURCE MARKERS SET SUCCESSFULLY" << endl;
 }
 

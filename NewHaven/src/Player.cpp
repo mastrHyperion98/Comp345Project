@@ -1,10 +1,10 @@
 #include "Setting.h"
 
-Player::Player(string id): id{new string(id)}, village{nullptr}, resource_score{new ResourceTracker()}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+Player::Player(string id): id{new string(id)}, village{nullptr}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
 
 }
 
-Player::Player(const Player &player): id{new string(*player.id)}, resource_score{new ResourceTracker(*player.resource_score)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+Player::Player(const Player &player): id{new string(*player.id)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
     if (player.village != nullptr)
         village = new VGMap(*player.village);
     else
@@ -13,7 +13,6 @@ Player::Player(const Player &player): id{new string(*player.id)}, resource_score
 
 Player::~Player(){
     delete village;
-    delete resource_score;
     delete vb_score;
     delete my_hand;
     delete id;
@@ -26,21 +25,16 @@ Player& Player::operator=(const Player &player) {
     else{
         // use assignment operator overload
         *village = *player.village;
-        *resource_score = *player.resource_score;
         *vb_score = *player.vb_score;
         *my_hand = *player.my_hand;
         *id = *player.id;
     }
     return *this;
 }
-// I'm assuming it just wants to return the resource_tracker
-ResourceTracker* Player::resourceTracker() {
-    // return a copy of the resource score;
-    return resource_score;
-}
+
 
 void Player::calculateResources(ResourceTrails trail) {
-    resource_score->computeScore(trail);
+    Setting::current->tracker->computeScore(trail);
 }
 
 bool Player::buildVillage(){
@@ -107,9 +101,9 @@ bool Player::buildVillage(){
 
 //    Building building = *(*my_hand->buildings)[index];
 //    ResourceTypes type=building.getBuildingType();
-    if(resource_score->hasResources(type, cost)) {
+    if(Setting::current->tracker->hasResources(type, cost)) {
         if(village->setBuilding(pos, &building)) {
-            resource_score->consumeResources(type, cost);
+            Setting::current->tracker->consumeResources(type, cost);
             my_hand->buildings->erase(my_hand->buildings->begin() + index);
             return true;
         }

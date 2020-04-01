@@ -18,6 +18,7 @@ public:
     inline Building* drawBuilding();
     inline HarvestTile* drawHarvestTile();
     static Setting *current;
+    ResourceTracker *tracker;
     GBMap *board;
     vector<Player*>* players;
     bool initSetting();
