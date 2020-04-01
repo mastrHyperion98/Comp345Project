@@ -227,3 +227,11 @@ void Player::setVillage(VGMap v_map) {
 string Player::getID(){
     return *id;
 }
+
+void Player::setShipmentPlayed(){
+    *my_hand->isShipmentPlayed = true;
+}
+
+bool Player::isShipmentPlayed(){
+return *my_hand->isShipmentPlayed;
+}

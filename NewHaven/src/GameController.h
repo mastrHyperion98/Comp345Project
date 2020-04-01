@@ -16,6 +16,7 @@ public:
     void start();
 
 private:
+    ResourceTypes *original_shipment{nullptr};
     Setting *game_settings;
     int *current_turn_player;
     void playTurn();
@@ -23,9 +24,10 @@ private:
     bool hasGameEnded();
     void endGame();
     void restart();
-    inline int selectTileOption();
-    inline int selectResourceType();
-    void playShipmentTile();
+    inline int selectTileOption(bool);
+    inline ResourceTypes selectResourceType();
+    void playShipmentTile(ResourceTypes type, Player *player);
+    inline void setOriginalShipmentTile(Player *player);
 };
 
 

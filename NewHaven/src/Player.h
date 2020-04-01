@@ -14,6 +14,7 @@ public:
     int placeHarvestTile();
     // Used for shipment tile
     int placeShipmentTile();
+
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
     void drawBuilding(Building* building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
@@ -26,9 +27,12 @@ public:
     void setVillage(VGMap);
     // Used to set the shipment tile in Player's hand
     void setShipmentTile(HarvestTile* shipmentTile);
+    void setShipmentContent(ResourceTypes *type);
     // Getter for shipment tile
     HarvestTile* getShipmentTile();
     string getID();
+    void setShipmentPlayed();
+    bool isShipmentPlayed();
 private:
     VGMap *village;
     ResourceTracker *resource_score;

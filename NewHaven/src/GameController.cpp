@@ -80,15 +80,20 @@ void GameController::playTurn(){
 
     cout << "Your turn! What would you like to do? "
             "Enter the number for the move you'd like to make." << endl;
-    int tile_option = selectTileOption();
+
     Player *current = (*game_settings->players)[*current_turn_player];
+    int tile_option = selectTileOption(current->isShipmentPlayed());
     switch(tile_option){
         case 1: current->placeHarvestTile();
         break;
-        case 2: playShipmentTile();
+        // play the shipmentTile
+        case 2:
+            playShipmentTile(selectResourceType(), current);
         break;
         default: current->placeHarvestTile();
     }
+    current->resourceTracker()->printScore();
+    // share the wealth
 }
 
 void GameController::endGame(){
@@ -110,12 +115,13 @@ bool GameController::hasGameEnded(){
     return false;
 }
 
-inline int GameController::selectTileOption() {
+inline int GameController::selectTileOption(bool shipmentPlayed) {
     int choice;
     std::string prompt = "1\tPlay a Harvest tile from your possession"
                          "\n2\tPlay with your Shipment tile."
                          "\nChoice: ";
-    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
+    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2
+            || (choice == 2 &&shipmentPlayed)){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
@@ -124,7 +130,7 @@ inline int GameController::selectTileOption() {
     return choice;
 }
 
-inline int GameController::selectResourceType() {
+inline ResourceTypes GameController::selectResourceType() {
     int choice;
     std::string prompt =  "Which resource type would you like?"
                                   "\n\t1 - Sheep"
@@ -137,21 +143,48 @@ inline int GameController::selectResourceType() {
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
     }
-    return choice;
+
+    ResourceTypes type;
+    if(choice == 1)
+        type = ResourceTypes::SHEEP;
+    else if(choice == 2)
+        type= ResourceTypes::STONE;
+    else if(choice == 3)
+        type = ResourceTypes::WOOD;
+    else
+        type = ResourceTypes::WHEAT;
+    return type;
 }
 
-void GameController::playShipmentTile(){
-  int choice = selectResourceType();
-  ResourceTypes type;
-  if(choice == 1)
-      type = ResourceTypes::SHEEP;
-  else if(choice == 2)
-      type= ResourceTypes::STONE;
-  else if(choice == 3)
-      type = ResourceTypes::WOOD;
-  else
-      type = ResourceTypes::WHEAT;
+inline void GameController::setOriginalShipmentTile(Player *player){
+    original_shipment = player->getShipmentTile()->tileContent;
+}
 
-  ResourceTypes *shipmentResources{new ResourceTypes[4]{type,type,type,type}};
-
+void GameController::playShipmentTile(ResourceTypes type, Player *player){
+    ResourceTypes *tmp_res{new ResourceTypes[4]{type,type,type,type}};
+    setOriginalShipmentTile(player);
+    // player plays the shipment tile.
+    player->getShipmentTile()->tileContent = tmp_res;
+    int pos{0};
+    POSITION:
+    while((cout <<  "position index to place tile: " && !( cin >> pos)) || pos < 0
+          || pos >= (25 + (10 * *Setting::current->board->CONFIG))){
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "That is not a valid tile index" << endl;
+    }
+    // later this will be called from the singleton Game Controller
+    if(Setting::current->board!= nullptr) {
+        if(Setting::current->board->placeHarvestTile(pos, player->getShipmentTile())){
+          player->setShipmentPlayed();
+            // compute resourceTracker using compies
+            player->resourceTracker()->computeScore(*Setting::current->board->getResourcedGraph(pos));
+            // once resource_score is calculated we flip the tile over
+            player->getShipmentTile()->tileContent=original_shipment;
+            original_shipment = nullptr;
+        } else{
+            cout << "Position Index is invalid. It has already been played!"<<endl;
+            goto POSITION;
+        }
+    }
 }
