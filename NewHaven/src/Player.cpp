@@ -227,11 +227,3 @@ void Player::setVillage(VGMap v_map) {
 string Player::getID(){
     return *id;
 }
-
-ResourceTracker Player::getScore(){
-    return *resource_score;
-}
-
-void Player::setScore(ResourceTracker score){
-    *resource_score = score;
-}

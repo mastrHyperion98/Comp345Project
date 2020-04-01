@@ -29,8 +29,6 @@ public:
     // Getter for shipment tile
     HarvestTile* getShipmentTile();
     string getID();
-    ResourceTracker getScore();
-    void setScore(ResourceTracker score);
 private:
     VGMap *village;
     ResourceTracker *resource_score;

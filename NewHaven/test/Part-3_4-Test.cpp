@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Player.h"
 
-int main() {
+void shareWealth() {
     auto *bDeck = new BuildingDeck();
     auto *hDeck = new HarvestDeck();
 
@@ -30,10 +30,10 @@ int main() {
 
     // Calculate Player1 's resource, this is the LEFTOVER resources other players can now use
     (*player1).calculateResources(*trail);
-    ResourceTracker leftover = (*player1).getScore();
+    std::map<ResourceTypes, std::uint_least16_t> leftover{*player1->resourceTracker()->score};
 
     // Now, we're in Player2's turn, as we move clockwise.
-    player2->setScore(leftover);
+    *player2->resourceTracker()->score = leftover;
 
     cout << "Would you like to use the leftover resources to erect a building in your village?" << endl;
 
@@ -52,4 +52,4 @@ int main() {
     else if (move_choice == 2)
         //end turn;
         cout << "Moving on to the next player." << endl;
-}
+};
