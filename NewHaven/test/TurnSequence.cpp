@@ -15,7 +15,7 @@ int main(){
     auto *bDeck = new BuildingDeck();
     auto *hDeck = new HarvestDeck();
 
-    auto *player = new Player(); // Initiate player
+    auto *player = new Player("Player1"); // Initiate player
 
     // Start of the game, each player should have 6 buildings and 2 Harvest Tiles
     for (int i = 0; i < 6; i ++)
