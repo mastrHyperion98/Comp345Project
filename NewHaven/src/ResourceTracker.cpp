@@ -381,3 +381,16 @@ inline void ResourceTracker::reset(){
     score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
     score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
 }
+
+bool ResourceTracker::isEmpty() {
+    int num_empty{0};
+    for(std::map<ResourceTypes, std::uint_least16_t>::iterator it=score->begin(); it!=score->end(); ++it){
+        if(it->second <= 0)
+            num_empty++;
+    }
+
+    if(num_empty == score->size())
+        return true;
+    else
+        return false;
+}

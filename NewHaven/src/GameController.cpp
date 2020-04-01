@@ -83,16 +83,16 @@ void GameController::playTurn(){
 
     Player *current = (*game_settings->players)[*current_turn_player];
     int tile_option = selectTileOption(current->isShipmentPlayed());
-    switch(tile_option){
-        case 1: current->placeHarvestTile();
-        break;
-        // play the shipmentTile
-        case 2:
-            playShipmentTile(selectResourceType(), current);
-        break;
-        default: current->placeHarvestTile();
+    if(tile_option == 1) {
+        int pos{current->placeHarvestTile()};
+        ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
+        game_settings->tracker->computeScore(*trail);
     }
-    current->resourceTracker()->printScore();
+        // play the shipmentTile
+    else if(tile_option == 2)
+        playShipmentTile(selectResourceType(), current);
+
+    game_settings->tracker->printScore();
     //share the wealth
 }
 
@@ -110,7 +110,6 @@ void GameController::restart(){
 bool GameController::hasGameEnded(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-
     // return isGameBoard has only 1 tile left
     return false;
 }
@@ -126,7 +125,6 @@ inline int GameController::selectTileOption(bool shipmentPlayed) {
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
     }
-
     return choice;
 }
 
@@ -143,7 +141,6 @@ inline ResourceTypes GameController::selectResourceType() {
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
     }
-
     ResourceTypes type;
     if(choice == 1)
         type = ResourceTypes::SHEEP;
@@ -155,11 +152,9 @@ inline ResourceTypes GameController::selectResourceType() {
         type = ResourceTypes::WHEAT;
     return type;
 }
-
 inline void GameController::setOriginalShipmentTile(Player *player){
     original_shipment = player->getShipmentTile()->tileContent;
 }
-
 void GameController::playShipmentTile(ResourceTypes type, Player *player){
     ResourceTypes *tmp_res{new ResourceTypes[4]{type,type,type,type}};
     setOriginalShipmentTile(player);
@@ -178,7 +173,7 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
         if(Setting::current->board->placeHarvestTile(pos, player->getShipmentTile())){
           player->setShipmentPlayed();
             // compute resourceTracker using compies
-            player->resourceTracker()->computeScore(*Setting::current->board->getResourcedGraph(pos));
+            game_settings->tracker->computeScore(*Setting::current->board->getResourcedGraph(pos));
             // once resource_score is calculated we flip the tile over
             player->getShipmentTile()->tileContent=original_shipment;
             original_shipment = nullptr;
@@ -187,4 +182,13 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
             goto POSITION;
         }
     }
+}
+
+void GameController::shareTheWealth(){
+    int player_index{0};
+    do{
+        // print out the available resources
+        cout << "Available resources:" << endl;
+        game_settings->tracker->printScore();
+    }while(player_index != *current_turn_player || !game_settings->tracker->isEmpty());
 }
