@@ -18,7 +18,8 @@ Setting::Setting():tracker{new ResourceTracker}{
 }
 
 Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.resourceTracker()};}{
+    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.tracker}
+}{
     // singleton design we dont need any other reference but the current one
 }
 
