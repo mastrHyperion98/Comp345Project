@@ -49,6 +49,7 @@ void GameController::start(){
     while(!hasGameEnded()){
         // PrintGameBoard
         playTurn();
+        *current_turn_player = *current_turn_player % game_settings->players->size();
     }
 
     endGame();
@@ -104,6 +105,7 @@ void GameController::playTurn(){
     game_settings->tracker->printScore();
     current->buildVillage();
     shareTheWealth();
+    game_settings->DrawBuilding(*current_turn_player);
 
 }
 
@@ -182,6 +184,7 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
     // later this will be called from the singleton Game Controller
     if(game_settings->board!= nullptr) {
         if(game_settings->board->placeHarvestTile(pos, player->getShipmentTile())){
+            // print new board config
           player->setShipmentPlayed();
             // compute resourceTracker using compies
             game_settings->tracker->computeScore(*game_settings->board->getResourcedGraph(pos));

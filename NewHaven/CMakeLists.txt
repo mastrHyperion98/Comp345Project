@@ -25,6 +25,7 @@ add_executable(Part1 test/Part1Driver.cpp src/Setting.cpp src/Resources.cpp src/
 add_executable(Part-3_6-Test test/Part-3_6-Test.cpp src/Part-3_6.cpp src/Player.cpp src/GBMap.cpp src/Square.cpp src/Resources.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp src/VGMap.cpp)
 add_executable(TurnSequenceTest test/TurnSequence.cpp src/Player.cpp src/GBMap.cpp src/VGMap.cpp src/Square.cpp src/ResourceTracker.cpp src/ScoreCalculator.cpp src/Resources.cpp)
 add_executable(Part-3_4-Test test/Part-3_4-Test.cpp src/Player.cpp src/GBMap.cpp src/Square.cpp src/Resources.cpp src/ScoreCalculator.cpp src/ResourceTracker.cpp src/VGMap.cpp)
+add_executable(Part2 test/Part2Driver.cpp src/GameController.cpp src/Setting.cpp src/Resources.cpp src/VGMap.cpp src/Player.cpp src/GBMap.cpp src/GBMapLoader.cpp src/Square.cpp src/ResourceTracker.cpp src/ScoreCalculator.cpp src/VGMapLoader.cpp Exceptions/InvalidConfigurationException.cpp Exceptions/BoardConfigurationNotLoaded.cpp src/GameController.cpp Exceptions/UninitializedControllerException.cpp)
 target_link_libraries (PlayerTest ${Boost_LIBRARIES})
 target_link_libraries(MapLoaderTest   ${Boost_LIBRARIES})
 target_link_libraries (VGMap ${Boost_LIBRARIES})

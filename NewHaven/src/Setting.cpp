@@ -80,10 +80,10 @@ void Setting::loadGameBoard(const std::string filepath) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
         }
-    }catch(InvalidConfigurationException ex){
+    }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
         throw ex;
-    }catch(BoardConfigurationNotLoaded ex){
+    }catch(const BoardConfigurationNotLoaded &ex){
         cout << "LOADING FAILED" << endl;
         throw ex;
     }
@@ -97,12 +97,12 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
             cout << "LOADING SUCCESSFUL" << endl;
             return loader.generateVMap();
         }
-    }catch(InvalidConfigurationException ex){
+    }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
-        throw InvalidConfigurationException();
-    }catch(BoardConfigurationNotLoaded ex){
+        throw ex;
+    }catch(const BoardConfigurationNotLoaded &ex){
         cout << "LOADING FAILED" << endl;
-        throw BoardConfigurationNotLoaded();
+        throw ex;
     }
 }
 
@@ -224,11 +224,11 @@ bool Setting::initSetting() {
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
-    }catch(InvalidConfigurationException ex){
+    }catch(const InvalidConfigurationException &ex){
         cerr << ex.what() << endl;
         return false;
     }
-    catch(BoardConfigurationNotLoaded ex){
+    catch(const BoardConfigurationNotLoaded &ex){
         cerr << ex.what() << endl;
         return false;
     }
