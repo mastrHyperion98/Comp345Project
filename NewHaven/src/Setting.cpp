@@ -37,6 +37,8 @@ Setting& Setting::operator=(const Setting& setting){
     players = new vector<Player*>(*setting.players);
 
    *tracker = *setting.tracker;
+
+   return *this;
 };
 Setting::~Setting() {
     delete h_deck;

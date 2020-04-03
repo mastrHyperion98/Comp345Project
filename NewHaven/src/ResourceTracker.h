@@ -20,7 +20,7 @@ public:
     bool consumeResources(ResourceTypes, std::uint_least16_t);
     bool hasResources(ResourceTypes, std::uint_least16_t);
     bool isEmpty();
-    inline void reset();
+    void reset();
     map<ResourceTypes, std::uint_least16_t> getScore();
 private:
     struct Quad{

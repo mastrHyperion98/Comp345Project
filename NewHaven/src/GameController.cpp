@@ -43,9 +43,10 @@ GameController::~GameController(){
 void GameController::start(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-    for(int i = 0; i < 100; i++){
+    for(int i = 0; i < 10; i++){
         cout << "\n"; // clear screen
     }
+    cout << "STARTING PLAYER HAS ID: " << (*game_settings->players)[*current_turn_player]->getID() << endl;
     while(!hasGameEnded()){
         // PrintGameBoard
         playTurn();
