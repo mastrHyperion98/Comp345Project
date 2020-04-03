@@ -17,11 +17,12 @@ public:
     inline int getNumberPlayers();
     inline Building* drawBuilding();
     inline HarvestTile* drawHarvestTile();
-    static Setting *current;
     ResourceTracker *tracker;
     GBMap *board;
     vector<Player*>* players;
     bool initSetting();
+    BuildingDeck& getBuildingDeck();
+    void DrawBuilding(int);
 private:
     HarvestDeck *h_deck;
     BuildingDeck *b_deck;

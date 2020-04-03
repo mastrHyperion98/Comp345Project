@@ -14,10 +14,10 @@ public:
     ~GameController();
     bool initialize();
     void start();
-
+    static GameController *current;
+    Setting *game_settings;
 private:
     ResourceTypes *original_shipment{nullptr};
-    Setting *game_settings;
     int *current_turn_player;
     void playTurn();
     int startingPlayer();
@@ -29,6 +29,7 @@ private:
     void playShipmentTile(ResourceTypes type, Player *player);
     inline void setOriginalShipmentTile(Player *player);
     void shareTheWealth();
+
 };
 
 

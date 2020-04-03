@@ -8,11 +8,18 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+
+GameController* GameController::current;
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
+    // singleton only one instance allowed
+    delete current;
+    current = this;
 }
 
 GameController::GameController(const GameController& controller):
 current_turn_player{new int(*controller.current_turn_player)},  game_settings{nullptr}{
+    delete current;
+    current = this;
 }
 
 GameController& GameController::operator=(const GameController &controller) {
@@ -30,6 +37,7 @@ GameController& GameController::operator=(const GameController &controller) {
 GameController::~GameController(){
     delete game_settings;
     delete current_turn_player;
+    current = nullptr;
 }
 
 void GameController::start(){
@@ -92,8 +100,11 @@ void GameController::playTurn(){
     else if(tile_option == 2)
         playShipmentTile(selectResourceType(), current);
 
+    cout << "Available resources:" << endl;
     game_settings->tracker->printScore();
-    //share the wealth
+    current->buildVillage();
+    shareTheWealth();
+
 }
 
 void GameController::endGame(){
@@ -163,17 +174,17 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
     int pos{0};
     POSITION:
     while((cout <<  "position index to place tile: " && !( cin >> pos)) || pos < 0
-          || pos >= (25 + (10 * *Setting::current->board->CONFIG))){
+          || pos >= (25 + (10 * *game_settings->board->CONFIG))){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "That is not a valid tile index" << endl;
     }
     // later this will be called from the singleton Game Controller
-    if(Setting::current->board!= nullptr) {
-        if(Setting::current->board->placeHarvestTile(pos, player->getShipmentTile())){
+    if(game_settings->board!= nullptr) {
+        if(game_settings->board->placeHarvestTile(pos, player->getShipmentTile())){
           player->setShipmentPlayed();
             // compute resourceTracker using compies
-            game_settings->tracker->computeScore(*Setting::current->board->getResourcedGraph(pos));
+            game_settings->tracker->computeScore(*game_settings->board->getResourcedGraph(pos));
             // once resource_score is calculated we flip the tile over
             player->getShipmentTile()->tileContent=original_shipment;
             original_shipment = nullptr;
@@ -185,10 +196,29 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
 }
 
 void GameController::shareTheWealth(){
-    int player_index{0};
+    int player_index{static_cast<int>((*current_turn_player + 1) % game_settings->players->size())};
     do{
         // print out the available resources
         cout << "Available resources:" << endl;
         game_settings->tracker->printScore();
+        // prompt user to action
+        string prompt = "Would you like to use the leftover resources to erect a building in your village?"
+                        "\n1\tErect a building.\n2\tPass\nChoice: ";
+        int choice{0};
+        while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
+            cin.clear(); // reset failbit
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "This is not a valid move. Select either 1 or 2:" << endl;
+        }
+        // call build village for that user
+        if(choice == 1){
+            (*game_settings->players)[player_index]->buildVillage();
+        }
+        cout << "Leftover resources:" << endl;
+        game_settings->tracker->printScore();
+
+        player_index = ++player_index % game_settings->players->size();
+
     }while(player_index != *current_turn_player || !game_settings->tracker->isEmpty());
 }
+

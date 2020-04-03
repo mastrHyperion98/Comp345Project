@@ -9,23 +9,17 @@
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "iostream"
 
-Setting* Setting::current;
-
 Setting::Setting():tracker{new ResourceTracker}{
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
-    delete current;
-    current = this;
 
 }
 
 Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
     board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.resourceTracker()};}{
     // singleton design we dont need any other reference but the current one
-    delete current;
-    current = this;
 }
 
 Setting& Setting::operator=(const Setting& setting){
@@ -42,8 +36,6 @@ Setting& Setting::operator=(const Setting& setting){
     players = new vector<Player*>(*setting.players);
 
    *tracker = *setting.tracker;
-    current = this;
-    return *this;
 };
 Setting::~Setting() {
     delete h_deck;
@@ -51,7 +43,6 @@ Setting::~Setting() {
     delete board;
     delete players;
     delete tracker;
-    current = nullptr;
 }
 
 void Setting::setupPlayers(const int numberOfPlayers) {
@@ -243,3 +234,89 @@ bool Setting::initSetting() {
     return true;
 }
 
+
+void Setting::DrawBuilding(int player_index)
+{
+    if(player_index < 0 || player_index > players->size())
+        throw std::exception();
+
+    std::uint_fast8_t buildingCountToDraw{ 4 };
+
+    for (std::pair<ResourceTypes, std::uint_fast16_t> const& element: tracker->getScore())
+    {
+        if (element.second != 0)
+            buildingCountToDraw--;
+    }
+
+    bool loopPool{ true };
+
+    for (std::uint_fast8_t i = 0; i < buildingCountToDraw; i++)
+    {
+        std::uint_fast16_t buildingIndex;
+        char input;
+
+        if (loopPool)
+        {
+            std::cout << "\nEnter building card index to draw from the pool: ";
+
+            try
+            {
+                std::cin >> buildingIndex;
+                std::cout << '\n';
+
+                if (std::cin.fail() || buildingIndex <= 0 || buildingIndex > b_deck->getBuildingPoolSize())
+                    throw std::exception();
+
+                loopPool = false;
+                (*players)[player_index]->drawBuildingPool(b_deck->buildingPoolDraw(buildingIndex - 1));
+                continue;
+            }
+            catch (const std::exception&)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "\nThe input was invalid, please enter a valid index.\n";
+                i--;
+                continue;
+            }
+        }
+
+        std::cout << "\nDo you want to pick another card from the pool? (y/n): ";
+        try
+        {
+            std::cin >> input;
+            std::cout << '\n';
+
+            if (input == 'y' || input == 'Y')
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                loopPool = true;
+                i--;
+                continue;
+            }
+            else if (input == 'n' || input == 'N')
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                loopPool = false;
+            }
+            else
+            {
+                throw std::exception();
+            }
+        }
+        catch (const std::exception& e)
+        {
+
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "\nInvalid input, try again.\n";
+            i--;
+            continue;
+        }
+
+        (*players)[player_index]->drawBuilding(b_deck->draw());
+    }
+    b_deck->fillBuildingPool();
+}

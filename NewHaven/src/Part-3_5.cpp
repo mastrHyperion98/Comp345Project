@@ -1,4 +1,6 @@
 #include "./Part-3_5.h"
+#include "Setting.h"
+#include "GameController.h"
 #include <iostream>
 
 BuildingDeck bd;
@@ -7,7 +9,7 @@ void DrawBuilding(Player& player)
 {
 	std::uint_fast8_t buildingCountToDraw{ 4 };
 
-	for (std::pair<ResourceTypes, std::uint_fast16_t> const& element: *player.resourceTracker().score)
+	for (std::pair<ResourceTypes, std::uint_fast16_t> const& element: GameController::current->game_settings->tracker->getScore())
 	{
 		if (element.second != 0)
 			buildingCountToDraw--;

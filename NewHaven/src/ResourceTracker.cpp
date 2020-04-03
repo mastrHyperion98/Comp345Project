@@ -31,7 +31,8 @@ ResourceTracker& ResourceTracker::operator=(const ResourceTracker& scores){
     return *this;
 }
 void ResourceTracker::computeScore(ResourceTrails trail) {
-    score->clear();
+    // reset the score to be 0,0,0,0
+    reset();
     // setup -- first step is to add the elements of the main root to the total for each resources
     deque<NodeID> queue;
     Map map;
@@ -394,3 +395,7 @@ bool ResourceTracker::isEmpty() {
     else
         return false;
 }
+
+map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
+    return *score;
+};

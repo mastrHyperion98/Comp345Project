@@ -1,4 +1,5 @@
 #include "Setting.h"
+#include "GameController.h"
 
 Player::Player(string id): id{new string(id)}, village{nullptr}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
 
@@ -34,7 +35,7 @@ Player& Player::operator=(const Player &player) {
 
 
 void Player::calculateResources(ResourceTrails trail) {
-    Setting::current->tracker->computeScore(trail);
+    GameController::current->game_settings->tracker->computeScore(trail);
 }
 
 bool Player::buildVillage(){
@@ -101,9 +102,9 @@ bool Player::buildVillage(){
 
 //    Building building = *(*my_hand->buildings)[index];
 //    ResourceTypes type=building.getBuildingType();
-    if(Setting::current->tracker->hasResources(type, cost)) {
+    if(GameController::current->game_settings->tracker->hasResources(type, cost)) {
         if(village->setBuilding(pos, &building)) {
-            Setting::current->tracker->consumeResources(type, cost);
+            GameController::current->game_settings->tracker->consumeResources(type, cost);
             my_hand->buildings->erase(my_hand->buildings->begin() + index);
             return true;
         }
@@ -139,15 +140,15 @@ int Player::placeHarvestTile() {
 
     POSITION:
     while((cout <<  "position index to place tile: " && !( cin >> pos)) || pos < 0
-    || pos >= (25 + (10 * *Setting::current->board->CONFIG))){
+    || pos >= (25 + (10 * *GameController::current->game_settings->board->CONFIG))){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "That is not a valid tile index" << endl;
     }
 
     // later this will be called from the singleton Game Controller
-    if(Setting::current->board!= nullptr) {
-        if(Setting::current->board->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile])) {
+    if(GameController::current->game_settings->board!= nullptr) {
+        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile])) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + index_tile);
             return pos;
         } else{
@@ -167,8 +168,8 @@ int Player::placeShipmentTile() {
     cin >> pos;
 
     // later this will be called from the singleton Game Controller
-    if(Setting::current->board != nullptr) {
-        if(Setting::current->board->placeHarvestTile(pos, (*my_hand->harvestTiles).back())) {
+    if(GameController::current->game_settings->board != nullptr) {
+        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles).back())) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->end());
             return pos;
         }

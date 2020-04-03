@@ -21,6 +21,7 @@ public:
     bool hasResources(ResourceTypes, std::uint_least16_t);
     bool isEmpty();
     inline void reset();
+    map<ResourceTypes, std::uint_least16_t> getScore();
 private:
     struct Quad{
         Quad();
