@@ -43,7 +43,7 @@ GameController::~GameController(){
 void GameController::start(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 25; i++){
         cout << "\n"; // clear screen
     }
     cout << "STARTING PLAYER HAS ID: " << (*game_settings->players)[*current_turn_player]->getID() << endl;
@@ -87,7 +87,13 @@ for(int i = 0; i < game_settings->players->size(); i++){
 void GameController::playTurn(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-
+    // Print board ID configuration
+    cout << "***GAME BOARD ID CONFIGURATION***" << endl;
+    game_settings->board->printIndexConfiguration();
+    cout << endl;
+    cout << "***GAME BOARD CONTENT***" << endl;
+    game_settings->board->printBoard();
+    cout << endl;
     cout << "Your turn! What would you like to do? "
             "Enter the number for the move you'd like to make." << endl;
 
@@ -102,6 +108,8 @@ void GameController::playTurn(){
     else if(tile_option == 2)
         playShipmentTile(selectResourceType(), current);
 
+    cout << "***UPDATED GAME BOARD CONTENT***" << endl;
+    game_settings->board->printBoard();
     cout << "Available resources:" << endl;
     game_settings->tracker->printScore();
     current->buildVillage();
