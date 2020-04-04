@@ -397,9 +397,9 @@ void Hand::printHarvestTiles()
 		for (std::uint_fast16_t i{ 0 }; i < harvestTiles->size(); ++i)
 		{
 			if (j == 0)
-				std::cout << i << ".\t" << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+				std::cout << i + 1 << ".\t" << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
 			else
-				std::cout << '\t' << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+				std::cout << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << '\t' << (*harvestTiles)[i]->tileContent[j] << "\t\t";
 		}
 
 		std::cout << '\n';
