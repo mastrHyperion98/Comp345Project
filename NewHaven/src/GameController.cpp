@@ -85,6 +85,8 @@ for(int i = 0; i < game_settings->players->size(); i++){
     return current_index;
 }
 void GameController::playTurn(){
+    int pos{-1};
+    bool shipmentPlayed{false};
     if(game_settings == nullptr)
         throw UninitializedControllerException();
     // Print board ID configuration
@@ -98,24 +100,32 @@ void GameController::playTurn(){
             "Enter the number for the move you'd like to make." << endl;
 
     Player *current = (*game_settings->players)[*current_turn_player];
-    int tile_option = selectTileOption(current->isShipmentPlayed());
+    int tile_option = selectTileOption();
     if(tile_option == 1) {
-        int pos{current->placeHarvestTile()};
+        pos=current->placeHarvestTile();
         ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
         game_settings->tracker->computeScore(*trail);
     }
         // play the shipmentTile
-    else if(tile_option == 2)
-        playShipmentTile(selectResourceType(), current);
+    else if(tile_option == 2){
+        pos = playShipmentTile(selectResourceType(), current);
+        shipmentPlayed = true;
+    }
 
     cout << "***UPDATED GAME BOARD CONTENT***" << endl;
     game_settings->board->printBoard();
     cout << "Available resources:" << endl;
     game_settings->tracker->printScore();
-    current->buildVillage();
-    shareTheWealth();
-    game_settings->DrawBuilding(*current_turn_player);
 
+    current->buildVillage();
+    //shareTheWealth();
+   //game_settings->DrawBuilding(*current_turn_player);
+
+    if(shipmentPlayed){
+        delete game_settings->board->getHarvestTile(pos)->tileContent;
+        game_settings->board->getHarvestTile(pos)->tileContent = original_shipment;
+        shipmentPlayed = false;
+    }
 }
 
 void GameController::endGame(){
@@ -136,13 +146,13 @@ bool GameController::hasGameEnded(){
     return false;
 }
 
-inline int GameController::selectTileOption(bool shipmentPlayed) {
+inline int GameController::selectTileOption() {
     int choice;
     std::string prompt = "1\tPlay a Harvest tile from your possession"
                          "\n2\tPlay with your Shipment tile."
                          "\nChoice: ";
     while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2
-            || (choice == 2 &&shipmentPlayed)){
+            || (choice == 2 && (*game_settings->players)[*current_turn_player]->getShipmentTile() == nullptr)){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
@@ -177,7 +187,7 @@ inline ResourceTypes GameController::selectResourceType() {
 inline void GameController::setOriginalShipmentTile(Player *player){
     original_shipment = player->getShipmentTile()->tileContent;
 }
-void GameController::playShipmentTile(ResourceTypes type, Player *player){
+int GameController::playShipmentTile(ResourceTypes type, Player *player){
     ResourceTypes *tmp_res{new ResourceTypes[4]{type,type,type,type}};
     setOriginalShipmentTile(player);
     // player plays the shipment tile.
@@ -194,17 +204,16 @@ void GameController::playShipmentTile(ResourceTypes type, Player *player){
     if(game_settings->board!= nullptr) {
         if(game_settings->board->placeHarvestTile(pos, player->getShipmentTile())){
             // print new board config
-          player->setShipmentPlayed();
+            player->setShipmentPlayed();
             // compute resourceTracker using compies
             game_settings->tracker->computeScore(*game_settings->board->getResourcedGraph(pos));
             // once resource_score is calculated we flip the tile over
-            player->getShipmentTile()->tileContent=original_shipment;
-            original_shipment = nullptr;
         } else{
             cout << "Position Index is invalid. It has already been played!"<<endl;
             goto POSITION;
         }
     }
+    return pos;
 }
 
 void GameController::shareTheWealth(){

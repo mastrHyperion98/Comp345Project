@@ -224,9 +224,6 @@ string Player::getID(){
 }
 
 void Player::setShipmentPlayed(){
-    *my_hand->isShipmentPlayed = true;
+    my_hand->shipment = nullptr;
 }
 
-bool Player::isShipmentPlayed(){
-return *my_hand->isShipmentPlayed;
-}

@@ -24,9 +24,9 @@ private:
     bool hasGameEnded();
     void endGame();
     void restart();
-    inline int selectTileOption(bool);
+    inline int selectTileOption();
     inline ResourceTypes selectResourceType();
-    void playShipmentTile(ResourceTypes type, Player *player);
+    int playShipmentTile(ResourceTypes type, Player *player);
     inline void setOriginalShipmentTile(Player *player);
     void shareTheWealth();
 

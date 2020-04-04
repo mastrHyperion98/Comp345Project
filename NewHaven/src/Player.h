@@ -29,7 +29,6 @@ public:
     // Getter for shipment tile
     HarvestTile* getShipmentTile();
     void setShipmentPlayed();
-    bool isShipmentPlayed();
     string getID();
 private:
     VGMap *village;

@@ -97,5 +97,4 @@ It's contains a vector for tiles and building cards.
 std::vector<HarvestTile*>* harvestTiles;
 HarvestTile* shipment;
 std::vector<Building*>* buildings;
-bool *isShipmentPlayed;
 };

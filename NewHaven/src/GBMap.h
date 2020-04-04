@@ -32,6 +32,7 @@ public:
     void printIndexConfiguration();
     bool addBuildingToBoard(Building &building);
     Building* drawBuildingFromBoard(int position);
+    HarvestTile* getHarvestTile(int);
 
 private:
     GameBoard* board;

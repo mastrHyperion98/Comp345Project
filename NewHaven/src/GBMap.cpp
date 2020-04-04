@@ -386,9 +386,9 @@ void GBMap::assignDefaultTiles() {
             *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
             *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, bl);
+            placeHarvestTile(20, br);
             *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, br);
+            placeHarvestTile(24, bl);
             *(*board)[24].isPlayed = true;
             break;
         case 1:
@@ -399,9 +399,9 @@ void GBMap::assignDefaultTiles() {
             *(*board)[5].isPlayed = true;
             placeHarvestTile(9,tr);
             *(*board)[9].isPlayed = true;
-            placeHarvestTile(25, bl);
+            placeHarvestTile(25, br);
             *(*board)[25].isPlayed = true;
-            placeHarvestTile(29, br);
+            placeHarvestTile(29, bl);
             *(*board)[29].isPlayed = true;
             break;
         case 2:
@@ -412,9 +412,9 @@ void GBMap::assignDefaultTiles() {
             *(*board)[6].isPlayed = true;
             placeHarvestTile(10,tr);
             *(*board)[10].isPlayed = true;
-            placeHarvestTile(34, bl);
+            placeHarvestTile(34, br);
             *(*board)[34].isPlayed = true;
-            placeHarvestTile(38, br);
+            placeHarvestTile(38, bl);
             *(*board)[38].isPlayed = true;
             break;
         default:
@@ -425,9 +425,9 @@ void GBMap::assignDefaultTiles() {
             *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
             *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, bl);
+            placeHarvestTile(20, br);
             *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, br);
+            placeHarvestTile(24, bl);
             *(*board)[24].isPlayed = true;
             break;
     }
@@ -442,4 +442,8 @@ string GBMap::castResourceTypesToString(ResourceTypes type){
         return "ST";
     else
         return "WT";
+}
+
+HarvestTile * GBMap::getHarvestTile(int position) {
+    return (*board)[position].tile;
 }
