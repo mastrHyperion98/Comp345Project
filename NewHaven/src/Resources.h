@@ -78,6 +78,7 @@ public:
 
 	Building* draw();
 	Building* buildingPoolDraw(const std::uint_least8_t&);
+	void printBuildingPool();
 	void fillBuildingPool();
 };
 

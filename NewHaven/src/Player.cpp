@@ -39,6 +39,10 @@ void Player::calculateResources(ResourceTrails trail) {
 }
 
 bool Player::buildVillage(){
+
+    PRINT_HAND:
+    cout << "Available resources:" << endl;
+    GameController::current->game_settings->tracker->printScore();
     for(int i = 0; i < my_hand->buildings->size(); i++){
         cout << "building index: " << i +1<< " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
         << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
@@ -110,7 +114,21 @@ bool Player::buildVillage(){
         if(village->setBuilding(pos, &building)) {
             GameController::current->game_settings->tracker->consumeResources(type, cost);
             my_hand->buildings->erase(my_hand->buildings->begin() + index);
-            return true;
+
+            int restart{0};
+            std::string prompt = "Select one of the options below: "
+                                 "\n1\tPlay another building from your possession"
+                                 "\n2\tDone building."
+                                 "\nChoice: ";
+            while((cout <<  prompt && !(cin >> restart))||restart< 1 || restart > 2){
+                cin.clear(); // reset failbit
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cout << "This is not a valid move. Try again!:" << endl;
+            }
+            if(restart == 1)
+                goto PRINT_HAND;
+            else
+                return true;
         }
         else{
             cin.clear(); // reset failbit

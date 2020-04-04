@@ -307,7 +307,13 @@ std::uint_least8_t BuildingDeck::getBuildingPoolSize() const
 {
 	return buildingPoolContent->size();
 }
-
+void BuildingDeck::printBuildingPool() {
+    std::cout << "\n***Building Pool Content***\n" << std::endl;
+    for(int i = 0; i < buildingPoolContent->size(); i++){
+        std::cout << "building index: " << i +1<< " type\t" <<  (* buildingPoolContent)[i]->getBuildingType() << " cost: "
+             << static_cast<int>((* buildingPoolContent)[i]->getBuildingNumber()) << std::endl;
+    }
+}
 Building* BuildingDeck::draw()
 {
 	std::srand(time(NULL) + std::rand());	//Different seed every execution

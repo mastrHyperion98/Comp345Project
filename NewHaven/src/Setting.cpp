@@ -237,7 +237,11 @@ bool Setting::initSetting() {
     return true;
 }
 
-
+// Slightly altered version from DrawBuilding found in Part3.5
+/*
+ * Iteration of user interactions to fill their hands with new buildings based on the position of the resource
+ * markers
+ */
 void Setting::DrawBuilding(int player_index)
 {
     if(player_index < 0 || player_index > players->size())
@@ -251,6 +255,9 @@ void Setting::DrawBuilding(int player_index)
             buildingCountToDraw--;
     }
 
+    // print buildigs available
+
+
     bool loopPool{ true };
 
     for (std::uint_fast8_t i = 0; i < buildingCountToDraw; i++)
@@ -260,6 +267,7 @@ void Setting::DrawBuilding(int player_index)
 
         if (loopPool)
         {
+            b_deck->printBuildingPool();
             std::cout << "\nEnter building card index to draw from the pool: ";
 
             try
@@ -319,7 +327,9 @@ void Setting::DrawBuilding(int player_index)
             continue;
         }
 
+
         (*players)[player_index]->drawBuilding(b_deck->draw());
+        std::cout << "A card was drawn from the deck!" << endl;
     }
     b_deck->fillBuildingPool();
 }
