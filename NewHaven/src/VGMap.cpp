@@ -116,8 +116,8 @@ void VGMap::PrintGraph() {
     // here we are going to print the graph
     // content of row | row value
     // column value|
-    string spacer = "    ";
-    string inner_spacer ="  ";
+    const string spacer = "    ";
+    const string inner_spacer ="  ";
     cout << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << endl;
     cout << "------------" << "-------------------------------------------------------------" << endl;
     int num_row{0};
