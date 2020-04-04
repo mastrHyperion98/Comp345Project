@@ -90,6 +90,7 @@ Hand(const Hand& hand);
 Hand& operator=(const Hand& hand);
 ~Hand();
 void printHarvestTiles();
+void printBuildings();
 /*
 Every player is supposed to have a hand.
 It's contains a vector for tiles and building cards.

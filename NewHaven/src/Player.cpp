@@ -44,15 +44,13 @@ bool Player::buildVillage(){
         village->PrintGraph();
         cout << "Available resources:" << endl;
         GameController::current->game_settings->tracker->printScore();
-        for (int i = 0; i < my_hand->buildings->size(); i++) {
-            cout << "building index: " << i + 1 << " type\t" << (*my_hand->buildings)[i]->getBuildingType() << " cost: "
-                 << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
-        }
+        printBuildingCards();
+
         SELECT_BUILDING:
         int index;
         bool valid = false;
         do {
-            cout << "Building index to play (0 to skip): ";
+            cout << "\nBuilding index to play (0 to skip): ";
             cin >> index;
             if (cin.good()) {
                 valid = true;
@@ -67,7 +65,7 @@ bool Player::buildVillage(){
             return false;
 
         index--;
-        POSITION:
+
         int pos;
         bool pValid = false;
         do {
@@ -78,7 +76,7 @@ bool Player::buildVillage(){
             } else {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Invalid pos; please re-enter" << endl;
+                cout << "Invalid position; please re-enter" << endl;
             }
         } while (!pValid || pos < 0 || pos >= 30);
 
@@ -87,10 +85,10 @@ bool Player::buildVillage(){
 
         int flipped;
 
-        cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): " << endl;
+        cout << "\nDo you want to place the building face up or face down? (0 for face up or 1 for face down): ";
         cin >> flipped;
         while (cin.fail() || flipped > 1 || flipped < 0) {
-            cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): "
+            cout << "\n Invalid input. Enter number 0 or 1. (0 for face up or 1 for face down): "
                  << endl;
             cin.clear();
             std::cin.ignore(256, '\n');
@@ -117,7 +115,7 @@ bool Player::buildVillage(){
                 my_hand->buildings->erase(my_hand->buildings->begin() + index);
 
                 int restart{0};
-                std::string prompt = "Select one of the options below: "
+                std::string prompt = "\nSelect one of the options below: "
                                      "\n1\tPlay another building from your possession"
                                      "\n2\tDone building."
                                      "\nChoice: ";
@@ -130,8 +128,8 @@ bool Player::buildVillage(){
             } else {
                 cin.clear(); // reset failbit
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cout << "ERROR cannot play building in that position. Costs do not match!" << endl;
-                goto POSITION;
+                cout << "ERROR cannot play building in that position." << endl;
+                goto SELECT_BUILDING;
             }
         } else {
             cin.clear(); // reset failbit
@@ -144,9 +142,6 @@ bool Player::buildVillage(){
 }
 
 int Player::placeHarvestTile() {
-
-    // print hand
-    my_hand->printHarvestTiles();
 
     int index_tile;
     int pos;
@@ -246,3 +241,12 @@ void Player::setShipmentPlayed(){
     my_hand->shipment = nullptr;
 }
 
+void Player::printHarvestCards()
+{
+    my_hand->printHarvestTiles();
+}
+
+void Player::printBuildingCards()
+{
+    my_hand->printBuildings();
+}

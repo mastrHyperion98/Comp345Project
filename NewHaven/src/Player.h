@@ -31,6 +31,8 @@ public:
     HarvestTile* getShipmentTile();
     void setShipmentPlayed();
     string getID();
+    void printHarvestCards();
+    void printBuildingCards();
 private:
     VGMap *village;
     ScoreCalculator *vb_score;

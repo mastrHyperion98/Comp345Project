@@ -409,3 +409,11 @@ void Hand::printHarvestTiles()
 		j += 2;
 	}
 }
+
+void Hand::printBuildings()
+{
+	for (int i = 0; i < buildings->size(); i++) {
+		std::cout << "\nbuilding index: " << i + 1 << " type\t" << (*buildings)[i]->getBuildingType() << "\tcost: "
+			<< static_cast<int>((*buildings)[i]->getBuildingNumber()) << '\n';
+	}
+}
