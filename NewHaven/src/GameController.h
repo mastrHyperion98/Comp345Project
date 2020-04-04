@@ -9,8 +9,8 @@
 class GameController {
 public:
     GameController();
-    GameController(const GameController & controller);
-    GameController& operator=(const GameController& controller);
+    GameController(const GameController & controller) = delete;
+    GameController& operator=(const GameController& controller) = delete;
     ~GameController();
     bool initialize();
     void start();

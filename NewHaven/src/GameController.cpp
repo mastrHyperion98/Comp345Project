@@ -23,24 +23,7 @@ GameController::GameController():current_turn_player{new int(0)}, game_settings{
     delete current;
     current = this;
 }
-// parametrized constructor
-GameController::GameController(const GameController& controller):
-current_turn_player{new int(*controller.current_turn_player)},  game_settings{nullptr}{
-    delete current;
-    current = this;
-}
-// assignment operator overlaod
-GameController& GameController::operator=(const GameController &controller) {
-    if(this == &controller)
-        return *this;
-    *current_turn_player = *controller.current_turn_player;
-    if(game_settings == nullptr && controller.game_settings != nullptr)
-        game_settings=new Setting(*controller.game_settings);
-    else if(game_settings != nullptr && controller.game_settings != nullptr)
-        *game_settings = *controller.game_settings;
 
-    return *this;
-}
 // destructor
 GameController::~GameController(){
     delete game_settings;
@@ -87,40 +70,54 @@ for(int i = 0; i < game_settings->players->size(); i++){
        // terminate application
         exit(-1);
     }
-    }
+}
     return current_index;
 }
 //  playTurn function that executes the turn of the current player and all the user
 // interaction needed to complete it
 void GameController::playTurn(){
-    int pos{-1};
+    int pos;
+    Player *current = (*game_settings->players)[*current_turn_player];
     bool shipmentPlayed{false};
+
     if(game_settings == nullptr)
         throw UninitializedControllerException();
     // Print board ID configuration
-    cout << "***GAME BOARD ID CONFIGURATION***" << endl;
+    cout << "\n***GAME BOARD ID CONFIGURATION***" << endl;
     game_settings->board->printIndexConfiguration();
-    cout << endl;
-    cout << "***GAME BOARD CONTENT***" << endl;
+    cout << "\n***GAME BOARD CONTENT***" << endl;
     game_settings->board->printBoard();
-    cout << endl;
-    cout << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
-            "Enter the number for the move you'd like to make." << endl;
+    cout << "Here are your building cards:";
+    current->printBuildingCards();
+    cout << "\nHere are your Harvest Tiles:";
+    current->printHarvestCards();
+    cout << '\n';
 
-    Player *current = (*game_settings->players)[*current_turn_player];
-    int tile_option = selectTileOption();
-    if(tile_option == 1) {
-        pos=current->placeHarvestTile();
-        ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
+    if (current->getShipmentTile() != nullptr)
+    {
+        cout << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
+                "Enter the number for the move you'd like to make." << endl;
+
+        int tile_option = selectTileOption();
+        if(tile_option == 1) {
+            pos=current->placeHarvestTile();
+            ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
+            game_settings->tracker->computeScore(*trail);
+        }
+            // play the shipmentTile
+        else if(tile_option == 2){
+            pos = playShipmentTile(selectResourceType(), current);
+            shipmentPlayed = true;
+        }
+    }
+    else
+    {
+        pos = current->placeHarvestTile();
+        ResourceTrails* trail = game_settings->board->getResourcedGraph(pos);
         game_settings->tracker->computeScore(*trail);
     }
-        // play the shipmentTile
-    else if(tile_option == 2){
-        pos = playShipmentTile(selectResourceType(), current);
-        shipmentPlayed = true;
-    }
 
-    cout << "***UPDATED GAME BOARD CONTENT***" << endl;
+    cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
     game_settings->board->printBoard();
     // current player builds his village
     current->buildVillage();
@@ -160,8 +157,7 @@ inline int GameController::selectTileOption() {
     std::string prompt = "1\tPlay a Harvest tile from your possession"
                          "\n2\tPlay with your Shipment tile."
                          "\nChoice: ";
-    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2
-            || (choice == 2 && (*game_settings->players)[*current_turn_player]->getShipmentTile() == nullptr)){
+    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
         cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "This is not a valid move. Select either:" << endl;
@@ -171,7 +167,7 @@ inline int GameController::selectTileOption() {
 
 inline ResourceTypes GameController::selectResourceType() {
     int choice;
-    std::string prompt =  "Which resource type would you like?"
+    std::string prompt =  "\nWhich resource type would you like?"
                                   "\n\t1 - Sheep"
                                   "\n\t2 - Stone"
                                   "\n\t3 - Wood\n"
@@ -239,7 +235,9 @@ void GameController::shareTheWealth(){
     do{
         // print out the available resources
         // prompt user to action
-        string prompt = (*game_settings->players)[player_index]->getID() + " Would you like to use the leftover resources to erect a building in your village?"
+        cout << "\nLeftover resources:" << endl;
+        game_settings->tracker->printScore();
+        string prompt = '\n' + (*game_settings->players)[player_index]->getID() + " Would you like to use the leftover resources to erect a building in your village?"
                         "\n1\tErect a building.\n2\tPass\nChoice: ";
         int choice{0};
         while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
@@ -251,9 +249,6 @@ void GameController::shareTheWealth(){
         if(choice == 1){
             (*game_settings->players)[player_index]->buildVillage();
         }
-
-        cout << "Leftover resources:" << endl;
-        game_settings->tracker->printScore();
 
         player_index = ++player_index % game_settings->players->size();
 
