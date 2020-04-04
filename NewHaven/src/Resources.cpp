@@ -392,6 +392,8 @@ Hand::~Hand()
 
 void Hand::printHarvestTiles()
 {
+	std::cout << '\n';
+
 	for (std::uint_fast8_t j{ 0 }; j < 3;)
 	{
 		for (std::uint_fast16_t i{ 0 }; i < harvestTiles->size(); ++i)
