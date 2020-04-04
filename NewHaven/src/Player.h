@@ -1,3 +1,4 @@
+#pragma once
 #include "VGMap.h"
 #include "Resources.h"
 #include "ScoreCalculator.h"
