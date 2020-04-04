@@ -146,16 +146,12 @@ bool Player::buildVillage(){
 int Player::placeHarvestTile() {
 
     // print hand
-    for(int i = 0; i < my_hand->harvestTiles->size(); i++){
-        cout << "tile index: " << i << " content\t" <<  (*my_hand->harvestTiles)[i]->getTileContent()[0] << " , "
-        << (*my_hand->harvestTiles)[i]->getTileContent()[1] << " , "<< (*my_hand->harvestTiles)[i]->getTileContent()[2]
-        << " , " << (*my_hand->harvestTiles)[i]->getTileContent()[3] << endl;
-    }
+    my_hand->printHarvestTiles();
 
     int index_tile;
     int pos;
 
-    while((cout <<  "Tile index to place: " && !(cin >> index_tile))||index_tile < 0 || index_tile >= my_hand->harvestTiles->size()){
+    while((cout <<  "Tile index to place: " && !(cin >> index_tile))||index_tile < 1 || index_tile >= my_hand->harvestTiles->size() + 1){
           cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "That is not a valid tile index" << endl;
@@ -171,8 +167,8 @@ int Player::placeHarvestTile() {
 
     // later this will be called from the singleton Game Controller
     if(GameController::current->game_settings->board!= nullptr) {
-        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile])) {
-            my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + index_tile);
+        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile - 1])) {
+            my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + (index_tile - 1));
             return pos;
         } else{
             cout << "Position Index is invalid. It has already been played!"<<endl;
