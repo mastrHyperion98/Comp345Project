@@ -18,8 +18,8 @@ Setting::Setting():tracker{new ResourceTracker}{
 }
 
 Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.tracker}
-}{
+    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.tracker}}
+{
     // singleton design we dont need any other reference but the current one
 }
 
@@ -208,21 +208,19 @@ bool Setting::initSetting() {
         setupPlayers(number_players);
         int file_index = 0;
         for(int i = 0; i < players->size(); i++){
-            Player* it = (*players)[i];
-            it->setVillage(loadVillageMap(v_files[file_index]));
+            (*players)[i]->setVillage(loadVillageMap(v_files[file_index]));
             file_index++;
         }
         resourceTracker();
         createBuildingDeck();
         createHarvestDeck();
         for(int i = 0; i < players->size(); i++){
-            Player* it = (*players)[i];
             cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
-            for (int i = 0; i < 5; i++)
-                it->drawBuilding(drawBuilding());
+            for (int j = 0; j < 5; j++)
+                (*players)[i]->drawBuilding(drawBuilding());
             for (int j = 0; j < 2; j++)
-                it->drawHarvestTile(drawHarvestTile());
-            it->setShipmentTile(drawHarvestTile());
+                (*players)[i]->drawHarvestTile(drawHarvestTile());
+            (*players)[i]->setShipmentTile(drawHarvestTile());
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
@@ -255,8 +253,7 @@ void Setting::DrawBuilding(int player_index)
             buildingCountToDraw--;
     }
 
-    // print buildigs available
-
+    // print buildings available
 
     bool loopPool{ true };
 
@@ -273,7 +270,6 @@ void Setting::DrawBuilding(int player_index)
             try
             {
                 std::cin >> buildingIndex;
-                std::cout << '\n';
 
                 if (std::cin.fail() || buildingIndex <= 0 || buildingIndex > b_deck->getBuildingPoolSize())
                     throw std::exception();
@@ -296,7 +292,6 @@ void Setting::DrawBuilding(int player_index)
         try
         {
             std::cin >> input;
-            std::cout << '\n';
 
             if (input == 'y' || input == 'Y')
             {
@@ -329,7 +324,8 @@ void Setting::DrawBuilding(int player_index)
 
 
         (*players)[player_index]->drawBuilding(b_deck->draw());
-        std::cout << "A card was drawn from the deck!" << endl;
+        std::cout << "\nA card was drawn from the deck!" << endl;
     }
+
     b_deck->fillBuildingPool();
 }

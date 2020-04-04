@@ -21,7 +21,6 @@ public:
     GBMap *board;
     vector<Player*>* players;
     bool initSetting();
-    BuildingDeck& getBuildingDeck();
     void DrawBuilding(int);
 private:
     HarvestDeck *h_deck;
