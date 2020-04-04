@@ -19,6 +19,9 @@ int main(){
     }
     else{
         std::cerr << "FAILED TO INITIALIZE CONTROLLER! EXITING SETUP" << endl;
+        return 1;
     }
+
+    return 0;
 }
 

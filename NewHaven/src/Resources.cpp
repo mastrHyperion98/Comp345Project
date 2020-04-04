@@ -226,7 +226,7 @@ Building& Building::operator=(const Building& building)
 
 bool Building::isFlipped() const
 {
-	return *faceUp;
+	return !*faceUp;
 }
 
 ResourceTypes Building::getBuildingType() const
