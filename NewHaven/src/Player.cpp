@@ -39,110 +39,108 @@ void Player::calculateResources(ResourceTrails trail) {
 }
 
 bool Player::buildVillage(){
-
-    PRINT_HAND:
-    cout << "Available resources:" << endl;
-    GameController::current->game_settings->tracker->printScore();
-    for(int i = 0; i < my_hand->buildings->size(); i++){
-        cout << "building index: " << i +1<< " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
-        << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
-    }
-    SELECT_BUILDING:
-    int index;
-    bool valid= false;
-    do {cout <<  "Building index to play (0 to skip): ";
-        cin >> index;
-        if(cin.good()){
-            valid = true;
+    bool playAgain{true};
+    while(playAgain) {
+        village->PrintGraph();
+        cout << "Available resources:" << endl;
+        GameController::current->game_settings->tracker->printScore();
+        for (int i = 0; i < my_hand->buildings->size(); i++) {
+            cout << "building index: " << i + 1 << " type\t" << (*my_hand->buildings)[i]->getBuildingType() << " cost: "
+                 << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
         }
-        else {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(),'\n');
-            cout << "Invalid input; please re-enter." << endl;
-        }
-    }  while(index < 0 || index > my_hand->buildings->size() +1|| !valid);
+        SELECT_BUILDING:
+        int index;
+        bool valid = false;
+        do {
+            cout << "Building index to play (0 to skip): ";
+            cin >> index;
+            if (cin.good()) {
+                valid = true;
+            } else {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid input; please re-enter." << endl;
+            }
+        } while (index < 0 || index > my_hand->buildings->size() + 1 || !valid);
 
-    if(index == 0)
-        return false;
+        if (index == 0)
+            return false;
 
-    index--;
-    POSITION:
-    int pos;
-    bool pValid = false;
-    do {cout<<"position index to place tile: ";
+        index--;
+        POSITION:
+        int pos;
+        bool pValid = false;
+        do {
+            cout << "position index to place tile: ";
             cin >> pos;
             if (cin.good()) {
                 pValid = true;
-            }
-            else {
+            } else {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Invalid pos; please re-enter" << endl;
             }
-        } while(!pValid || pos < 0 || pos >= 30);
+        } while (!pValid || pos < 0 || pos >= 30);
 
-    Building building = *(*my_hand->buildings)[index];
-    ResourceTypes type=building.getBuildingType();
+        Building *building = (*my_hand->buildings)[index];
+        ResourceTypes type = building->getBuildingType();
 
-    int flipped;
+        int flipped;
 
-    cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): " << endl;
-    cin >> flipped;
-    while(cin.fail() || flipped > 1 || flipped < 0){
+        cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): " << endl;
+        cin >> flipped;
+        while (cin.fail() || flipped > 1 || flipped < 0) {
             cout << "Do you want to place the building face up or face down? (0 for face up or 1 for face down): "
                  << endl;
             cin.clear();
             std::cin.ignore(256, '\n');
             cin >> flipped;
-    }
+        }
 
-    std::uint_least16_t cost = 0;
+        std::uint_least16_t cost = 0;
 
-    if (flipped == 0) {
-        (*my_hand->buildings)[index]->isFlipped();
-        cost = (*my_hand->buildings)[index]->getBuildingNumber();
-    }
-    // just need to assign cost
-    else if (flipped == 1) {
-        (*my_hand->buildings)[index]->flipCard();
-        cost = village->getPositionCost(pos);
-    }
+        if (flipped == 0) {
+            (*my_hand->buildings)[index]->isFlipped();
+            cost = (*my_hand->buildings)[index]->getBuildingNumber();
+        }
+            // just need to assign cost
+        else if (flipped == 1) {
+            (*my_hand->buildings)[index]->flipCard();
+            cost = village->getPositionCost(pos);
+        }
 
 //    Building building = *(*my_hand->buildings)[index];
 //    ResourceTypes type=building.getBuildingType();
-    if(GameController::current->game_settings->tracker->hasResources(type, cost)) {
-        if(village->setBuilding(pos, &building)) {
-            GameController::current->game_settings->tracker->consumeResources(type, cost);
-            my_hand->buildings->erase(my_hand->buildings->begin() + index);
+        if (GameController::current->game_settings->tracker->hasResources(type, cost)) {
+            if (village->setBuilding(pos, building)) {
+                GameController::current->game_settings->tracker->consumeResources(type, cost);
+                my_hand->buildings->erase(my_hand->buildings->begin() + index);
 
-            int restart{0};
-            std::string prompt = "Select one of the options below: "
-                                 "\n1\tPlay another building from your possession"
-                                 "\n2\tDone building."
-                                 "\nChoice: ";
-            while((cout <<  prompt && !(cin >> restart))||restart< 1 || restart > 2){
+                int restart{0};
+                std::string prompt = "Select one of the options below: "
+                                     "\n1\tPlay another building from your possession"
+                                     "\n2\tDone building."
+                                     "\nChoice: ";
+                while ((cout << prompt && !(cin >> restart)) || restart < 1 || restart > 2) {
+                    cin.clear(); // reset failbit
+                    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "This is not a valid move. Try again!:" << endl;
+                }
+                playAgain = restart == 1;
+            } else {
                 cin.clear(); // reset failbit
                 cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                cout << "This is not a valid move. Try again!:" << endl;
+                cout << "ERROR cannot play building in that position. Costs do not match!" << endl;
+                goto POSITION;
             }
-            if(restart == 1)
-                goto PRINT_HAND;
-            else
-                return true;
-        }
-        else{
+        } else {
             cin.clear(); // reset failbit
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            cout << "ERROR cannot play building in that position. Costs do not match!" << endl;
-            goto  POSITION;
+            cout << "Cannot play building: Insufficient resources" << endl;
+            goto SELECT_BUILDING;
         }
     }
-    else{
-        cin.clear(); // reset failbit
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        cout << "Cannot play building: Insufficient resources" << endl;
-        goto SELECT_BUILDING;
-    }
+    return true;
 }
 
 int Player::placeHarvestTile() {

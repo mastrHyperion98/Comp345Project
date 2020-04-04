@@ -11,6 +11,8 @@
 // include the string library
 #include <string>
 #include <deque>
+#include <iomanip>
+
 using namespace std;
 using namespace boost;
 
@@ -111,7 +113,44 @@ void VGMap::CreateVillageField() {
 
 }
 void VGMap::PrintGraph() {
-    boost::print_graph(*village_board);
+    // here we are going to print the graph
+    // content of row | row value
+    // column value|
+    string spacer = "    ";
+    string inner_spacer ="  ";
+    cout << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << endl;
+    cout << "------------" << "-------------------------------------------------------------" << endl;
+    int num_row{0};
+    for(int i{0}; i < 6; i++){
+        std::cout << spacer << spacer <<  (6 - i) << " |" << spacer;
+        for(int j{5*i}; j < 5*i + 5; j++){
+            if((*village_board)[j].building == nullptr){
+                cout << std::setfill('0') << std::setw(2)<<*(*village_board)[j].position << spacer;
+            }else{
+                cout << castResourceTypesToString((*village_board)[j].building->getBuildingType()) << spacer;
+            }
+        }
+        switch(num_row){
+            case 0: cout << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(2)<<6; break;
+            case 1: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<5; break;
+            case 2: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<4; break;
+            case 3: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<3; break;
+            case 4: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<2; break;
+            case 5: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<1; break;
+        }
+        num_row++;
+        cout << endl;
+    }
+    cout << "------------" << "-------------------------------------------------------------" << endl;
+    cout << "#Colonists|  " << inner_spacer;
+    cout << std::setfill('0') << std::setw(2)<< 5<< spacer;
+    cout << std::setfill('0') << std::setw(2)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(2)<< 3 << spacer;
+    cout << std::setfill('0') << std::setw(2)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(2)<< 5 << spacer;
+
+    cout << endl << endl;
+
 }
 // Taken from the Boost Connected Graph Example
 //https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
@@ -431,4 +470,16 @@ int VGMap::getPositionCost(int position){
 
 string VGMap::getName(){
     return *name;
+}
+
+
+string VGMap::castResourceTypesToString(ResourceTypes type){
+    if(type == ResourceTypes::SHEEP)
+        return "SH";
+    else if(type == ResourceTypes::WOOD)
+        return "WD";
+    else if(type == ResourceTypes::STONE)
+        return "ST";
+    else if(type == ResourceTypes::WHEAT)
+        return "WT";
 }

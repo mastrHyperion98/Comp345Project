@@ -58,6 +58,7 @@ private:
     C_Graph *village_board;
     map<ResourceTypes, bool> *typePlayed;
     bool isAdjacentType(ResourceTypes type, int position);
+    string castResourceTypesToString(ResourceTypes);
 
 };
 
