@@ -389,3 +389,21 @@ Hand::~Hand()
 	//delete shipment;
 	delete buildings;
 }
+
+void Hand::printHarvestTiles()
+{
+	for (std::uint_fast8_t j{ 0 }; j < 3;)
+	{
+		for (std::uint_fast16_t i{ 0 }; i < harvestTiles->size(); ++i)
+		{
+			if (j == 0)
+				std::cout << i << ".\t" << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+			else
+				std::cout << '\t' << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+		}
+
+		std::cout << '\n';
+
+		j += 2;
+	}
+}

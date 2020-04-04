@@ -84,13 +84,12 @@ public:
 
 struct Hand
 {
-private:
-
 public:
 Hand();
 Hand(const Hand& hand);
 Hand& operator=(const Hand& hand);
 ~Hand();
+void printHarvestTiles();
 /*
 Every player is supposed to have a hand.
 It's contains a vector for tiles and building cards.
