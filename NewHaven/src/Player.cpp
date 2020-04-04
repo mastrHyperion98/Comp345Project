@@ -40,13 +40,13 @@ void Player::calculateResources(ResourceTrails trail) {
 
 bool Player::buildVillage(){
     for(int i = 0; i < my_hand->buildings->size(); i++){
-        cout << "building index: " << i << " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
+        cout << "building index: " << i +1<< " type\t" <<  (*my_hand->buildings)[i]->getBuildingType() << " cost: "
         << static_cast<int>((*my_hand->buildings)[i]->getBuildingNumber()) << endl;
     }
-
+    SELECT_BUILDING:
     int index;
     bool valid= false;
-    do {cout <<  "Building index to play: ";
+    do {cout <<  "Building index to play (0 to skip): ";
         cin >> index;
         if(cin.good()){
             valid = true;
@@ -56,9 +56,13 @@ bool Player::buildVillage(){
             cin.ignore(numeric_limits<streamsize>::max(),'\n');
             cout << "Invalid input; please re-enter." << endl;
         }
-    }  while(index < 0 || index > my_hand->buildings->size() || !valid);
+    }  while(index < 0 || index > my_hand->buildings->size() +1|| !valid);
 
+    if(index == 0)
+        return false;
 
+    index--;
+    POSITION:
     int pos;
     bool pValid = false;
     do {cout<<"position index to place tile: ";
@@ -112,12 +116,15 @@ bool Player::buildVillage(){
             cin.clear(); // reset failbit
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             cout << "ERROR cannot play building in that position. Costs do not match!" << endl;
+            goto  POSITION;
         }
     }
     else{
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "Cannot play building: Insufficient resources" << endl;
+        goto SELECT_BUILDING;
     }
-    return false;
 }
 
 int Player::placeHarvestTile() {
