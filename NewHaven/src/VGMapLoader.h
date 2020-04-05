@@ -13,10 +13,7 @@ public:
     VGMap generateVMap();
 
 private:
-    int VBoard_num_of_players = -1;
-
+    string *name{new string("")};
 };
-
-
 
 #endif //NEWHAVEN_VGMAPLOADER_H

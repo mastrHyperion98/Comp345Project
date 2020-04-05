@@ -10,10 +10,8 @@ std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource); /
 struct HarvestTile
 {
 private:
-	ResourceTypes* tileContent;	//Array of resource types
-
 public:
-
+    ResourceTypes* tileContent;	//Array of resource types
 	HarvestTile(ResourceTypes*);
     HarvestTile(const HarvestTile &tile);
 	~HarvestTile();
@@ -39,7 +37,7 @@ public:
 
 	std::uint_least8_t getDeckSize() const;
 
-	HarvestTile* draw() const;	//Return a pointer to a harvest tile in deckContent
+	HarvestTile* draw();	//Return a pointer to a harvest tile in deckContent
 };
 
 struct Building
@@ -69,28 +67,35 @@ private:
 	const std::uint_least8_t* const MAX_DECK_SIZE{ new std::uint_least8_t(144) };
 	std::uint_least8_t* deckSize;
 	std::vector<Building*>* deckContent;	//Vector of pointers for building cards
+	std::vector<Building*>* buildingPoolContent;	//Array of buildings to represent the pool
 	
 public:
 	BuildingDeck();
 	~BuildingDeck();
 
 	std::uint_least8_t getDeckSize() const;
+	std::uint_least8_t getBuildingPoolSize() const;
 
-	Building* draw() const;
+	Building* draw();
+	Building* buildingPoolDraw(const std::uint_least8_t&);
+	void printBuildingPool();
+	void fillBuildingPool();
 };
 
 struct Hand
 {
-private:
-
 public:
-	Hand();
-	~Hand();
-	/*
-	Every player is supposed to have a hand.
-	It's contains a vector for tiles and building cards.
-	*/
-    std::vector<HarvestTile*>* harvestTiles;
-    HarvestTile* shipment;
-    std::vector<Building*>* buildings;
+Hand();
+Hand(const Hand& hand);
+Hand& operator=(const Hand& hand);
+~Hand();
+void printHarvestTiles();
+void printBuildings();
+/*
+Every player is supposed to have a hand.
+It's contains a vector for tiles and building cards.
+*/
+std::vector<HarvestTile*>* harvestTiles;
+HarvestTile* shipment;
+std::vector<Building*>* buildings;
 };

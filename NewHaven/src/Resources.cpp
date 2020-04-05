@@ -104,7 +104,7 @@ HarvestDeck::HarvestDeck():
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
 	deckContent{ new std::vector<HarvestTile*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	 //+1 for the card swapping during draw
 	/*
 	In VS, the file path is relative to the build directory, not the source file directory.
 	The build directory is represented where the debug condition is true.
@@ -174,12 +174,20 @@ std::uint_least8_t HarvestDeck::getDeckSize() const
 	return *deckSize;
 }
 
-HarvestTile* HarvestDeck::draw() const
+HarvestTile* HarvestDeck::draw()
 {
+	std::srand(time(NULL) + std::rand());	//Different seed every execution
+
 	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
+		int cardIndex = std::rand() % *deckSize;
+		HarvestTile* pickedCard{ deckContent->at(cardIndex) };
+
+		deckContent->push_back(pickedCard);
+		deckContent->erase(deckContent->begin() + cardIndex);
 		(*deckSize)--;
-		return deckContent->at(*deckSize);
+
+		return pickedCard;
 	}
 	else
 	{
@@ -218,7 +226,7 @@ Building& Building::operator=(const Building& building)
 
 bool Building::isFlipped() const
 {
-	return *faceUp;
+	return !*faceUp;
 }
 
 ResourceTypes Building::getBuildingType() const
@@ -237,11 +245,13 @@ bool Building::flipCard()
 	return *faceUp;
 }
 
-BuildingDeck::BuildingDeck():
+BuildingDeck::BuildingDeck() :
 	deckSize{ new std::uint_least8_t(*MAX_DECK_SIZE) },
-	deckContent{ new std::vector<Building*> }
+	deckContent{ new std::vector<Building*> },
+	buildingPoolContent{ new std::vector<Building*> }
 {
-	deckContent->reserve(*MAX_DECK_SIZE);	//We allocate space without filling it up yet
+	deckContent->reserve(*MAX_DECK_SIZE + 1);	//We allocate space without filling it up yet, +1 for the card swapping during draw
+	buildingPoolContent->reserve(5);
 
 	ResourceTypes buildingType;
 
@@ -272,10 +282,12 @@ BuildingDeck::BuildingDeck():
 		{
 			for (std::uint_fast8_t k = 0; k < 6; k++)
 			{
-				deckContent->push_back(new Building(buildingType, j));
+				deckContent->push_back(new Building(buildingType, j+1));
 			}
 		}
 	}
+
+	fillBuildingPool();
 }
 
 BuildingDeck::~BuildingDeck()
@@ -283,6 +295,7 @@ BuildingDeck::~BuildingDeck()
 	delete MAX_DECK_SIZE;
 	delete deckSize;
 	delete deckContent;
+	delete buildingPoolContent;
 }
 
 std::uint_least8_t BuildingDeck::getDeckSize() const
@@ -290,16 +303,58 @@ std::uint_least8_t BuildingDeck::getDeckSize() const
 	return *deckSize;
 }
 
-Building* BuildingDeck::draw() const
+std::uint_least8_t BuildingDeck::getBuildingPoolSize() const
 {
-	if (*deckSize > 0)
+	return buildingPoolContent->size();
+}
+void BuildingDeck::printBuildingPool() {
+    std::cout << "\n***Building Pool Content***\n" << std::endl;
+    for(int i = 0; i < buildingPoolContent->size(); i++){
+        std::cout << "building index: " << i +1<< " type\t" <<  (* buildingPoolContent)[i]->getBuildingType() << "\tcost: "
+             << static_cast<int>((* buildingPoolContent)[i]->getBuildingNumber()) << std::endl;
+    }
+}
+Building* BuildingDeck::draw()
+{
+	std::srand(time(NULL) + std::rand());	//Different seed every execution
+
+	if (*deckSize > 0)	//Can only draw when there are still cards
 	{
+		int cardIndex = std::rand() % *deckSize;
+		Building* pickedCard{ deckContent->at(cardIndex) };
+
+		deckContent->push_back(pickedCard);
+		deckContent->erase(deckContent->begin() + cardIndex);
 		(*deckSize)--;
-		return deckContent->at(*deckSize);
+
+		return pickedCard;
 	}
 	else
 	{
 		return nullptr;
+	}
+}
+
+Building* BuildingDeck::buildingPoolDraw(const std::uint_least8_t& index)
+{
+	if (buildingPoolContent->size() && index >= 0 && index < buildingPoolContent->size())
+	{
+		Building* pickedCard{ buildingPoolContent->at(index) };
+		buildingPoolContent->erase(buildingPoolContent->begin() + index);
+
+		return pickedCard;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+void BuildingDeck::fillBuildingPool()
+{
+	while (buildingPoolContent->size() < 5)
+	{
+		buildingPoolContent->push_back(draw());
 	}
 }
 
@@ -311,9 +366,54 @@ Hand::Hand():
 	harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
+Hand::Hand(const Hand &hand):harvestTiles{new std::vector<HarvestTile*>(*hand.harvestTiles)},
+shipment{hand.shipment},
+buildings{new std::vector<Building*>(*hand.buildings)}
+{
+    harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
+}
+
+Hand& Hand::operator=(const Hand &hand) {
+    if(this == &hand)
+        return *this;
+
+    *harvestTiles = *hand.harvestTiles;
+    shipment = hand.shipment;
+    *buildings = *hand.buildings;
+    return *this;
+}
 Hand::~Hand()
 {
+    // do not delete the tiles references they will be deleted by the decks
 	delete harvestTiles;
-	delete shipment;
+	//delete shipment;
 	delete buildings;
+}
+
+void Hand::printHarvestTiles()
+{
+	std::cout << '\n';
+
+	for (std::uint_fast8_t j{ 0 }; j < 3;)
+	{
+		for (std::uint_fast16_t i{ 0 }; i < harvestTiles->size(); ++i)
+		{
+			if (j == 0)
+				std::cout << i + 1 << ".\t" << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+			else
+				std::cout << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << '\t' << (*harvestTiles)[i]->tileContent[j] << "\t\t";
+		}
+
+		std::cout << '\n';
+
+		j += 2;
+	}
+}
+
+void Hand::printBuildings()
+{
+	for (int i = 0; i < buildings->size(); i++) {
+		std::cout << "\nbuilding index: " << i + 1 << " type\t" << (*buildings)[i]->getBuildingType() << "\tcost: "
+			<< static_cast<int>((*buildings)[i]->getBuildingNumber()) << '\n';
+	}
 }

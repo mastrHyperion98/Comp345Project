@@ -29,35 +29,33 @@ bool VGMapLoader::loadVConfig(std::string filepath) {
         position = line.find_first_of(':');
 
         string header = line.substr(0, position);
-        if(header.compare("NEW_HAVEN_VILLAGE_BOARD_LOADER_NUM") != 0){
+        if(header.compare("NEW_HAVEN_VILLAGE_BOARD_LOADER") != 0){
             throw InvalidConfigurationException();
         }
         if(line.length() > position+1) {
             string config = line.substr(position + 1);
-            int player_num = -1;
+            string village_name;
             try {
-                player_num = boost::lexical_cast<int>(config);
-            } catch (std::exception e) {
+                village_name=config;
+            } catch (std::exception &e) {
                 throw InvalidConfigurationException();
             }
-            if (player_num >= 0 && player_num < 3) {
-                this->VBoard_num_of_players = player_num;
+                *this->name = village_name;
                 return true;
-            }
         }
         return false;
     }
     else {
-        cerr << "ERROR: File either does not exist or cannot open file";
+        cerr << "ERROR: File either does not exist or cannot open file" << endl;
         // close the reader before returning
         reader.close();
-        return false;
+        throw BoardConfigurationNotLoaded();
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
 VGMap VGMapLoader::generateVMap() {
-    if(VBoard_num_of_players != -1){
-            VGMap vg_map;
+    if(*name != ""){
+            VGMap vg_map{VGMap(*name)};
             return vg_map;
     }
     else{

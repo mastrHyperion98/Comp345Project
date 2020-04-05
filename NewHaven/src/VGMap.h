@@ -39,7 +39,7 @@ using namespace std;
 class VGMap {
 public:
     // class constructor
-    VGMap();
+    VGMap(string);
     VGMap(const VGMap &map);
     VGMap &operator=(const VGMap &map);
     ~VGMap();
@@ -51,11 +51,19 @@ public:
     ConnectedCircles getConnectedRow(int const row);
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
+    string getName();
+    int getNumUnplayed();
 private:
+    string *name;
     void CreateVillageField();
     C_Graph *village_board;
     map<ResourceTypes, bool> *typePlayed;
     bool isAdjacentType(ResourceTypes type, int position);
+    string castResourceTypesToString(ResourceTypes);
+    int *playCounter{new int(0)};
+    const int *const SIZE{new const int{30}};
+    bool playBuildingFlipped(Building* building, ResourceTypes type, int position);
+    bool playBuilding(Building* building, ResourceTypes type, int position);
 
 };
 
