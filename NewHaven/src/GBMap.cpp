@@ -437,6 +437,5 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 }
 
 bool GBMap::isGameOver(){
-    const int LIMIT = 20;
-    return (*SIZE - *playCounter) == LIMIT;
+    return (*SIZE - *playCounter) == 1;
 }
