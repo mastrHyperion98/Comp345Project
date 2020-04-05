@@ -146,10 +146,50 @@ int Player::placeHarvestTile() {
     int index_tile;
     int pos;
 
+    TILE_SELECT:
     while((cout <<  "Tile index to place: " && !(cin >> index_tile))||index_tile < 1 || index_tile >= my_hand->harvestTiles->size() + 1){
           cin.clear(); // reset failbit
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         cout << "That is not a valid tile index" << endl;
+    }
+    int choice_rot{0};
+    string prompt = "Select the position to play your tile(Press 0 to return):\n";
+    // show possible tile positions
+    HarvestTile * tile = (*my_hand->harvestTiles)[index_tile-1];
+    // position 1 --> default
+    cout << "1:\t" << tile->getTileContent()[0] <<"  " <<tile->getTileContent()[1] << endl;
+    cout << "  \t" << tile->getTileContent()[3] <<"  " << tile->getTileContent()[2] << endl << endl;
+    // position 2 -->
+    tile->rotateTileClockwise();
+    cout << "2:\t" << tile->getTileContent()[0] <<"  " <<tile->getTileContent()[1] << endl;
+    cout << "  \t" << tile->getTileContent()[3] << "  "<< tile->getTileContent()[2] << endl << endl;
+    // position 3
+    tile->rotateTileClockwise();
+    cout << "3:\t" << tile->getTileContent()[0] <<"  " <<tile->getTileContent()[1] << endl;
+    cout << "  \t" << tile->getTileContent()[3] << "  " << tile->getTileContent()[2] << endl << endl;
+    // position 4
+    tile->rotateTileClockwise();
+    cout << "4:\t" << tile->getTileContent()[0] <<"  " <<tile->getTileContent()[1] << endl;
+    cout << "  \t" << tile->getTileContent()[3] << "  " << tile->getTileContent()[2] << endl << endl;
+
+
+    while( (cout << "\nChoice: " && !(cin >> choice_rot)) || choice_rot < 0 || choice_rot > 4){
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "That is not a valid tile rotation" << endl;
+    }
+    if(choice_rot == 0) {
+        cout << "Here are your building cards:";
+        my_hand->printBuildings();
+        cout << "\nHere are your Harvest Tiles:";
+        my_hand->printHarvestTiles();
+        goto TILE_SELECT;
+
+    }
+
+    else{
+        for(int i = 0; i < choice_rot; i++)
+            tile->rotateTileClockwise();
     }
 
     POSITION:
@@ -162,7 +202,7 @@ int Player::placeHarvestTile() {
 
     // later this will be called from the singleton Game Controller
     if(GameController::current->game_settings->board!= nullptr) {
-        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles)[index_tile - 1])) {
+        if(GameController::current->game_settings->board->placeHarvestTile(pos, tile)) {
             my_hand->harvestTiles->erase(my_hand->harvestTiles->begin() + (index_tile - 1));
             return pos;
         } else{
