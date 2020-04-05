@@ -107,7 +107,8 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
         if (loader.loadVConfig(filepath)) {
             cout << "LOADING SUCCESSFUL" << endl;
             return loader.generateVMap();
-        }
+        } else
+            throw BoardConfigurationNotLoaded();
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
         throw ex;

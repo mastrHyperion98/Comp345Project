@@ -37,7 +37,7 @@ bool VGMapLoader::loadVConfig(std::string filepath) {
             string village_name;
             try {
                 village_name=config;
-            } catch (std::exception e) {
+            } catch (std::exception &e) {
                 throw InvalidConfigurationException();
             }
                 *this->name = village_name;

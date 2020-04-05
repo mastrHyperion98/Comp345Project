@@ -294,7 +294,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::WOOD] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::WOOD &&  (*typePlayed)[ResourceTypes::WOOD]){
@@ -302,7 +302,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             if(isAdjacentType(ResourceTypes::WOOD, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
         }
@@ -310,14 +310,14 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::STONE] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::STONE &&  (*typePlayed)[ResourceTypes::STONE]){
             if(isAdjacentType(ResourceTypes::STONE, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
 
@@ -326,14 +326,14 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::SHEEP] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::SHEEP &&  (*typePlayed)[ResourceTypes::SHEEP]){
             if(isAdjacentType(ResourceTypes::SHEEP, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
 
@@ -342,7 +342,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::WHEAT] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
 
             return true;
         }
@@ -350,7 +350,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             if(isAdjacentType(ResourceTypes::WHEAT, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
         }
@@ -360,7 +360,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::WOOD] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::WOOD &&  (*typePlayed)[ResourceTypes::WOOD]){
@@ -368,7 +368,7 @@ bool VGMap::setBuilding(int position, Building *building) {
             if(isAdjacentType(ResourceTypes::WOOD, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
         }
@@ -376,14 +376,14 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::STONE] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::STONE &&  (*typePlayed)[ResourceTypes::STONE]){
             if(isAdjacentType(ResourceTypes::STONE, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
 
@@ -392,14 +392,14 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::SHEEP] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::SHEEP &&  (*typePlayed)[ResourceTypes::SHEEP]){
             if(isAdjacentType(ResourceTypes::SHEEP, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
 
@@ -408,14 +408,14 @@ bool VGMap::setBuilding(int position, Building *building) {
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
             (*typePlayed)[ResourceTypes::WHEAT] = true;
-            *playCounter++;
+            *playCounter = *playCounter + 1;
             return true;
         }
         else if(building->getBuildingType() == ResourceTypes::WHEAT &&  (*typePlayed)[ResourceTypes::WHEAT]){
             if(isAdjacentType(ResourceTypes::WHEAT, position)){
                 (*village_board)[position].building = building;
                 *(*village_board)[position].isPlayed = true;
-                *playCounter++;
+                *playCounter = *playCounter + 1;
                 return true;
             }
         }

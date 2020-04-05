@@ -38,7 +38,7 @@ bool GBMapLoader::loadConfig(std::string filepath) {
             int board_config = -1;
             try {
                 board_config = boost::lexical_cast<int>(config);
-            } catch (std::exception e) {
+            } catch (std::exception &e) {
                 throw InvalidConfigurationException();
             }
             if (board_config >= 0 && board_config < 3) {

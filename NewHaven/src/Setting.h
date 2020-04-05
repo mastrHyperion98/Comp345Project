@@ -16,7 +16,7 @@ public:
     Setting &operator=(const Setting& settings);
     inline int getNumberPlayers();
     inline Building* drawBuilding();
-    inline HarvestTile* drawHarvestTile();
+    HarvestTile* drawHarvestTile();
     ResourceTracker *tracker;
     GBMap *board;
     vector<Player*>* players;

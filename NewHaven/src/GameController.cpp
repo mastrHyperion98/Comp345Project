@@ -144,11 +144,11 @@ if(winners.size() == 1)
     announcement = "THE WINNER IS: ";
 
 else
-    announcement = "THE WINNERS ARE:\n";
+    announcement = "TIE! THE WINNERS ARE:\n";
 
     cout << announcement;
     for(scores::iterator it = winners.begin(); it != winners.end(); ++it)
-        std::cout << it->first->getID() << " with " << it->second << " points!";
+        std::cout <<"\n" << it->first->getID() << endl;
 
     int choice;
     std::cout << "\nWhat do you wish to do, please select from an option below:" << endl;
@@ -292,7 +292,8 @@ scores GameController::findWinner(){
     // iterate through list of players
     for(std::vector<Player*>::iterator it{players->begin()}; it != players->end(); ++it){
         int score{(*it.base())->calculateScore()};
-        // add the entry to the map
+        cout << "\nPlayer: " << (*it.base())->getID() << " has " << score << " colonists" << endl;
+         // add the entry to the map
         player_scores.insert(entry(*it.base(),score));
     }
     // now we need to traverse the map and find the max value
@@ -308,8 +309,8 @@ scores GameController::findWinner(){
     // a bit more work needs to be done now we remove all those that are not equal to max
     auto it = player_scores.begin();
     while(it != player_scores.end()){
-        if(it->second != current_max)
-            player_scores.erase(it);
+        if(it->second != max_score)
+           it= player_scores.erase(it);
         else
             ++it;
     }
@@ -320,24 +321,29 @@ scores GameController::findWinner(){
         // otherwise try to break the tie by counting number of empty spaces left on village board
     else{
 
-        // update the map using the number of buildings left
+        // update the map using the number of buildings space left
+        it = player_scores.begin();
         while(it != player_scores.end()){
-            it->second = it->first->getVillage().getNumUnplayed();
+            int num_spaces_empty =  it->first->getVillage().getNumUnplayed();
+            it->second = num_spaces_empty;
+            cout << "\nPlayer: " << it->first->getID() << " has " << num_spaces_empty << " empty spaces on their board" << endl;
+            it++;
         }
         // now we find that lowest number and repeat our previous loops
         int current_min{0};
         int min_score{player_scores[(*players)[current_max]]};
         for(int i{0}; i < player_scores.size(); i++){
             if(player_scores[(*players)[current_min]] > player_scores[(*players)[i]]) {
-                current_max = i;
+                current_min = i;
                 min_score = player_scores[(*players)[i]];
             }
         }
         // a bit more work needs to be done now we remove all those that are not equal to max
-        auto it = player_scores.begin();
+        it = player_scores.begin();
         while(it != player_scores.end()){
-            if(it->second != current_min)
-                player_scores.erase(it);
+            if( it->second != min_score) {
+               it= player_scores.erase(it);
+            }
             else
                 ++it;
         }
@@ -346,22 +352,26 @@ scores GameController::findWinner(){
             // if more than one player still remains than we check their hands
             //  If  still  tied,  then  the player  with  the  least  buildings  leftover wins so repeat again
         else{
+            it = player_scores.begin();
             while(it != player_scores.end()){
-                it->second = it->first->getHand().buildings->size();
+                int hand_size = it->first->getHand().buildings->size();
+                it->second = hand_size;
+                cout << "\nPlayer: " << it->first->getID() << " has " << hand_size << " buildings left in their hand" << endl;
+                it++;
             }
             current_min=0;
             min_score=player_scores[(*players)[current_max]];
             for(int i{0}; i < player_scores.size(); i++){
                 if(player_scores[(*players)[current_min]] > player_scores[(*players)[i]]) {
-                    current_max = i;
+                    current_min = i;
                     min_score = player_scores[(*players)[i]];
                 }
             }
             // a bit more work needs to be done now we remove all those that are not equal to max
             it = player_scores.begin();
             while(it != player_scores.end()){
-                if(it->second != current_min)
-                    player_scores.erase(it);
+                if(it->second != min_score)
+                    it = player_scores.erase(it);
                 else
                     ++it;
             }

@@ -50,7 +50,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     // should use the operator overload
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
-    *playCounter++;
+    *playCounter = *playCounter + 1;
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
@@ -437,5 +437,6 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 }
 
 bool GBMap::isGameOver(){
-    return (*SIZE - *playCounter) == 1;
+    const int LIMIT = 20;
+    return (*SIZE - *playCounter) == LIMIT;
 }
