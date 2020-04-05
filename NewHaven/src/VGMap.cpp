@@ -284,7 +284,7 @@ void VGMap::resetVisited() {
     }
 }
 bool VGMap::setBuilding(int position, Building *building) {
-    if(building->getBuildingNumber() == *(*village_board)[position].vCost || !building->isFlipped()){
+    if(building->getBuildingNumber() == *(*village_board)[position].vCost && !building->isFlipped()){
         if( building->getBuildingType() == ResourceTypes::WOOD && ! (*typePlayed)[ResourceTypes::WOOD]){
             (*village_board)[position].building = building;
             *(*village_board)[position].isPlayed = true;
