@@ -292,7 +292,7 @@ scores GameController::findWinner(){
     // iterate through list of players
     for(std::vector<Player*>::iterator it{players->begin()}; it != players->end(); ++it){
         int score{(*it)->calculateScore()};
-        cout << "\nPlayer: " << (*it.base())->getID() << " has " << score << " colonists" << endl;
+        cout << "\nPlayer: " << (*it)->getID() << " has " << score << " colonists" << endl;
          // add the entry to the map
         player_scores.insert(entry(*it,score));
     }
