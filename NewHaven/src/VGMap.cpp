@@ -139,23 +139,23 @@ void VGMap::PrintGraph() {
             }
         }
         switch(num_row){
-            case 0: cout << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(2)<<6; break;
-            case 1: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<5; break;
-            case 2: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<4; break;
-            case 3: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<3; break;
-            case 4: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<2; break;
-            case 5: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(2)<<1; break;
+            case 0: cout << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(4)<<6; break;
+            case 1: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<5; break;
+            case 2: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<4; break;
+            case 3: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<3; break;
+            case 4: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<2; break;
+            case 5: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<1; break;
         }
         num_row++;
         cout << endl;
     }
     cout << "------------" << "-------------------------------------------------------------" << endl;
     cout << "#Colonists|  " << inner_spacer;
-    cout << std::setfill('0') << std::setw(2)<< 5<< spacer;
-    cout << std::setfill('0') << std::setw(2)<< 4 << spacer;
-    cout << std::setfill('0') << std::setw(2)<< 3 << spacer;
-    cout << std::setfill('0') << std::setw(2)<< 4 << spacer;
-    cout << std::setfill('0') << std::setw(2)<< 5 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 5<< spacer;
+    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 3 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 5 << spacer;
 
     cout << endl << endl;
 
