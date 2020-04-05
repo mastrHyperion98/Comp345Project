@@ -1,5 +1,9 @@
 //
 // Created by hyperion on 2020-03-17.
+// Student ID: 40057065
+// Created for: Assingment 2 Concordia W2020 Comp 345 with Dr. Nora
+//
+// Composed of the elements required for Part 1.
 //
 #include "boost/lexical_cast.hpp"
 #include "Setting.h"
@@ -69,7 +73,11 @@ Setting::~Setting() {
     delete players;
     delete tracker;
 }
-
+/*
+ * Setup the players, takes in the number of players and creates the proper amount.
+ * Each time a player is created a prompt is asked that the player enters his/her student
+ * ID number.
+ */
 void Setting::setupPlayers(const int numberOfPlayers) {
     std::cout << "CREATING " << numberOfPlayers << " PLAYERS!" << endl;
     if(players == nullptr)
@@ -77,7 +85,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
         string id{""};
-        while ((cout << "Enter your 8-digit student ID number: " && !(cin >> id))
+        while ((cout << "Enter your 8-digit student ID number(8 digits): " && !(cin >> id))
                || id.length() != *ID_LENGTH || !validateIDString(id)) {
             id.clear();
             std::cin.clear(); //clear bad input flag
@@ -88,6 +96,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
+// validate if the ID string are only numbers
 bool Setting::validateIDString(string id) {
     for(int i = 0; i < id.length(); i++){
         int ascii = id.at(i);
@@ -96,6 +105,7 @@ bool Setting::validateIDString(string id) {
     }
     return true;
 }
+// use GBMapLoader to load the proper game_board
 void Setting::loadGameBoard(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     GBMapLoader loader;
@@ -112,7 +122,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         throw ex;
     }
 }
-
+// use VGMap loader to load proper village board
 VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
@@ -130,13 +140,13 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
         throw ex;
     }
 }
-
+// reset resourceTracker to default state
 void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
     tracker->reset();
     cout << "GAME RESOURCE MARKERS SET SUCCESSFULLY" << endl;
 }
-
+// User interface for inputting the number of players
 int Setting::promptNumberPlayers() {
     int number_of_players;
     while ((cout << "Enter the number of players (2, 3 or 4): " && !(cin >> number_of_players))
@@ -147,7 +157,7 @@ int Setting::promptNumberPlayers() {
     }
     return number_of_players;
 }
-
+// create the harvest deck
 inline void Setting::createHarvestDeck() {
     cout << "CREATING HARVEST DECK!" << endl;
     if(h_deck == nullptr) {
@@ -157,6 +167,7 @@ inline void Setting::createHarvestDeck() {
         cout << "ERROR HARVEST DECK HAS ALREADY BEEN CREATED!";
 }
 
+// create the building deck
 inline void Setting::createBuildingDeck() {
     cout << "CREATING BUILDING DECK!" << endl;
     if(b_deck == nullptr) {
@@ -167,6 +178,7 @@ inline void Setting::createBuildingDeck() {
         cout << "ERROR BUILDING DECK HAS ALREADY BEEN CREATED!" << endl;
 }
 
+// inline function to draw a building from the deck
 inline Building* Setting::drawBuilding() {
     cout << "DRAWING A BUILDING" << endl;
     if(b_deck == nullptr)
@@ -174,6 +186,7 @@ inline Building* Setting::drawBuilding() {
     return b_deck->draw();
 }
 
+// inline function to draw a harvest tile from the deck
 inline HarvestTile* Setting::drawHarvestTile() {
     cout << "DRAWING A HARVEST TILE" << endl;
     if(h_deck == nullptr)
@@ -181,15 +194,19 @@ inline HarvestTile* Setting::drawHarvestTile() {
     return h_deck->draw();
 }
 
+// get the number of plauyers
 inline int Setting::getNumberPlayers() {
     if(players== nullptr)
         return 0;
     return players->size();
 }
 
+// main Setting loop --- initializes all the settings and make it ready for use
+// returns false if failed, true otherwise.
 bool Setting::initSetting() {
 
-
+// define pre-processor command passed on current environment. DEBUG environment file_path is different on
+// windows than Unix.
 #ifdef _DEBUG
     string files[3] = {"../../../config/GBMapConfig_0.config",
                        "../../../config/GBMapConfig_1.config",
