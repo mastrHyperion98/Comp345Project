@@ -451,14 +451,11 @@ bool GBMap::isGameOver(){
     bool isGameOver = false;
     int num_empty = 0;
 
-    GameBoard::vertex_iterator neighbourIt, neighbourEnd;
-    NodeID origin = board->vertex_set()[0];
-    for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board); neighbourIt != neighbourEnd; ++neighbourIt) {
-        if(*(*board)[*neighbourIt].isPlayed == false && (*board)[*neighbourIt].tile == nullptr)
-            num_empty++;
-    }
+   for(int i = 0; i < *SIZE; i++)
+       if(!*(*board)[i].isPlayed && (*board)[i].tile == nullptr)
+           num_empty++;
 
-    if(num_empty == 25)
+    if(num_empty == 1)
         isGameOver = true;
 
     return isGameOver;

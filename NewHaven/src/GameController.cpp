@@ -136,6 +136,7 @@ void GameController::playTurn(){
 // end game function
 void GameController::endGame(){
 // requires part4 and isnt part of what is needed for Part 2 driver
+cout << "\n***GAME OVER!***" << endl;
 scores winners = findWinner();
 // two cases one where ther eis only one winner, or a tie
 string announcement{""};
@@ -147,7 +148,7 @@ else
 
     cout << announcement;
     for(scores::iterator it = winners.begin(); it != winners.end(); ++it)
-        std::cout << it->first->getID() << " with " << it->second << " points!"; s
+        std::cout << it->first->getID() << " with " << it->second << " points!";
 
     int choice;
     std::cout << "What do you wish to do, please select from an option below:" << endl;

@@ -487,12 +487,12 @@ string VGMap::castResourceTypesToString(ResourceTypes type){
 int VGMap::getNumUnplayed(){
     // essentially we loop through
     int num_empty{0};
-    C_Graph::vertex_iterator neighbourIt, neighbourEnd;
-    vertex_v origin = village_board->vertex_set()[0];
-    for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *village_board); neighbourIt != neighbourEnd; ++neighbourIt) {
-        if(*(*village_board)[*neighbourIt].isPlayed == false && (*village_board)[*neighbourIt].building == nullptr)
-            num_empty++;
-    }
+
+    for(int i = 0; i < 30; i++)
+        if (!*(*village_board)[i].isPlayed) {
+            if ((*village_board)[i].building == nullptr)
+                num_empty++;
+        }
 
     return num_empty;
 }
