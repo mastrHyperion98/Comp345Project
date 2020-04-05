@@ -73,7 +73,7 @@ Setting::~Setting() {
     delete players;
     delete tracker;
 }
-/*
+/*2
  * Setup the players, takes in the number of players and creates the proper amount.
  * Each time a player is created a prompt is asked that the player enters his/her student
  * ID number.

@@ -213,28 +213,6 @@ int Player::placeHarvestTile() {
     return -1;
 }
 
-// Used to play the last tile on hand, which is done immediately after drawing the Shipment Tile.
-int Player::placeShipmentTile() {
-    int pos;
-
-    POSITION:
-    cout <<  "position index to place tile: ";
-    cin >> pos;
-
-    // later this will be called from the singleton Game Controller
-    if(GameController::current->game_settings->board != nullptr) {
-        if(GameController::current->game_settings->board->placeHarvestTile(pos, (*my_hand->harvestTiles).back())) {
-            my_hand->harvestTiles->erase(my_hand->harvestTiles->end());
-            return pos;
-        }
-        else{
-            cout << "This position is incorrect. Please select another position" << endl;
-            goto POSITION;
-        }
-    }
-    return -1;
-}
-
 /*
  * NON FINAL IMPLEMENTATION:
  *
