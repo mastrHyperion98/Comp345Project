@@ -23,6 +23,7 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
 GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
+    *playCounter = *map.playCounter;
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -33,6 +34,7 @@ GBMap::~GBMap(){
     delete tr;
     delete bl;
     delete br;
+    delete playCounter;
     // set to nullptr since it is static and belongs to the class.
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
@@ -48,6 +50,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     // should use the operator overload
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
+    *playCounter++;
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
@@ -353,24 +356,6 @@ void GBMap::printIndexConfiguration() {
         cout << config;
     }
 }
-bool GBMap::addBuildingToBoard(Building &building) {
-    // max of 5 buildings on the board.
-    if (buildings->size() < 5){
-        buildings->push_back(&building);
-        return true;
-    }
-    // return false if we can not add a building to the board
-    return false;
-}
-Building* GBMap::drawBuildingFromBoard(int position) {
-    if(position < buildings->size()){
-        Building *my_building = buildings->at(position);
-        // remove from the board
-        buildings->erase(buildings->begin() + position);
-        return my_building;
-        }
-    return nullptr;
-}
 
 void GBMap::assignDefaultTiles() {
     /*
@@ -389,6 +374,7 @@ void GBMap::assignDefaultTiles() {
             *(*board)[20].isPlayed = true;
             placeHarvestTile(24, bl);
             *(*board)[24].isPlayed = true;
+            *playCounter = 4;
             break;
         case 1:
             /*
@@ -402,6 +388,7 @@ void GBMap::assignDefaultTiles() {
             *(*board)[25].isPlayed = true;
             placeHarvestTile(29, bl);
             *(*board)[29].isPlayed = true;
+            *playCounter = 4;
             break;
         case 2:
             /*
@@ -415,6 +402,7 @@ void GBMap::assignDefaultTiles() {
             *(*board)[34].isPlayed = true;
             placeHarvestTile(38, bl);
             *(*board)[38].isPlayed = true;
+            *playCounter = 4;
             break;
         default:
             /*
@@ -428,6 +416,7 @@ void GBMap::assignDefaultTiles() {
             *(*board)[20].isPlayed = true;
             placeHarvestTile(24, bl);
             *(*board)[24].isPlayed = true;
+            *playCounter = 4;
             break;
     }
 }
@@ -448,15 +437,5 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 }
 
 bool GBMap::isGameOver(){
-    bool isGameOver = false;
-    int num_empty = 0;
-
-   for(int i = 0; i < *SIZE; i++)
-       if(!*(*board)[i].isPlayed && (*board)[i].tile == nullptr)
-           num_empty++;
-
-    if(num_empty == 1)
-        isGameOver = true;
-
-    return isGameOver;
+    return (*SIZE - *playCounter) == 1;
 }

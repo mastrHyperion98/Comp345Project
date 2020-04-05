@@ -60,6 +60,8 @@ private:
     map<ResourceTypes, bool> *typePlayed;
     bool isAdjacentType(ResourceTypes type, int position);
     string castResourceTypesToString(ResourceTypes);
+    int *playCounter{new int(0)};
+    const int *const SIZE{new const int{30}};
 
 };
 

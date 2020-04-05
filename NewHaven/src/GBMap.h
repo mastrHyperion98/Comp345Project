@@ -30,8 +30,6 @@ public:
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
     void printIndexConfiguration();
-    bool addBuildingToBoard(Building &building);
-    Building* drawBuildingFromBoard(int position);
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
 private:
@@ -47,6 +45,7 @@ private:
     inline int getVertexPosition(ResourceTrails graph, int position) const;
     void assignDefaultTiles();
     string castResourceTypesToString(ResourceTypes);
+    int *playCounter{new int(0)};
 };
 
 #endif //NEWHAVEN_GBMAP_H
