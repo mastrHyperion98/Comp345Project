@@ -85,7 +85,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
         string id{""};
-        while ((cout << "Enter your 8-digit student ID number(8 digits): " && !(cin >> id))
+        while ((cout << "Enter your 8-digit student ID number: " && !(cin >> id))
                || id.length() != *ID_LENGTH || !validateIDString(id)) {
             id.clear();
             std::cin.clear(); //clear bad input flag
