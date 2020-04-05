@@ -130,9 +130,12 @@ void VGMap::PrintGraph() {
         std::cout << spacer << spacer <<  (6 - i) << " |" << spacer;
         for(int j{5*i}; j < 5*i + 5; j++){
             if((*village_board)[j].building == nullptr){
-                cout << std::setfill('0') << std::setw(2)<<*(*village_board)[j].position << spacer;
+                cout << std::setfill('0') << std::setw(4)<<*(*village_board)[j].position << spacer;
             }else{
-                cout << castResourceTypesToString((*village_board)[j].building->getBuildingType()) << spacer;
+                if(!(*village_board)[j].building->isFlipped())
+                     cout << " "<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<" "<< spacer;
+                else
+                    cout << "-"<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<"-"<< spacer;
             }
         }
         switch(num_row){

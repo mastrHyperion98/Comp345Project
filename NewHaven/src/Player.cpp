@@ -39,6 +39,7 @@ void Player::calculateResources(ResourceTrails trail) {
 }
 
 bool Player::buildVillage(){
+
     bool playAgain{true};
     while(playAgain) {
         village->PrintGraph();
