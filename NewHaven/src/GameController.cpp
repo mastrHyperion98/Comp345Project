@@ -151,7 +151,7 @@ else
         std::cout << it->first->getID() << " with " << it->second << " points!";
 
     int choice;
-    std::cout << "What do you wish to do, please select from an option below:" << endl;
+    std::cout << "\nWhat do you wish to do, please select from an option below:" << endl;
     std::string prompt = "1\tPlay a new game!"
                          "\n2\tEnd game!"
                          "\nChoice: ";
