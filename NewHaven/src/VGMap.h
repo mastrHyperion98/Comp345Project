@@ -62,6 +62,8 @@ private:
     string castResourceTypesToString(ResourceTypes);
     int *playCounter{new int(0)};
     const int *const SIZE{new const int{30}};
+    bool playBuildingFlipped(Building* building, ResourceTypes type, int position);
+    bool playBuilding(Building* building, ResourceTypes type, int position);
 
 };
 
