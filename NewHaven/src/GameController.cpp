@@ -90,11 +90,10 @@ void GameController::playTurn(){
     current->printBuildingCards();
     cout << "\nHere are your Harvest Tiles:";
     current->printHarvestCards();
-    cout << '\n';
 
     if (current->getShipmentTile() != nullptr)
     {
-        cout << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
+        cout << '\n' << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();
@@ -267,6 +266,8 @@ void GameController::shareTheWealth(){
         // prompt user to action
         cout << "\nLeftover resources:" << endl;
         game_settings->tracker->printScore();
+        cout << "\nHere are your building cards:";
+        (*game_settings->players)[player_index]->printBuildingCards();
         string prompt = '\n' + (*game_settings->players)[player_index]->getID() + " Would you like to use the leftover resources to erect a building in your village?"
                         "\n1\tErect a building.\n2\tPass\nChoice: ";
         int choice{0};
