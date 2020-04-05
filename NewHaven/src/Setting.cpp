@@ -21,26 +21,42 @@ Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tr
 {
     if(setting.h_deck != nullptr)
         h_deck = new HarvestDeck(*setting.h_deck);
+    else
+        h_deck = nullptr;
     if(setting.b_deck != nullptr)
         b_deck = new BuildingDeck(*setting.b_deck);
+    else
+        b_deck = nullptr;
     if(setting.board != nullptr)
         board = new GBMap(*setting.board);
+    else
+        board = nullptr;
     if(setting.players != nullptr)
         players = new vector<Player*>(*setting.players);
+    else
+        players = nullptr;
 }
 
 Setting& Setting::operator=(const Setting& setting){
     if(this == &setting)
         return *this;
-
-   if(setting.h_deck != nullptr)
-    h_deck = new HarvestDeck(*setting.h_deck);
-   if(setting.b_deck != nullptr)
-    b_deck = new BuildingDeck(*setting.b_deck);
-   if(setting.board != nullptr)
-    board = new GBMap(*setting.board);
-   if(setting.players != nullptr)
-    players = new vector<Player*>(*setting.players);
+    
+    if(setting.h_deck != nullptr)
+        h_deck = new HarvestDeck(*setting.h_deck);
+    else
+        h_deck = nullptr;
+    if(setting.b_deck != nullptr)
+        b_deck = new BuildingDeck(*setting.b_deck);
+    else
+        b_deck = nullptr;
+    if(setting.board != nullptr)
+        board = new GBMap(*setting.board);
+    else
+        board = nullptr;
+    if(setting.players != nullptr)
+        players = new vector<Player*>(*setting.players);
+    else
+        players = nullptr;
 
    *tracker = *setting.tracker;
 
