@@ -502,6 +502,8 @@ string VGMap::castResourceTypesToString(ResourceTypes type){
         return "ST";
     else if(type == ResourceTypes::WHEAT)
         return "WT";
+    else
+        return "NA";
 }
 
 int VGMap::getNumUnplayed(){
