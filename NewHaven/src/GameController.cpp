@@ -44,7 +44,6 @@ void GameController::start(){
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
-
     endGame();
 }
 // initialize the gameController such that all settings are configured properly
@@ -137,6 +136,37 @@ void GameController::playTurn(){
 // end game function
 void GameController::endGame(){
 // requires part4 and isnt part of what is needed for Part 2 driver
+scores winners = findWinner();
+// two cases one where ther eis only one winner, or a tie
+string announcement{""};
+if(winners.size() == 1)
+    announcement = "THE WINNER IS: ";
+
+else
+    announcement = "THE WINNERS ARE:\n";
+
+    cout << announcement;
+    for(scores::iterator it = winners.begin(); it != winners.end(); ++it)
+        std::cout << it->first->getID() << " with " << it->second << " points!"; s
+
+    int choice;
+    std::cout << "What do you wish to do, please select from an option below:" << endl;
+    std::string prompt = "1\tPlay a new game!"
+                         "\n2\tEnd game!"
+                         "\nChoice: ";
+    while((cout <<  prompt && !(cin >> choice))||choice < 1 || choice > 2){
+        cin.clear(); // reset failbit
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cout << "This is not a valid move. Select either:" << endl;
+    }
+
+    if(choice == 1)
+        restart();
+
+    else {
+        std::cout << "THANK YOU FOR PLAYING NEW HAVEN!" << endl;
+        return;
+    }
 }
 
 // Restart the game
@@ -148,9 +178,8 @@ void GameController::restart(){
 bool GameController::hasGameEnded(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-    // return isGameBoard has only 1 tile left
-    // requires a function defined in part 4.
-    return false;
+
+    return game_settings->board->isGameOver();
 }
 inline int GameController::selectTileOption() {
     int choice;
@@ -254,4 +283,89 @@ void GameController::shareTheWealth(){
 
     }while(player_index != *current_turn_player && !game_settings->tracker->isEmpty());
 }
+// this will need to be tested
+scores GameController::findWinner(){
+    vector<Player*> *players = game_settings->players;
+    // now that we have the list of players we want to create a map of players and points
+    scores player_scores;
+    // iterate through list of players
+    for(std::vector<Player*>::iterator it{players->begin()}; it != players->end(); ++it){
+        int score{(*it.base())->calculateScore()};
+        // add the entry to the map
+        player_scores.insert(entry(*it.base(),score));
+    }
+    // now we need to traverse the map and find the max value
+    int current_max{0};
+    int max_score{0};
+    max_score = player_scores[(*players)[current_max]];
+    for(int i{0}; i < player_scores.size(); i++){
+        if(player_scores[(*players)[current_max]] < player_scores[(*players)[i]]) {
+            current_max = i;
+            max_score = player_scores[(*players)[i]];
+        }
+    }
+    // a bit more work needs to be done now we remove all those that are not equal to max
+    auto it = player_scores.begin();
+    while(it != player_scores.end()){
+        if(it->second != current_max)
+            player_scores.erase(it);
+        else
+            ++it;
+    }
+    // now the map should contain only the list of players that have the max score only
+    // if there is only one entry it is the sole max so return it
+    if(player_scores.size() == 1)
+        return player_scores;
+        // otherwise try to break the tie by counting number of empty spaces left on village board
+    else{
 
+        // update the map using the number of buildings left
+        while(it != player_scores.end()){
+            it->second = it->first->getVillage().getNumUnplayed();
+        }
+        // now we find that lowest number and repeat our previous loops
+        int current_min{0};
+        int min_score{player_scores[(*players)[current_max]]};
+        for(int i{0}; i < player_scores.size(); i++){
+            if(player_scores[(*players)[current_min]] > player_scores[(*players)[i]]) {
+                current_max = i;
+                min_score = player_scores[(*players)[i]];
+            }
+        }
+        // a bit more work needs to be done now we remove all those that are not equal to max
+        auto it = player_scores.begin();
+        while(it != player_scores.end()){
+            if(it->second != current_min)
+                player_scores.erase(it);
+            else
+                ++it;
+        }
+        if(player_scores.size() == 1)
+            return player_scores;
+            // if more than one player still remains than we check their hands
+            //  If  still  tied,  then  the player  with  the  least  buildings  leftover wins so repeat again
+        else{
+            while(it != player_scores.end()){
+                it->second = it->first->getHand().buildings->size();
+            }
+            current_min=0;
+            min_score=player_scores[(*players)[current_max]];
+            for(int i{0}; i < player_scores.size(); i++){
+                if(player_scores[(*players)[current_min]] > player_scores[(*players)[i]]) {
+                    current_max = i;
+                    min_score = player_scores[(*players)[i]];
+                }
+            }
+            // a bit more work needs to be done now we remove all those that are not equal to max
+            it = player_scores.begin();
+            while(it != player_scores.end()){
+                if(it->second != current_min)
+                    player_scores.erase(it);
+                else
+                    ++it;
+            }
+            // now regardless of result return winners
+            return player_scores;
+        }
+    }
+}

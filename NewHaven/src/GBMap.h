@@ -33,7 +33,7 @@ public:
     bool addBuildingToBoard(Building &building);
     Building* drawBuildingFromBoard(int position);
     HarvestTile* getHarvestTile(int);
-
+    bool isGameOver();
 private:
     GameBoard* board;
     std::vector<Building*>* buildings;

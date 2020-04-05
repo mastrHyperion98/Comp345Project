@@ -33,6 +33,9 @@ public:
     string getID();
     void printHarvestCards();
     void printBuildingCards();
+    int calculateScore() const;
+    VGMap getVillage() const;
+    Hand getHand() const;
 private:
     VGMap *village;
     ScoreCalculator *vb_score;

@@ -446,3 +446,20 @@ string GBMap::castResourceTypesToString(ResourceTypes type){
 HarvestTile * GBMap::getHarvestTile(int position) {
     return (*board)[position].tile;
 }
+
+bool GBMap::isGameOver(){
+    bool isGameOver = false;
+    int num_empty = 0;
+
+    GameBoard::vertex_iterator neighbourIt, neighbourEnd;
+    NodeID origin = board->vertex_set()[0];
+    for (tie(neighbourIt, neighbourEnd) = adjacent_vertices(origin, *board); neighbourIt != neighbourEnd; ++neighbourIt) {
+        if(*(*board)[*neighbourIt].isPlayed == false && (*board)[*neighbourIt].tile == nullptr)
+            num_empty++;
+    }
+
+    if(num_empty == 25)
+        isGameOver = true;
+
+    return isGameOver;
+}

@@ -250,3 +250,16 @@ void Player::printBuildingCards()
 {
     my_hand->printBuildings();
 }
+
+int Player::calculateScore() const{
+    return vb_score->getScore(*village);
+}
+
+VGMap Player::getVillage() const {
+    // returns a copy but that is 100% fine
+    return *village;
+}
+
+Hand Player::getHand() const{
+    return *my_hand;
+}

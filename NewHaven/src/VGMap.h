@@ -52,6 +52,7 @@ public:
     ConnectedCircles getConnectedColumn(int const col);
     void resetVisited();
     string getName();
+    int getNumUnplayed();
 private:
     string *name;
     void CreateVillageField();

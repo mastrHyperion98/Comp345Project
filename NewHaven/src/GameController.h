@@ -5,7 +5,8 @@
 #ifndef NEWHAVEN_GAMECONTROLLER_H
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
-
+typedef pair<Player*, int> entry;
+typedef map<Player*, int> scores;
 class GameController {
 public:
     GameController();
@@ -30,6 +31,7 @@ private:
     inline void setOriginalShipmentTile(Player *player);
     void shareTheWealth();
 
+    scores findWinner();
 };
 
 
