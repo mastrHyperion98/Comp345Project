@@ -17,7 +17,7 @@ Setting::Setting():tracker{new ResourceTracker}{
 
 }
 
-Setting::Setting(const Setting& setting)
+Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
 {
     if(setting.h_deck != nullptr)
         h_deck = new HarvestDeck(*setting.h_deck);
@@ -27,9 +27,6 @@ Setting::Setting(const Setting& setting)
         board = new GBMap(*setting.board);
     if(setting.players != nullptr)
         players = new vector<Player*>(*setting.players);
-
-    // always initialized. Dont need to worry about nullptr errors
-    *tracker = *setting.tracker;
 }
 
 Setting& Setting::operator=(const Setting& setting){
