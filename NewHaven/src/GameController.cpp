@@ -136,15 +136,15 @@ void GameController::playTurn(){
 // end game function
 void GameController::endGame(){
 // requires part4 and isnt part of what is needed for Part 2 driver
-cout << "\n***GAME OVER!***" << endl;
-scores winners = findWinner();
-// two cases one where ther eis only one winner, or a tie
-string announcement{""};
-if(winners.size() == 1)
-    announcement = "THE WINNER IS: ";
+    cout << "\n***GAME OVER!***" << endl;
+    scores winners = findWinner();
+    // two cases one where ther eis only one winner, or a tie
+    string announcement;
+    if(winners.size() == 1)
+        announcement = "THE WINNER IS: ";
 
-else
-    announcement = "TIE! THE WINNERS ARE:\n";
+    else
+        announcement = "TIE! THE WINNERS ARE:\n";
 
     cout << announcement;
     for(scores::iterator it = winners.begin(); it != winners.end(); ++it)
