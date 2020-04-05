@@ -6,6 +6,6 @@
 
 int main(){
     Setting setting;
-    setting.current->initSetting();
+    setting.initSetting();
 
 };

@@ -226,7 +226,7 @@ Building& Building::operator=(const Building& building)
 
 bool Building::isFlipped() const
 {
-	return *faceUp;
+	return !*faceUp;
 }
 
 ResourceTypes Building::getBuildingType() const
@@ -282,7 +282,7 @@ BuildingDeck::BuildingDeck() :
 		{
 			for (std::uint_fast8_t k = 0; k < 6; k++)
 			{
-				deckContent->push_back(new Building(buildingType, j));
+				deckContent->push_back(new Building(buildingType, j+1));
 			}
 		}
 	}
@@ -307,7 +307,13 @@ std::uint_least8_t BuildingDeck::getBuildingPoolSize() const
 {
 	return buildingPoolContent->size();
 }
-
+void BuildingDeck::printBuildingPool() {
+    std::cout << "\n***Building Pool Content***\n" << std::endl;
+    for(int i = 0; i < buildingPoolContent->size(); i++){
+        std::cout << "building index: " << i +1<< " type\t" <<  (* buildingPoolContent)[i]->getBuildingType() << "\tcost: "
+             << static_cast<int>((* buildingPoolContent)[i]->getBuildingNumber()) << std::endl;
+    }
+}
 Building* BuildingDeck::draw()
 {
 	std::srand(time(NULL) + std::rand());	//Different seed every execution
@@ -362,7 +368,8 @@ Hand::Hand():
 
 Hand::Hand(const Hand &hand):harvestTiles{new std::vector<HarvestTile*>(*hand.harvestTiles)},
 shipment{hand.shipment},
-buildings{new std::vector<Building*>(*hand.buildings)}{
+buildings{new std::vector<Building*>(*hand.buildings)}
+{
     harvestTiles->reserve(2);	//We know a player can only hold 2 harvest tiles
 }
 
@@ -381,4 +388,32 @@ Hand::~Hand()
 	delete harvestTiles;
 	//delete shipment;
 	delete buildings;
+}
+
+void Hand::printHarvestTiles()
+{
+	std::cout << '\n';
+
+	for (std::uint_fast8_t j{ 0 }; j < 3;)
+	{
+		for (std::uint_fast16_t i{ 0 }; i < harvestTiles->size(); ++i)
+		{
+			if (j == 0)
+				std::cout << i + 1 << ".\t" << (*harvestTiles)[i]->tileContent[j] << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << "\t\t";
+			else
+				std::cout << '\t' << (*harvestTiles)[i]->tileContent[j + 1] << '\t' << (*harvestTiles)[i]->tileContent[j] << "\t\t";
+		}
+
+		std::cout << '\n';
+
+		j += 2;
+	}
+}
+
+void Hand::printBuildings()
+{
+	for (int i = 0; i < buildings->size(); i++) {
+		std::cout << "\nbuilding index: " << i + 1 << " type\t" << (*buildings)[i]->getBuildingType() << "\tcost: "
+			<< static_cast<int>((*buildings)[i]->getBuildingNumber()) << '\n';
+	}
 }

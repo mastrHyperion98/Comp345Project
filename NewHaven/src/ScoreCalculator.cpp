@@ -1,7 +1,8 @@
 //
-// Created by hyperion on 2020-02-27.
+// Created by hyperion(Steven Smith) on 2020-02-27.
 //
-
+// Computes the scores of the player village. Essentially the number of colonizers atttracted.
+//
 #include "ScoreCalculator.h"
 
 ScoreCalculator::ScoreCalculator(){

@@ -1,3 +1,4 @@
+#pragma once
 #include "VGMap.h"
 #include "Resources.h"
 #include "ScoreCalculator.h"
@@ -14,13 +15,13 @@ public:
     int placeHarvestTile();
     // Used for shipment tile
     int placeShipmentTile();
+
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the building deck
     void drawBuilding(Building* building);
     // cannot implement yet. Requires the game_controller / main-loop / logic controller to be a singleton with references to the harvest tile
     void drawHarvestTile(HarvestTile* tile);
     void drawBuildingPool(Building*);
     // Returns the ResourceTracker object held by the player
-    ResourceTracker* resourceTracker();
     bool buildVillage();
     void calculateResources(ResourceTrails);
     void setVillage(VGMap);
@@ -28,10 +29,15 @@ public:
     void setShipmentTile(HarvestTile* shipmentTile);
     // Getter for shipment tile
     HarvestTile* getShipmentTile();
+    void setShipmentPlayed();
     string getID();
+    void printHarvestCards();
+    void printBuildingCards();
+    int calculateScore() const;
+    VGMap getVillage() const;
+    Hand getHand() const;
 private:
     VGMap *village;
-    ResourceTracker *resource_score;
     ScoreCalculator *vb_score;
     Hand *my_hand;
     string *id;

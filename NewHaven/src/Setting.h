@@ -16,11 +16,12 @@ public:
     Setting &operator=(const Setting& settings);
     inline int getNumberPlayers();
     inline Building* drawBuilding();
-    inline HarvestTile* drawHarvestTile();
-    static Setting *current;
+    HarvestTile* drawHarvestTile();
+    ResourceTracker *tracker;
     GBMap *board;
-    vector<Player>* players;
+    vector<Player*>* players;
     bool initSetting();
+    void DrawBuilding(int);
 private:
     HarvestDeck *h_deck;
     BuildingDeck *b_deck;

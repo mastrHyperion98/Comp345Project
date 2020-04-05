@@ -9,13 +9,10 @@
 #include "boost/graph/graph_utility.hpp"
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
-
-GBMap* GBMap::current_map;
-
+#include <iomanip>
 
 GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
     board = new GameBoard();
-    current_map = this;
     // populate board
     if(!createBoard())
         // create a proper exception maybe
@@ -26,7 +23,7 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
 GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
-    current_map = this;
+    *playCounter = *map.playCounter;
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -37,8 +34,8 @@ GBMap::~GBMap(){
     delete tr;
     delete bl;
     delete br;
+    delete playCounter;
     // set to nullptr since it is static and belongs to the class.
-    current_map = nullptr;
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
     board = new GameBoard();
@@ -53,6 +50,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     // should use the operator overload
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
+    *playCounter = *playCounter + 1;
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
@@ -115,7 +113,131 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
 
 
 void GBMap::printBoard() {
-    boost::print_graph(*board);
+  /*
+   * Traverses the graph row by row and prints out the content of each element
+   * Unplayed Tile will print field index in every 4 resource space
+   */
+    const string spacer{"    "};
+    const string inner_spacer("  ");
+    // Check config to determine #row
+    int row_num{5};
+    // if config is 3 or 4 players
+    if(*CONFIG >= 1)
+        row_num = 7;
+    // we will iterate by row
+    if(*CONFIG != 2){
+        int col_num{5};
+        for(int i{0}; i < row_num; i++){
+            for(int j{i*5}; j <  (i * col_num) + col_num; j++){
+                if(!*(*board)[j].isPlayed) {
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                }else{
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                }
+            }
+            // new line
+            cout << endl;
+            for(int j{i*5}; j < (i * col_num) + col_num; j++){
+                if(!*(*board)[j].isPlayed) {
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                }else{
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                }
+            }
+            cout << endl << endl;
+        }
+    }else{
+        // CONFIG == 2 has a special case where the first row and last row have only 5 elements rather than 7
+        // As such those two rows must be handled seperately.
+        int col_num{7};
+        // perform on first row
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        for(int j{0}; j <  5; j++){
+            if(!*(*board)[j].isPlayed) {
+                cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+            }else{
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+            }
+        }
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        cout << endl;
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        for(int j{0}; j < 5; j++){
+            if(!*(*board)[j].isPlayed) {
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+            }else{
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+            }
+        }
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        cout << endl << endl;
+
+        // now we want to do as before but iterate on the next 5 rows
+        for(int i{0}; i < 5; i++){
+            for(int j{5 +(i*7)}; j < (i * col_num) + col_num + 5; j++){
+                if(!*(*board)[j].isPlayed) {
+                    cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                }else{
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                }
+            }
+            // new line
+            cout << endl;
+            for(int j{5 +(i*7)}; j < (i * col_num) + col_num + 5; j++){
+                if(!*(*board)[j].isPlayed) {
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                }else{
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                    cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                }
+            }
+            cout << endl<< endl;
+        }
+        // perform on last row
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        for(int j{40}; j <  45; j++){
+            if(!*(*board)[j].isPlayed) {
+                cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+            }else{
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+            }
+        }
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        cout << endl;
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        for(int j{40}; j < 45; j++){
+            if(!*(*board)[j].isPlayed) {
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+            }else{
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+            }
+        }
+        cout << "--" << inner_spacer;
+        cout << "--" << spacer;
+        cout << endl << endl;
+    }
 }
 
 void GBMap::resetVisitedNodes() {
@@ -234,24 +356,6 @@ void GBMap::printIndexConfiguration() {
         cout << config;
     }
 }
-bool GBMap::addBuildingToBoard(Building &building) {
-    // max of 5 buildings on the board.
-    if (buildings->size() < 5){
-        buildings->push_back(&building);
-        return true;
-    }
-    // return false if we can not add a building to the board
-    return false;
-}
-Building* GBMap::drawBuildingFromBoard(int position) {
-    if(position < buildings->size()){
-        Building *my_building = buildings->at(position);
-        // remove from the board
-        buildings->erase(buildings->begin() + position);
-        return my_building;
-        }
-    return nullptr;
-}
 
 void GBMap::assignDefaultTiles() {
     /*
@@ -263,36 +367,75 @@ void GBMap::assignDefaultTiles() {
              * config 0 --- 0   4 20 24
              */
             placeHarvestTile(0, tl);
+            *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
-            placeHarvestTile(20, bl);
-            placeHarvestTile(24, br);
+            *(*board)[4].isPlayed = true;
+            placeHarvestTile(20, br);
+            *(*board)[20].isPlayed = true;
+            placeHarvestTile(24, bl);
+            *(*board)[24].isPlayed = true;
+            *playCounter = 4;
             break;
         case 1:
             /*
              * config 1 --- 5   9 25 29
              */
             placeHarvestTile(5, tl);
+            *(*board)[5].isPlayed = true;
             placeHarvestTile(9,tr);
-            placeHarvestTile(25, bl);
-            placeHarvestTile(29, br);
+            *(*board)[9].isPlayed = true;
+            placeHarvestTile(25, br);
+            *(*board)[25].isPlayed = true;
+            placeHarvestTile(29, bl);
+            *(*board)[29].isPlayed = true;
+            *playCounter = 4;
             break;
         case 2:
             /*
                  * config 1 --- 6   10 34 38
                  */
             placeHarvestTile(6, tl);
+            *(*board)[6].isPlayed = true;
             placeHarvestTile(10,tr);
-            placeHarvestTile(34, bl);
-            placeHarvestTile(38, br);
+            *(*board)[10].isPlayed = true;
+            placeHarvestTile(34, br);
+            *(*board)[34].isPlayed = true;
+            placeHarvestTile(38, bl);
+            *(*board)[38].isPlayed = true;
+            *playCounter = 4;
             break;
         default:
             /*
              * config 0 --- 0   4 20 24
              */
             placeHarvestTile(0, tl);
+            *(*board)[0].isPlayed = true;
             placeHarvestTile(4,tr);
-            placeHarvestTile(20, bl);
-            placeHarvestTile(24, br);
+            *(*board)[4].isPlayed = true;
+            placeHarvestTile(20, br);
+            *(*board)[20].isPlayed = true;
+            placeHarvestTile(24, bl);
+            *(*board)[24].isPlayed = true;
+            *playCounter = 4;
             break;
     }
+}
+
+string GBMap::castResourceTypesToString(ResourceTypes type){
+    if(type == ResourceTypes::SHEEP)
+        return "SH";
+    else if(type == ResourceTypes::WOOD)
+        return "WD";
+    else if(type == ResourceTypes::STONE)
+        return "ST";
+    else
+        return "WT";
+}
+
+HarvestTile * GBMap::getHarvestTile(int position) {
+    return (*board)[position].tile;
+}
+
+bool GBMap::isGameOver(){
+    return (*SIZE - *playCounter) == 1;
 }

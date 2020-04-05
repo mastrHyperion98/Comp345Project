@@ -11,6 +11,8 @@
 // include the string library
 #include <string>
 #include <deque>
+#include <iomanip>
+
 using namespace std;
 using namespace boost;
 
@@ -26,6 +28,8 @@ VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new 
 VGMap::~VGMap() {
     delete village_board;
     delete name;
+    delete SIZE;
+    delete playCounter;
 }
 
 VGMap::VGMap(const VGMap &map) {
@@ -37,6 +41,8 @@ VGMap::VGMap(const VGMap &map) {
     name = new string(*map.name);
     else
         name = nullptr;
+
+    *playCounter = *map.playCounter;
 }
 
 VGMap & VGMap::operator=(const VGMap &map){
@@ -47,6 +53,7 @@ VGMap & VGMap::operator=(const VGMap &map){
         *village_board = *map.village_board;
         *typePlayed = *map.typePlayed;
         *name = *map.name;
+        *playCounter = *map.playCounter;
     }
 
     return *this;
@@ -111,7 +118,47 @@ void VGMap::CreateVillageField() {
 
 }
 void VGMap::PrintGraph() {
-    boost::print_graph(*village_board);
+    // here we are going to print the graph
+    // content of row | row value
+    // column value|
+    const string spacer = "    ";
+    const string inner_spacer ="  ";
+    cout << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << endl;
+    cout << "------------" << "-------------------------------------------------------------" << endl;
+    int num_row{0};
+    for(int i{0}; i < 6; i++){
+        std::cout << spacer << spacer <<  (6 - i) << " |" << spacer;
+        for(int j{5*i}; j < 5*i + 5; j++){
+            if((*village_board)[j].building == nullptr){
+                cout << std::setfill('0') << std::setw(4)<<*(*village_board)[j].position << spacer;
+            }else{
+                if(!(*village_board)[j].building->isFlipped())
+                     cout << " "<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<" "<< spacer;
+                else
+                    cout << "-"<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<"-"<< spacer;
+            }
+        }
+        switch(num_row){
+            case 0: cout << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(4)<<6; break;
+            case 1: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<5; break;
+            case 2: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<4; break;
+            case 3: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<3; break;
+            case 4: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<2; break;
+            case 5: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<1; break;
+        }
+        num_row++;
+        cout << endl;
+    }
+    cout << "------------" << "-------------------------------------------------------------" << endl;
+    cout << "#Colonists|  " << inner_spacer;
+    cout << std::setfill('0') << std::setw(4)<< 5<< spacer;
+    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 3 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    cout << std::setfill('0') << std::setw(4)<< 5 << spacer;
+
+    cout << endl << endl;
+
 }
 // Taken from the Boost Connected Graph Example
 //https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
@@ -244,65 +291,37 @@ void VGMap::resetVisited() {
          *(*village_board)[i].isVisited = false;
     }
 }
+bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
+    bool hasAdjacent{isAdjacentType(type, position)};
+    if(building->getBuildingNumber() == *(*village_board)[position].vCost && (!(*typePlayed)[type] ||  hasAdjacent)) {
+        (*village_board)[position].building = building;
+        *(*village_board)[position].isPlayed = true;
+        (*typePlayed)[type] = true;
+        *playCounter = *playCounter + 1;
+        return true;
+    } else
+        return false;
+}
+
+bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int position) {
+    bool hasAdjacent{isAdjacentType(type, position)};
+    if((!(*typePlayed)[type] ||  hasAdjacent)) {
+        (*village_board)[position].building = building;
+        *(*village_board)[position].isPlayed = true;
+        (*typePlayed)[type] = true;
+        *playCounter = *playCounter + 1;
+        return true;
+    } else
+        return false;
+}
 bool VGMap::setBuilding(int position, Building *building) {
-    if(building->getBuildingNumber() == *(*village_board)[position].vCost || !building->isFlipped()){
-        if( building->getBuildingType() == ResourceTypes::WOOD && ! (*typePlayed)[ResourceTypes::WOOD]){
-            (*village_board)[position].building = building;
-            *(*village_board)[position].isPlayed = true;
-            (*typePlayed)[ResourceTypes::WOOD] = true;
-            return true;
-        }
-        else if(building->getBuildingType() == ResourceTypes::WOOD &&  (*typePlayed)[ResourceTypes::WOOD]){
-            // check adjacency
-            if(isAdjacentType(ResourceTypes::WOOD, position)){
-                (*village_board)[position].building = building;
-                *(*village_board)[position].isPlayed = true;
-                return true;
-            }
-        }
-        else if( building->getBuildingType() == ResourceTypes::STONE && ! (*typePlayed)[ResourceTypes::STONE]){
-            (*village_board)[position].building = building;
-            *(*village_board)[position].isPlayed = true;
-            (*typePlayed)[ResourceTypes::STONE] = true;
-            return true;
-        }
-        else if(building->getBuildingType() == ResourceTypes::STONE &&  (*typePlayed)[ResourceTypes::STONE]){
-            if(isAdjacentType(ResourceTypes::STONE, position)){
-                (*village_board)[position].building = building;
-                *(*village_board)[position].isPlayed = true;
-                return true;
-            }
+    bool isFlipped{building->isFlipped()};
 
-        }
-        else if( building->getBuildingType() == ResourceTypes::SHEEP && ! (*typePlayed)[ResourceTypes::SHEEP]){
-            (*village_board)[position].building = building;
-            *(*village_board)[position].isPlayed = true;
-            (*typePlayed)[ResourceTypes::SHEEP] = true;
-            return true;
-        }
-        else if(building->getBuildingType() == ResourceTypes::SHEEP &&  (*typePlayed)[ResourceTypes::SHEEP]){
-            if(isAdjacentType(ResourceTypes::SHEEP, position)){
-                (*village_board)[position].building = building;
-                *(*village_board)[position].isPlayed = true;
-                return true;
-            }
+    if(!isFlipped)
+        return playBuilding(building, building->getBuildingType(), position);
+    else
+        return playBuildingFlipped(building, building->getBuildingType(), position);
 
-        }
-        else if( building->getBuildingType() == ResourceTypes::WHEAT && ! (*typePlayed)[ResourceTypes::WHEAT]){
-            (*village_board)[position].building = building;
-            *(*village_board)[position].isPlayed = true;
-            (*typePlayed)[ResourceTypes::WHEAT] = true;
-
-            return true;
-        }
-        else if(building->getBuildingType() == ResourceTypes::WHEAT &&  (*typePlayed)[ResourceTypes::WHEAT]){
-            if(isAdjacentType(ResourceTypes::WHEAT, position)){
-                (*village_board)[position].building = building;
-                *(*village_board)[position].isPlayed = true;
-                return true;
-            }
-        }
-    }
     return false;
 }
 
@@ -373,4 +392,23 @@ int VGMap::getPositionCost(int position){
 
 string VGMap::getName(){
     return *name;
+}
+
+
+string VGMap::castResourceTypesToString(ResourceTypes type){
+    if(type == ResourceTypes::SHEEP)
+        return "SH";
+    else if(type == ResourceTypes::WOOD)
+        return "WD";
+    else if(type == ResourceTypes::STONE)
+        return "ST";
+    else if(type == ResourceTypes::WHEAT)
+        return "WT";
+    else
+        return "NA";
+}
+
+int VGMap::getNumUnplayed(){
+    // essentially we loop through
+    return (*SIZE - *playCounter);
 }

@@ -10,7 +10,7 @@
 using namespace std;
 class ResourceTracker {
 public:
-    std::map<ResourceTypes, std::uint_least16_t>* score;
+
     ResourceTracker();
     ~ResourceTracker();
     ResourceTracker(const ResourceTracker& tracker);
@@ -19,6 +19,9 @@ public:
     void printScore();
     bool consumeResources(ResourceTypes, std::uint_least16_t);
     bool hasResources(ResourceTypes, std::uint_least16_t);
+    bool isEmpty();
+    void reset();
+    map<ResourceTypes, std::uint_least16_t> getScore();
 private:
     struct Quad{
         Quad();
@@ -33,6 +36,7 @@ private:
     };
     typedef std::map<NodeID, Quad*> Map;
     typedef std::pair<NodeID, Quad*> Pair;
+    std::map<ResourceTypes, std::uint_least16_t>* score;
     void setQuadInner(Quad *quad, ResourceTypes* resource, int direction);
     inline void addResources(ResourceTypes type);
     const int  *DOWN = new int(-5);

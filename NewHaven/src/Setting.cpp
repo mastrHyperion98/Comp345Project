@@ -1,5 +1,9 @@
 //
 // Created by hyperion on 2020-03-17.
+// Student ID: 40057065
+// Created for: Assingment 2 Concordia W2020 Comp 345 with Dr. Nora
+//
+// Composed of the elements required for Part 1.
 //
 #include "boost/lexical_cast.hpp"
 #include "Setting.h"
@@ -9,51 +13,75 @@
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "iostream"
 
-Setting* Setting::current;
-
-Setting::Setting(){
+Setting::Setting():tracker{new ResourceTracker}{
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
-    delete current;
-    current = this;
+
 }
 
-Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player>(*setting.players)}{
-    // singleton design we dont need any other reference but the current one
-    delete current;
-    current = this;
+Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
+{
+    if(setting.h_deck != nullptr)
+        h_deck = new HarvestDeck(*setting.h_deck);
+    else
+        h_deck = nullptr;
+    if(setting.b_deck != nullptr)
+        b_deck = new BuildingDeck(*setting.b_deck);
+    else
+        b_deck = nullptr;
+    if(setting.board != nullptr)
+        board = new GBMap(*setting.board);
+    else
+        board = nullptr;
+    if(setting.players != nullptr)
+        players = new vector<Player*>(*setting.players);
+    else
+        players = nullptr;
 }
 
 Setting& Setting::operator=(const Setting& setting){
     if(this == &setting)
         return *this;
 
-   if(setting.h_deck != nullptr)
-    h_deck = new HarvestDeck(*setting.h_deck);
-   if(setting.b_deck != nullptr)
-    b_deck = new BuildingDeck(*setting.b_deck);
-   if(setting.board != nullptr)
-    board = new GBMap(*setting.board);
-   if(setting.players != nullptr)
-    players = new vector<Player>(*setting.players);
-    current = this;
-    return *this;
+    if(setting.h_deck != nullptr)
+        h_deck = new HarvestDeck(*setting.h_deck);
+    else
+        h_deck = nullptr;
+    if(setting.b_deck != nullptr)
+        b_deck = new BuildingDeck(*setting.b_deck);
+    else
+        b_deck = nullptr;
+    if(setting.board != nullptr)
+        board = new GBMap(*setting.board);
+    else
+        board = nullptr;
+    if(setting.players != nullptr)
+        players = new vector<Player*>(*setting.players);
+    else
+        players = nullptr;
+
+   *tracker = *setting.tracker;
+
+   return *this;
 };
 Setting::~Setting() {
     delete h_deck;
     delete b_deck;
     delete board;
     delete players;
-    current = nullptr;
+    delete tracker;
 }
-
+/*2
+ * Setup the players, takes in the number of players and creates the proper amount.
+ * Each time a player is created a prompt is asked that the player enters his/her student
+ * ID number.
+ */
 void Setting::setupPlayers(const int numberOfPlayers) {
     std::cout << "CREATING " << numberOfPlayers << " PLAYERS!" << endl;
     if(players == nullptr)
-        players = new vector<Player>;
+        players = new vector<Player*>;
     players->clear();
     for(int i = 0; i < numberOfPlayers;i++){
         string id{""};
@@ -64,10 +92,11 @@ void Setting::setupPlayers(const int numberOfPlayers) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //discard input
             std::cout << "Invalid input; please re-enter.\n";
         }
-        players->push_back(Player(id));
+        players->push_back(new Player(id));
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
+// validate if the ID string are only numbers
 bool Setting::validateIDString(string id) {
     for(int i = 0; i < id.length(); i++){
         int ascii = id.at(i);
@@ -76,6 +105,7 @@ bool Setting::validateIDString(string id) {
     }
     return true;
 }
+// use GBMapLoader to load the proper game_board
 void Setting::loadGameBoard(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     GBMapLoader loader;
@@ -84,15 +114,15 @@ void Setting::loadGameBoard(const std::string filepath) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
         }
-    }catch(InvalidConfigurationException ex){
+    }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
         throw ex;
-    }catch(BoardConfigurationNotLoaded ex){
+    }catch(const BoardConfigurationNotLoaded &ex){
         cout << "LOADING FAILED" << endl;
         throw ex;
     }
 }
-
+// use VGMap loader to load proper village board
 VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
@@ -100,27 +130,23 @@ VGMap Setting::loadVillageMap(const std::string filepath) {
         if (loader.loadVConfig(filepath)) {
             cout << "LOADING SUCCESSFUL" << endl;
             return loader.generateVMap();
-        }
-    }catch(InvalidConfigurationException ex){
+        } else
+            throw BoardConfigurationNotLoaded();
+    }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
-        throw InvalidConfigurationException();
-    }catch(BoardConfigurationNotLoaded ex){
+        throw ex;
+    }catch(const BoardConfigurationNotLoaded &ex){
         cout << "LOADING FAILED" << endl;
-        throw BoardConfigurationNotLoaded();
+        throw ex;
     }
 }
-
+// reset resourceTracker to default state
 void Setting::resourceTracker(){
     cout << "SETTING GAME RESOURCE MARKERS!" << endl;
-    for(std::vector<Player>::iterator it = players->begin() ; it != players->end(); ++it){
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WHEAT,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::STONE,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::SHEEP,0));
-        it->resourceTracker()->score->insert(pair<ResourceTypes,std::uint_least16_t>(ResourceTypes::WOOD,0));
-    }
+    tracker->reset();
     cout << "GAME RESOURCE MARKERS SET SUCCESSFULLY" << endl;
 }
-
+// User interface for inputting the number of players
 int Setting::promptNumberPlayers() {
     int number_of_players;
     while ((cout << "Enter the number of players (2, 3 or 4): " && !(cin >> number_of_players))
@@ -131,7 +157,7 @@ int Setting::promptNumberPlayers() {
     }
     return number_of_players;
 }
-
+// create the harvest deck
 inline void Setting::createHarvestDeck() {
     cout << "CREATING HARVEST DECK!" << endl;
     if(h_deck == nullptr) {
@@ -141,6 +167,7 @@ inline void Setting::createHarvestDeck() {
         cout << "ERROR HARVEST DECK HAS ALREADY BEEN CREATED!";
 }
 
+// create the building deck
 inline void Setting::createBuildingDeck() {
     cout << "CREATING BUILDING DECK!" << endl;
     if(b_deck == nullptr) {
@@ -151,6 +178,7 @@ inline void Setting::createBuildingDeck() {
         cout << "ERROR BUILDING DECK HAS ALREADY BEEN CREATED!" << endl;
 }
 
+// inline function to draw a building from the deck
 inline Building* Setting::drawBuilding() {
     cout << "DRAWING A BUILDING" << endl;
     if(b_deck == nullptr)
@@ -158,6 +186,7 @@ inline Building* Setting::drawBuilding() {
     return b_deck->draw();
 }
 
+// inline function to draw a harvest tile from the deck
 inline HarvestTile* Setting::drawHarvestTile() {
     cout << "DRAWING A HARVEST TILE" << endl;
     if(h_deck == nullptr)
@@ -165,15 +194,19 @@ inline HarvestTile* Setting::drawHarvestTile() {
     return h_deck->draw();
 }
 
+// get the number of plauyers
 inline int Setting::getNumberPlayers() {
     if(players== nullptr)
         return 0;
     return players->size();
 }
 
+// main Setting loop --- initializes all the settings and make it ready for use
+// returns false if failed, true otherwise.
 bool Setting::initSetting() {
 
-
+// define pre-processor command passed on current environment. DEBUG environment file_path is different on
+// windows than Unix.
 #ifdef _DEBUG
     string files[3] = {"../../../config/GBMapConfig_0.config",
                        "../../../config/GBMapConfig_1.config",
@@ -214,31 +247,125 @@ bool Setting::initSetting() {
         }
         setupPlayers(number_players);
         int file_index = 0;
-        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
-            it->setVillage(loadVillageMap(v_files[file_index]));
+        for(int i = 0; i < players->size(); i++){
+            (*players)[i]->setVillage(loadVillageMap(v_files[file_index]));
             file_index++;
         }
         resourceTracker();
         createBuildingDeck();
         createHarvestDeck();
-        for (std::vector<Player>::iterator it = players->begin(); it != players->end(); ++it) {
+        for(int i = 0; i < players->size(); i++){
             cout << "NEW PLAYER GETTING READY TO DRAW HIS/HER INTIAL SETUP!" << endl;
-            for (int i = 0; i < 5; i++)
-                it->drawBuilding(drawBuilding());
+            for (int j = 0; j < 5; j++)
+                (*players)[i]->drawBuilding(drawBuilding());
             for (int j = 0; j < 2; j++)
-                it->drawHarvestTile(drawHarvestTile());
-            it->setShipmentTile(drawHarvestTile());
+                (*players)[i]->drawHarvestTile(drawHarvestTile());
+            (*players)[i]->setShipmentTile(drawHarvestTile());
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
-    }catch(InvalidConfigurationException ex){
+    }catch(const InvalidConfigurationException &ex){
         cerr << ex.what() << endl;
         return false;
     }
-    catch(BoardConfigurationNotLoaded ex){
+    catch(const BoardConfigurationNotLoaded &ex){
         cerr << ex.what() << endl;
         return false;
     }
     return true;
 }
 
+// Slightly altered version from DrawBuilding found in Part3.5
+/*
+ * Iteration of user interactions to fill their hands with new buildings based on the position of the resource
+ * markers
+ */
+void Setting::DrawBuilding(int player_index)
+{
+    if(player_index < 0 || player_index > players->size())
+        throw std::exception();
+
+    std::uint_fast8_t buildingCountToDraw{ 4 };
+
+    for (std::pair<ResourceTypes, std::uint_fast16_t> const& element: tracker->getScore())
+    {
+        if (element.second != 0)
+            buildingCountToDraw--;
+    }
+
+    // print buildings available
+
+    bool loopPool{ true };
+
+    for (std::uint_fast8_t i = 0; i < buildingCountToDraw; i++)
+    {
+        std::uint_fast16_t buildingIndex;
+        char input;
+
+        if (loopPool)
+        {
+            b_deck->printBuildingPool();
+            std::cout << "\nEnter building card index to draw from the pool: ";
+
+            try
+            {
+                std::cin >> buildingIndex;
+
+                if (std::cin.fail() || buildingIndex <= 0 || buildingIndex > b_deck->getBuildingPoolSize())
+                    throw std::exception();
+
+                loopPool = false;
+                (*players)[player_index]->drawBuildingPool(b_deck->buildingPoolDraw(buildingIndex - 1));
+                continue;
+            }
+            catch (const std::exception&)
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "\nThe input was invalid, please enter a valid index.\n";
+                i--;
+                continue;
+            }
+        }
+
+        std::cout << "\nDo you want to pick another card from the pool? (y/n): ";
+        try
+        {
+            std::cin >> input;
+
+            if (input == 'y' || input == 'Y')
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                loopPool = true;
+                i--;
+                continue;
+            }
+            else if (input == 'n' || input == 'N')
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                loopPool = false;
+            }
+            else
+            {
+                throw std::exception();
+            }
+        }
+        catch (const std::exception& e)
+        {
+
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "\nInvalid input, try again.\n";
+            i--;
+            continue;
+        }
+
+
+        (*players)[player_index]->drawBuilding(b_deck->draw());
+        std::cout << "\nA card was drawn from the deck!" << endl;
+    }
+
+    b_deck->fillBuildingPool();
+}

@@ -10,7 +10,7 @@
 #include <vector>
 #include "Resources.h"
 #include "Square.h"
-
+#include <string>
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::bidirectionalS, Square> ResourceTrails;
 typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
@@ -24,17 +24,16 @@ public:
     GBMap(int configuration);
     GBMap(const GBMap &map);
     ~GBMap();
-    static GBMap *current_map;
     const int* const CONFIG;
     const int * const SIZE;
     bool placeHarvestTile(int NodeID,HarvestTile *tile);
     ResourceTrails* getResourcedGraph(int position);
     void printBoard();
     void printIndexConfiguration();
-    bool addBuildingToBoard(Building &building);
-    Building* drawBuildingFromBoard(int position);
-    GameBoard* board;
+    HarvestTile* getHarvestTile(int);
+    bool isGameOver();
 private:
+    GameBoard* board;
     std::vector<Building*>* buildings;
     HarvestTile *tl{new HarvestTile(new ResourceTypes[4]{ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD})};
     HarvestTile *tr{new HarvestTile(new ResourceTypes[4]{ResourceTypes::WHEAT, ResourceTypes ::SHEEP, ResourceTypes::WHEAT, ResourceTypes::WOOD})};
@@ -45,6 +44,8 @@ private:
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;
     inline int getVertexPosition(ResourceTrails graph, int position) const;
     void assignDefaultTiles();
+    string castResourceTypesToString(ResourceTypes);
+    int *playCounter{new int(0)};
 };
 
 #endif //NEWHAVEN_GBMAP_H
