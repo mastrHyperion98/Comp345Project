@@ -17,10 +17,19 @@ Setting::Setting():tracker{new ResourceTracker}{
 
 }
 
-Setting::Setting(const Setting& setting):h_deck{new HarvestDeck(*setting.h_deck)}, b_deck{new BuildingDeck(*setting.b_deck)},
-    board{new GBMap(*setting.board)}, players{new vector<Player*>(*setting.players)}, tracker{new ResourceTracker{*setting.tracker}}
+Setting::Setting(const Setting& setting)
 {
-    // singleton design we dont need any other reference but the current one
+    if(setting.h_deck != nullptr)
+        h_deck = new HarvestDeck(*setting.h_deck);
+    if(setting.b_deck != nullptr)
+        b_deck = new BuildingDeck(*setting.b_deck);
+    if(setting.board != nullptr)
+        board = new GBMap(*setting.board);
+    if(setting.players != nullptr)
+        players = new vector<Player*>(*setting.players);
+
+    // always initialized. Dont need to worry about nullptr errors
+    *tracker = *setting.tracker;
 }
 
 Setting& Setting::operator=(const Setting& setting){
