@@ -294,7 +294,7 @@ scores GameController::findWinner(){
         int score{(*it)->calculateScore()};
         cout << "\nPlayer: " << (*it.base())->getID() << " has " << score << " colonists" << endl;
          // add the entry to the map
-        player_scores.insert(entry(*it.base(),score));
+        player_scores.insert(entry(*it,score));
     }
     // now we need to traverse the map and find the max value
     int current_max{0};

@@ -40,7 +40,7 @@ Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tr
 Setting& Setting::operator=(const Setting& setting){
     if(this == &setting)
         return *this;
-    
+
     if(setting.h_deck != nullptr)
         h_deck = new HarvestDeck(*setting.h_deck);
     else
