@@ -10,6 +10,24 @@
 #include "../Exceptions/InvalidConfigurationException.h"
 
 using namespace std;
+
+VGMapLoader::VGMapLoader(){}
+VGMapLoader::VGMapLoader(const VGMapLoader &loader) {
+    *name = *loader.name;
+}
+
+VGMapLoader & VGMapLoader::operator=(const VGMapLoader &loader) {
+    if(&loader == this)
+        return *this;
+
+    *name = *loader.name;
+
+    return *this;
+}
+
+VGMapLoader::~VGMapLoader() {
+    delete name;
+}
 // Reads filepath and returns true if the board was creation. It will either return false or an exception if it fails.
 bool VGMapLoader::loadVConfig(std::string filepath) {
 

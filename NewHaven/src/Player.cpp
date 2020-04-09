@@ -157,22 +157,29 @@ int Player::placeHarvestTile() {
     cout << "\nHere is a combination of rotations possible for your tile:\n";
     // show possible tile positions
     HarvestTile * tile = (*my_hand->harvestTiles)[index_tile-1];
+    ResourceTypes *types = tile->getTileContent();
     // position 1 --> default
-    cout << "\n1:\t" << tile->getTileContent()[0] << '\t' <<tile->getTileContent()[1] << endl;
-    cout << "  \t" << tile->getTileContent()[3] << '\t' << tile->getTileContent()[2] << endl << endl;
+    cout << "\n1:\t" <<types[0] << '\t' <<types[1] << endl;
+    cout << "  \t" << types[3] << '\t' << types[2] << endl << endl;
+    delete types;
     // position 2 -->
     tile->rotateTileClockwise();
-    cout << "2:\t" << tile->getTileContent()[0] << '\t' <<tile->getTileContent()[1] << endl;
-    cout << "  \t" << tile->getTileContent()[3] << '\t' << tile->getTileContent()[2] << endl << endl;
+    types = tile->getTileContent();;
+    cout << "2:\t" <<types[0] << '\t' <<types[1] << endl;
+    cout << "  \t" << types[3] << '\t' << types[2] << endl << endl;
+    delete types;
     // position 3
     tile->rotateTileClockwise();
-    cout << "3:\t" << tile->getTileContent()[0] << '\t' <<tile->getTileContent()[1] << endl;
-    cout << "  \t" << tile->getTileContent()[3] << '\t' << tile->getTileContent()[2] << endl << endl;
+    types = tile->getTileContent();;
+    cout << "3:\t" << types[0] << '\t' <<types[1] << endl;
+    cout << "  \t" << types[3] << '\t' << types[2] << endl << endl;
+    delete types;
     // position 4
     tile->rotateTileClockwise();
-    cout << "4:\t" << tile->getTileContent()[0] << '\t' <<tile->getTileContent()[1] << endl;
-    cout << "  \t" << tile->getTileContent()[3] << '\t' << tile->getTileContent()[2] << endl << endl;
-
+    types = tile->getTileContent();;
+    cout << "4:\t" << types[0] << '\t' <<types[1] << endl;
+    cout << "  \t" << types[3] << '\t' << types[2] << endl << endl;
+    delete types;
 
     while( (cout << "Choice: " && !(cin >> choice_rot)) || choice_rot < 0 || choice_rot > 4){
         cin.clear(); // reset failbit

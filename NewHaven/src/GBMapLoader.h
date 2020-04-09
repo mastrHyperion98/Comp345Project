@@ -10,6 +10,10 @@
 #include "GBMap.h"
 class GBMapLoader {
 public:
+    GBMapLoader();
+    GBMapLoader(const GBMapLoader & loader);
+    GBMapLoader& operator=(const GBMapLoader & loader);
+    ~GBMapLoader();
     bool loadConfig(std::string filepath);
     GBMap* generateMap();
 

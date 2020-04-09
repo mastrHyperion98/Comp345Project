@@ -9,6 +9,10 @@
 
 class VGMapLoader {
 public:
+    VGMapLoader();
+    VGMapLoader(const VGMapLoader & loader);
+    VGMapLoader& operator=(const VGMapLoader & loader);
+    ~VGMapLoader();
     bool loadVConfig(std::string filepath);
     VGMap generateVMap();
 
