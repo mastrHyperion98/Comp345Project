@@ -11,6 +11,24 @@
 #include "../Exceptions/InvalidConfigurationException.h"
 
 using namespace std;
+
+GBMapLoader::GBMapLoader(){}
+GBMapLoader::GBMapLoader(const GBMapLoader &loader) {
+    *game_board_configuration = *loader.game_board_configuration;
+}
+
+GBMapLoader & GBMapLoader::operator=(const GBMapLoader &loader) {
+    if(&loader == this)
+        return *this;
+
+    *game_board_configuration = *loader.game_board_configuration;
+
+    return *this;
+}
+
+GBMapLoader::~GBMapLoader() {
+    delete game_board_configuration;
+}
 // Reads filepath and returns true if the board was creation. It will either return false or an exception if it fails.
 bool GBMapLoader::loadConfig(std::string filepath) {
 
@@ -58,8 +76,7 @@ bool GBMapLoader::loadConfig(std::string filepath) {
 // create a GBMap, set its configuration and generate the graph before returning it.
 GBMap* GBMapLoader::generateMap() {
     if(*game_board_configuration != -1){
-        GBMap *gb_map{new GBMap(*game_board_configuration)};
-        return gb_map;
+        return new GBMap(*game_board_configuration);
     }
     else{
         throw BoardConfigurationNotLoaded();

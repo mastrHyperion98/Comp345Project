@@ -101,6 +101,7 @@ void GameController::playTurn(){
             pos=current->placeHarvestTile();
             ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
             game_settings->tracker->computeScore(*trail);
+            delete trail;
         }
             // play the shipmentTile
         else if(tile_option == 2){
