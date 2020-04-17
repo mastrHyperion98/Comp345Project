@@ -72,9 +72,16 @@ for(int i = 0; i < game_settings->players->size(); i++){
 }
     return current_index;
 }
+
+int GameController::getCurrentPlayer()
+{
+    return *current_turn_player;
+}
+
 //  playTurn function that executes the turn of the current player and all the user
 // interaction needed to complete it
 void GameController::playTurn(){
+    notify();   // We notify observers that the turn has changed
     int pos;
     Player *current = (*game_settings->players)[*current_turn_player];
     bool shipmentPlayed{false};
