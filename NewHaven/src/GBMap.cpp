@@ -11,7 +11,8 @@
 #include "../src/GBMap.h"
 #include <iomanip>
 
-GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
+GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG * 10))), buildings{ new std::vector<Building*> }, playCounter{ new int(4) }, boardString{ new string() }
+{
     board = new GameBoard();
     // populate board
     if(!createBoard())

@@ -49,7 +49,7 @@ private:
     inline int getVertexPosition(ResourceTrails graph, int position) const;
     void assignDefaultTiles();
     string castResourceTypesToString(ResourceTypes);
-    int *playCounter{new int(4)};
+    int *playCounter;
 };
 
 #endif //NEWHAVEN_GBMAP_H
