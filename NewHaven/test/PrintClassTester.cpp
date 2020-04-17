@@ -4,16 +4,27 @@
 int main() {
     /*
     We test the modified GBMap print functions
-    GBMap map(2);
+    GBMap gMap(2);
 
-    string board{ map.printBoard() };
+    string board{ gMap.printBoard() };
 
-    string bConfig{ map.printIndexConfiguration() };
+    string bConfig{ gMap.printIndexConfiguration() };
 
-    cout << board << '\n' << bConfig;
+    cout << gBoard << '\n' << bConfig;
     */
 
+    /*
+    We test the modified VGMap print function
+#ifdef _DEBUG
+    VGMap vMap("../../../config/GBMapConfig_0.config");
+#else
+    VGMap vMap("".. / config / VGMapNum_0.config");
+#endif // DEBUG
 
+    string vBoard{ vMap.PrintGraph() };
+
+    cout << vBoard;
+    */
 
     return 0;
 }

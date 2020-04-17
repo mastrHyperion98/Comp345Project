@@ -43,7 +43,7 @@ public:
     VGMap(const VGMap &map);
     VGMap &operator=(const VGMap &map);
     ~VGMap();
-    void PrintGraph();
+    string PrintGraph();
     void PrintConnectedGraph();
     bool isPlayed(int position);
     bool setBuilding(int position, Building *building);
