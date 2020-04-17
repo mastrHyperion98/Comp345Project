@@ -28,7 +28,7 @@ public:
     const int * const SIZE;
     bool placeHarvestTile(int NodeID,HarvestTile *tile);
     ResourceTrails* getResourcedGraph(int position);
-    void printBoard();
+    string printBoard();
     void printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
