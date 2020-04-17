@@ -51,6 +51,9 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
+    // We update the current board string and notify observers
+    *boardString = printBoard();
+    notify();
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
@@ -369,61 +372,44 @@ void GBMap::assignDefaultTiles() {
      * Create 4 tiles
      */
     switch((*CONFIG)){
-        case 0:
-            /*
-             * config 0 --- 0   4 20 24
-             */
-            placeHarvestTile(0, tl);
-            *(*board)[0].isPlayed = true;
-            placeHarvestTile(4,tr);
-            *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, br);
-            *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, bl);
-            *(*board)[24].isPlayed = true;
-            *playCounter = 4;
-            break;
         case 1:
             /*
              * config 1 --- 5   9 25 29
              */
-            placeHarvestTile(5, tl);
+            (*board)[5].tile = tl;
             *(*board)[5].isPlayed = true;
-            placeHarvestTile(9,tr);
+            (*board)[9].tile = tr;
             *(*board)[9].isPlayed = true;
-            placeHarvestTile(25, br);
+            (*board)[25].tile = br;
             *(*board)[25].isPlayed = true;
-            placeHarvestTile(29, bl);
+            (*board)[29].tile = bl;
             *(*board)[29].isPlayed = true;
-            *playCounter = 4;
             break;
         case 2:
             /*
                  * config 1 --- 6   10 34 38
                  */
-            placeHarvestTile(6, tl);
+            (*board)[6].tile = tl;
             *(*board)[6].isPlayed = true;
-            placeHarvestTile(10,tr);
+            (*board)[10].tile = tr;
             *(*board)[10].isPlayed = true;
-            placeHarvestTile(34, br);
+            (*board)[34].tile = br;
             *(*board)[34].isPlayed = true;
-            placeHarvestTile(38, bl);
+            (*board)[38].tile = bl;
             *(*board)[38].isPlayed = true;
-            *playCounter = 4;
             break;
         default:
             /*
              * config 0 --- 0   4 20 24
              */
-            placeHarvestTile(0, tl);
+            (*board)[0].tile = tl;
             *(*board)[0].isPlayed = true;
-            placeHarvestTile(4,tr);
+            (*board)[4].tile = tr;
             *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, br);
+            (*board)[20].tile = br;
             *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, bl);
+            (*board)[24].tile = bl;
             *(*board)[24].isPlayed = true;
-            *playCounter = 4;
             break;
     }
 }
@@ -445,4 +431,9 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 
 bool GBMap::isGameOver(){
     return (*SIZE - *playCounter) == 1;
+}
+
+string GBMap::getBoardString() const
+{
+    return *boardString;
 }
