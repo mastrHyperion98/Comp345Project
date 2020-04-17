@@ -29,7 +29,7 @@ public:
     bool placeHarvestTile(int NodeID,HarvestTile *tile);
     ResourceTrails* getResourcedGraph(int position);
     string printBoard();
-    void printIndexConfiguration();
+    string printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
 private:

@@ -3,12 +3,14 @@
 
 int main() {
     /*
-    We test the modified GBMap print function
+    We test the modified GBMap print functions
     GBMap map(2);
 
-    string str{ map.printBoard() };
+    string board{ map.printBoard() };
 
-    cout << str;
+    string bConfig{ map.printIndexConfiguration() };
+
+    cout << board << '\n' << bConfig;
     */
 
 
