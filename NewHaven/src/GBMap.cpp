@@ -21,16 +21,18 @@ GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new 
         throw 1;
     // assign
     assignDefaultTiles();
-    //We attach an observer to this class
-    attach(GameController::current->game_settings->flowPrinter);
+    //We attach an observer to this class if the map wasn't created independently
+    if (GameController::current != nullptr)
+        attach(GameController::current->game_settings->flowPrinter);
 }
 GBMap::GBMap(const GBMap& map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG * 10))), buildings{ new std::vector<Building*>(*map.buildings) }, boardString{ new string(*map.boardString) }
 {
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     *playCounter = *map.playCounter;
-    //We attach an observer to this class
-    attach(GameController::current->game_settings->flowPrinter);
+    //We attach an observer to this class if the map wasn't created independently
+    if (GameController::current != nullptr)
+        attach(GameController::current->game_settings->flowPrinter);
 }
 GBMap::~GBMap(){
     delete CONFIG;
