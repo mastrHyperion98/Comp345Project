@@ -10,6 +10,7 @@
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
 #include <iomanip>
+#include "GameController.h"
 
 GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG * 10))), buildings{ new std::vector<Building*> }, playCounter{ new int(4) }, boardString{ new string() }
 {
@@ -20,11 +21,16 @@ GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new 
         throw 1;
     // assign
     assignDefaultTiles();
+    //We attach an observer to this class
+    attach(GameController::current->game_settings->flowPrinter);
 }
-GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
+GBMap::GBMap(const GBMap& map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG * 10))), buildings{ new std::vector<Building*>(*map.buildings) }, boardString{ new string(*map.boardString) }
+{
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     *playCounter = *map.playCounter;
+    //We attach an observer to this class
+    attach(GameController::current->game_settings->flowPrinter);
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -36,7 +42,7 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     delete playCounter;
-    // set to nullptr since it is static and belongs to the class.
+    delete boardString;
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
     board = new GameBoard();
