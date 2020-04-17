@@ -2,6 +2,15 @@
 
 #include <vector>
 
+class Observer
+{
+public:
+	~Observer() = default;
+	virtual void update() = 0;
+protected:
+	Observer() = default;
+};
+
 class Observable
 {
 public:
@@ -14,13 +23,4 @@ public:
 
 private:
 	std::vector<Observer*>* observers;
-};
-
-class Observer
-{
-public:
-	~Observer() = default;
-	virtual void update() = 0:
-protected:
-	Observer() = default;
 };
