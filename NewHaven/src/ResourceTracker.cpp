@@ -403,10 +403,18 @@ map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
 };
 
 void ResourceTracker::update(){
+    int c_player{GameController::current->getCurrentPlayerTurn()};
+    Player *ptr = (*GameController::current->game_settings->players)[c_player];
     if(GameController::current->game_settings->board->RT != nullptr) {
         computeScore(*GameController::current->game_settings->board->RT);
         // delete it when we are done
         delete GameController::current->game_settings->board->RT;
         GameController::current->game_settings->board->RT = nullptr;
+    }
+    if(*ptr->getVillage().status_cost != 0 && ptr->getVillage().status_type != nullptr){
+        consumeResources(*ptr->getVillage().status_type, *ptr->getVillage().status_cost);
+        *ptr->getVillage().status_cost = 0;
+        delete ptr->getVillage().status_type;
+        ptr->getVillage().status_type = nullptr;
     }
 }

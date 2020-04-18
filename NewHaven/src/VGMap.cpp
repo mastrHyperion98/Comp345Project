@@ -31,6 +31,8 @@ VGMap::~VGMap() {
     delete SIZE;
     delete playCounter;
     delete typePlayed;
+    delete status_cost;
+    delete status_type;
 }
 
 VGMap::VGMap(const VGMap &map) {

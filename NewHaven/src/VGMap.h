@@ -53,8 +53,9 @@ public:
     void resetVisited();
     string getName();
     int getNumUnplayed();
-    // 0 means unplayed
+    // 0 means unplayed -- use as flag
     int * status_cost{new int{0}};
+    ResourceTypes *status_type = nullptr;
 private:
     string *name;
     void CreateVillageField();
