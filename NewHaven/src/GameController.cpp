@@ -255,6 +255,7 @@ void GameController::shareTheWealth(){
     do{
         // print out the available resources
         // prompt user to action
+        *is_share_wealth=true;
         cout << "\nLeftover resources:" << endl;
         game_settings->tracker->printScore();
         cout << "\nHere are your building cards:";
@@ -269,12 +270,14 @@ void GameController::shareTheWealth(){
         }
         // call build village for that user
         if(choice == 1){
+            *sw_player=player_index;
             (*game_settings->players)[player_index]->buildVillage();
         }
 
         player_index = ++player_index % game_settings->players->size();
 
     }while(player_index != *current_turn_player && !game_settings->tracker->isEmpty());
+    *is_share_wealth=false;
 }
 // this will need to be tested
 scores GameController::findWinner(){
