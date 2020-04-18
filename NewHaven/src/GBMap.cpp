@@ -351,26 +351,26 @@ string GBMap::printIndexConfiguration() {
     ostringstream boardConfig;
 
     if(*CONFIG == 2){
-        boardConfig << "BOARD LAYOUT FOR 4 Players" << "\n" <<" -  00 01 02 03 04--" <<"\n 05 06 07 08 09 10 11-"
-             << "\n 12 13 14 15 16 17 18-" << "\n 19 20 21 22 23 24 25-" << "\n 26 27 28 29 30 31 32-" << "\n 33 34 35 36 37 38 39 "
-             << "\n -  40 41 42 43 44 -" << '\n';
+        boardConfig <<" -- 00 01 02 03 04 --" <<"\n 05 06 07 08 09 10 11"
+             << "\n 12 13 14 15 16 17 18" << "\n 19 20 21 22 23 24 25" << "\n 26 27 28 29 30 31 32" << "\n 33 34 35 36 37 38 39 "
+             << "\n -- 40 41 42 43 44 --" << '\n';
     }
     else if(*CONFIG == 1){
-        string config =" -  00 01 02 03 04 -\n";
-        config.append(" -  05 06 07 08 09 -\n");
-        config.append(" -  10 11 12 13 14 -\n");
-        config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  20 21 22 23 24 -\n");
-        config.append(" -  25 26 27 28 29 -\n");
-        config.append(" -  30 31 32 33 34 -\n");
+        string config =" -- 00 01 02 03 04 --\n";
+        config.append(" -- 05 06 07 08 09 --\n");
+        config.append(" -- 10 11 12 13 14 --\n");
+        config.append(" -- 15 16 17 18 19 --\n");
+        config.append(" -- 20 21 22 23 24 --\n");
+        config.append(" -- 25 26 27 28 29 --\n");
+        config.append(" -- 30 31 32 33 34 --\n");
         boardConfig << config;
     }
     else{
-        string config =" -  00 01 02 03 04 -\n";
-        config.append(" -  05 06 07 08 09 -\n");
-        config.append(" -  10 11 12 13 14 -\n");
-        config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  20 21 22 23 24 -\n");
+        string config =" -- 00 01 02 03 04 --\n";
+        config.append(" -- 05 06 07 08 09 --\n");
+        config.append(" -- 10 11 12 13 14 --\n");
+        config.append(" -- 15 16 17 18 19 --\n");
+        config.append(" -- 20 21 22 23 24 --\n");
         boardConfig << config;
     }
 

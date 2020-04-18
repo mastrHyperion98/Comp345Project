@@ -102,7 +102,7 @@ void GameController::playTurn(){
 
     if (current->getShipmentTile() != nullptr)
     {
-        cout << "What would you like to do? "
+        cout << "\nWhat would you like to do? "
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();
