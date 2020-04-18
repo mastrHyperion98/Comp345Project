@@ -38,9 +38,10 @@ void GameController::start(){
     for(int i = 0; i < 25; i++){
         cout << "\n"; // clear screen
     }
-    cout << "STARTING PLAYER HAS ID: " << (*game_settings->players)[*current_turn_player]->getID() << endl;
+
     while(!hasGameEnded()){
-        // PrintGameBoard
+        notify();   // We notify observers that the turn has changed
+        game_settings->flowPrinter->printCurrentPlayer();
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
@@ -52,6 +53,9 @@ bool GameController::initialize() {
     bool init = game_settings->initSetting();
     if(init)
         *current_turn_player = startingPlayer();
+
+    attach(game_settings->flowPrinter);
+
     return init;
 }
 // find the starting player by comparing their studentID
@@ -72,6 +76,12 @@ for(int i = 0; i < game_settings->players->size(); i++){
 }
     return current_index;
 }
+
+int GameController::getCurrentPlayer()
+{
+    return *current_turn_player;
+}
+
 //  playTurn function that executes the turn of the current player and all the user
 // interaction needed to complete it
 void GameController::playTurn(){
@@ -81,19 +91,18 @@ void GameController::playTurn(){
 
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-    // Print board ID configuration
-    cout << "\n***GAME BOARD ID CONFIGURATION***" << endl;
-    game_settings->board->printIndexConfiguration();
-    cout << "\n***GAME BOARD CONTENT***" << endl;
-    game_settings->board->printBoard();
-    cout << "Here are your building cards:";
+
+    game_settings->flowPrinter->printGameBoardConfig();
+    game_settings->flowPrinter->printGameBoard();
+    
+    cout << "Here are your building cards:\n";
     current->printBuildingCards();
-    cout << "\nHere are your Harvest Tiles:";
+    cout << "\nHere are your Harvest Tiles:\n";
     current->printHarvestCards();
 
     if (current->getShipmentTile() != nullptr)
     {
-        cout << '\n' << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
+        cout << "\nWhat would you like to do? "
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();
@@ -110,8 +119,7 @@ void GameController::playTurn(){
 
 
 
-    cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
-    game_settings->board->printBoard();
+    game_settings->flowPrinter->printGameBoard();
     // current player builds his village
     current->buildVillage();
     shareTheWealth();

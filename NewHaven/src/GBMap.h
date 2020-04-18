@@ -12,13 +12,15 @@
 #include "Square.h"
 #include "GameObservers.h"
 #include <string>
+#include "GameObservers.h"
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::bidirectionalS, Square> ResourceTrails;
 typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
 
 
 using namespace std;
-class GBMap: public Observable{
+class GBMap : public Observable
+{
     // declaring public methods and parameters
 public:
     GBMap();
@@ -29,13 +31,14 @@ public:
     const int * const SIZE;
     bool placeHarvestTile(int NodeID,HarvestTile *tile);
     ResourceTrails* getResourcedGraph(int position);
-    void printBoard();
-    void printIndexConfiguration();
+    string printBoard();
+    string printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
     ResourceTrails *RT{nullptr};
-
+    string getBoardString() const;
 private:
+    string* boardString;
     GameBoard* board;
     std::vector<Building*>* buildings;
     HarvestTile *tl{new HarvestTile(new ResourceTypes[4]{ResourceTypes::STONE, ResourceTypes ::SHEEP, ResourceTypes::WOOD, ResourceTypes::WOOD})};
@@ -48,7 +51,7 @@ private:
     inline int getVertexPosition(ResourceTrails graph, int position) const;
     void assignDefaultTiles();
     string castResourceTypesToString(ResourceTypes);
-    int *playCounter{new int(0)};
+    int *playCounter;
 };
 
 #endif //NEWHAVEN_GBMAP_H

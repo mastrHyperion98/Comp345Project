@@ -9,8 +9,10 @@
 #include "GBMap.h"
 #include "ResourceTracker.h"
 #include <string>
+#include "GameFlowPrinter.h"
 
 class ResourceTracker;
+
 class Setting {
 public:
     Setting();
@@ -23,6 +25,7 @@ public:
     ResourceTracker *tracker;
     GBMap *board;
     vector<Player*>* players;
+    GameFlowPrinter* flowPrinter;
     bool initSetting();
     void DrawBuilding(int);
 private:

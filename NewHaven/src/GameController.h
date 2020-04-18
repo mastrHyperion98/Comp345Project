@@ -5,11 +5,13 @@
 #ifndef NEWHAVEN_GAMECONTROLLER_H
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
+#include "GameObservers.h"
 
 class Setting;
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
-class GameController {
+class GameController : public Observable
+{
 public:
     GameController();
     GameController(const GameController & controller) = delete;
@@ -17,6 +19,7 @@ public:
     ~GameController();
     bool initialize();
     void start();
+    int getCurrentPlayer();
     static GameController *current;
     Setting *game_settings;
     int getCurrentPlayerTurn(){return *current_turn_player;};

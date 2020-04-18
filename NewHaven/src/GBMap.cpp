@@ -10,8 +10,10 @@
 #include "boost/graph/copy.hpp"
 #include "../src/GBMap.h"
 #include <iomanip>
+#include "GameController.h"
 
-GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
+GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG * 10))), buildings{ new std::vector<Building*> }, playCounter{ new int(4) }, boardString{ new string() }
+{
     board = new GameBoard();
     // populate board
     if(!createBoard())
@@ -19,10 +21,14 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
         throw 1;
     // assign
     assignDefaultTiles();
+    //We attach an observer to this class if the map wasn't created independently
+    *boardString = printBoard();
 }
-GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
+GBMap::GBMap(const GBMap& map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG * 10))), buildings{ new std::vector<Building*>(*map.buildings) }, boardString{ new string(*map.boardString) }
+{
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
+
     *playCounter = *map.playCounter;
     // the pointers get destroy after notified probably always nullptr
     RT = map.RT;
@@ -37,8 +43,8 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     delete playCounter;
+    delete boardString;
     delete RT;
-    // set to nullptr since it is static and belongs to the class.
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
     board = new GameBoard();
@@ -54,6 +60,8 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
+    // We update the current board string
+    *boardString = printBoard();
     // RT should be deleted and set to nullptr from the resourceTracker;
     RT = getResourcedGraph(NodeID);
     this->notify();
@@ -120,11 +128,12 @@ ResourceTrails * GBMap::getResourcedGraph(int position) {
 }
 
 
-void GBMap::printBoard() {
+string GBMap::printBoard() {
   /*
    * Traverses the graph row by row and prints out the content of each element
    * Unplayed Tile will print field index in every 4 resource space
    */
+    ostringstream gBoard;
     const string spacer{"    "};
     const string inner_spacer("  ");
     // Check config to determine #row
@@ -138,114 +147,116 @@ void GBMap::printBoard() {
         for(int i{0}; i < row_num; i++){
             for(int j{i*5}; j <  (i * col_num) + col_num; j++){
                 if(!*(*board)[j].isPlayed) {
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
                 }else{
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
                 }
             }
             // new line
-            cout << endl;
+            gBoard << '\n';
             for(int j{i*5}; j < (i * col_num) + col_num; j++){
                 if(!*(*board)[j].isPlayed) {
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
                 }else{
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
                 }
             }
-            cout << endl << endl;
+            gBoard << '\n' << '\n';
         }
     }else{
         // CONFIG == 2 has a special case where the first row and last row have only 5 elements rather than 7
         // As such those two rows must be handled seperately.
         int col_num{7};
         // perform on first row
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
         for(int j{0}; j <  5; j++){
             if(!*(*board)[j].isPlayed) {
-                cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                gBoard << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
             }else{
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
             }
         }
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
-        cout << endl;
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
+        gBoard << '\n';
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
         for(int j{0}; j < 5; j++){
             if(!*(*board)[j].isPlayed) {
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
             }else{
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
             }
         }
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
-        cout << endl << endl;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
+        gBoard << '\n' << '\n';
 
         // now we want to do as before but iterate on the next 5 rows
         for(int i{0}; i < 5; i++){
             for(int j{5 +(i*7)}; j < (i * col_num) + col_num + 5; j++){
                 if(!*(*board)[j].isPlayed) {
-                    cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                    gBoard << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
                 }else{
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
                 }
             }
             // new line
-            cout << endl;
+            gBoard << '\n';
             for(int j{5 +(i*7)}; j < (i * col_num) + col_num + 5; j++){
                 if(!*(*board)[j].isPlayed) {
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
-                    cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                    gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
                 }else{
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
-                    cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                    gBoard << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
                 }
             }
-            cout << endl<< endl;
+            gBoard << '\n'<< '\n';
         }
         // perform on last row
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
         for(int j{40}; j <  45; j++){
             if(!*(*board)[j].isPlayed) {
-                cout << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                gBoard << std::setfill('0') << std::setw(2)<<*(*board)[j].position << inner_spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
             }else{
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[0]) << inner_spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[1]) << spacer;
             }
         }
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
-        cout << endl;
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
+        gBoard << '\n';
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
         for(int j{40}; j < 45; j++){
             if(!*(*board)[j].isPlayed) {
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
-                cout << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << inner_spacer;
+                gBoard << std::setfill('0') << std::setw(2) << *(*board)[j].position << spacer;
             }else{
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
-                cout << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[3]) << inner_spacer;
+                gBoard << castResourceTypesToString((*board)[j].tile->tileContent[2]) << spacer;
             }
         }
-        cout << "--" << inner_spacer;
-        cout << "--" << spacer;
-        cout << endl << endl;
+        gBoard << "--" << inner_spacer;
+        gBoard << "--" << spacer;
+        gBoard << '\n' << '\n';
     }
+
+    return gBoard.str();
 }
 
 void GBMap::resetVisitedNodes() {
@@ -339,30 +350,34 @@ bool GBMap::createBoard() {
     return true;
 }
 
-void GBMap::printIndexConfiguration() {
+string GBMap::printIndexConfiguration() {
+    ostringstream boardConfig;
+
     if(*CONFIG == 2){
-        cout << "BOARD LAYOUT FOR 4 Players" << "\n" <<" -  00 01 02 03 04--" <<"\n 05 06 07 08 09 10 11-"
-             << "\n 12 13 14 15 16 17 18-" << "\n 19 20 21 22 23 24 25-" << "\n 26 27 28 29 30 31 32-" << "\n 33 34 35 36 37 38 39 "
-             << "\n -  40 41 42 43 44 -" << endl;
+        boardConfig <<" -- 00 01 02 03 04 --" <<"\n 05 06 07 08 09 10 11"
+             << "\n 12 13 14 15 16 17 18" << "\n 19 20 21 22 23 24 25" << "\n 26 27 28 29 30 31 32" << "\n 33 34 35 36 37 38 39 "
+             << "\n -- 40 41 42 43 44 --" << '\n';
     }
     else if(*CONFIG == 1){
-        string config =" -  00 01 02 03 04 -\n";
-        config.append(" -  05 06 07 08 09 -\n");
-        config.append(" -  10 11 12 13 14 -\n");
-        config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  20 21 22 23 24 -\n");
-        config.append(" -  25 26 27 28 29 -\n");
-        config.append(" -  30 31 32 33 34 -\n");
-        cout << config;
+        string config =" -- 00 01 02 03 04 --\n";
+        config.append(" -- 05 06 07 08 09 --\n");
+        config.append(" -- 10 11 12 13 14 --\n");
+        config.append(" -- 15 16 17 18 19 --\n");
+        config.append(" -- 20 21 22 23 24 --\n");
+        config.append(" -- 25 26 27 28 29 --\n");
+        config.append(" -- 30 31 32 33 34 --\n");
+        boardConfig << config;
     }
     else{
-        string config =" -  00 01 02 03 04 -\n";
-        config.append(" -  05 06 07 08 09 -\n");
-        config.append(" -  10 11 12 13 14 -\n");
-        config.append(" -  15 16 17 18 19 -\n");
-        config.append(" -  20 21 22 23 24 -\n");
-        cout << config;
+        string config =" -- 00 01 02 03 04 --\n";
+        config.append(" -- 05 06 07 08 09 --\n");
+        config.append(" -- 10 11 12 13 14 --\n");
+        config.append(" -- 15 16 17 18 19 --\n");
+        config.append(" -- 20 21 22 23 24 --\n");
+        boardConfig << config;
     }
+
+    return boardConfig.str();
 }
 
 void GBMap::assignDefaultTiles() {
@@ -370,61 +385,44 @@ void GBMap::assignDefaultTiles() {
      * Create 4 tiles
      */
     switch((*CONFIG)){
-        case 0:
-            /*
-             * config 0 --- 0   4 20 24
-             */
-            placeHarvestTile(0, tl);
-            *(*board)[0].isPlayed = true;
-            placeHarvestTile(4,tr);
-            *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, br);
-            *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, bl);
-            *(*board)[24].isPlayed = true;
-            *playCounter = 4;
-            break;
         case 1:
             /*
              * config 1 --- 5   9 25 29
              */
-            placeHarvestTile(5, tl);
+            (*board)[5].tile = tl;
             *(*board)[5].isPlayed = true;
-            placeHarvestTile(9,tr);
+            (*board)[9].tile = tr;
             *(*board)[9].isPlayed = true;
-            placeHarvestTile(25, br);
+            (*board)[25].tile = br;
             *(*board)[25].isPlayed = true;
-            placeHarvestTile(29, bl);
+            (*board)[29].tile = bl;
             *(*board)[29].isPlayed = true;
-            *playCounter = 4;
             break;
         case 2:
             /*
                  * config 1 --- 6   10 34 38
                  */
-            placeHarvestTile(6, tl);
+            (*board)[6].tile = tl;
             *(*board)[6].isPlayed = true;
-            placeHarvestTile(10,tr);
+            (*board)[10].tile = tr;
             *(*board)[10].isPlayed = true;
-            placeHarvestTile(34, br);
+            (*board)[34].tile = br;
             *(*board)[34].isPlayed = true;
-            placeHarvestTile(38, bl);
+            (*board)[38].tile = bl;
             *(*board)[38].isPlayed = true;
-            *playCounter = 4;
             break;
         default:
             /*
              * config 0 --- 0   4 20 24
              */
-            placeHarvestTile(0, tl);
+            (*board)[0].tile = tl;
             *(*board)[0].isPlayed = true;
-            placeHarvestTile(4,tr);
+            (*board)[4].tile = tr;
             *(*board)[4].isPlayed = true;
-            placeHarvestTile(20, br);
+            (*board)[20].tile = br;
             *(*board)[20].isPlayed = true;
-            placeHarvestTile(24, bl);
+            (*board)[24].tile = bl;
             *(*board)[24].isPlayed = true;
-            *playCounter = 4;
             break;
     }
 }
@@ -446,4 +444,9 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 
 bool GBMap::isGameOver(){
     return (*SIZE - *playCounter) == 1;
+}
+
+string GBMap::getBoardString() const
+{
+    return *boardString;
 }

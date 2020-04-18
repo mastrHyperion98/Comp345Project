@@ -18,7 +18,7 @@ Setting::Setting():tracker{new ResourceTracker}{
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
-
+    flowPrinter = nullptr;
 }
 
 Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
@@ -114,6 +114,7 @@ void Setting::loadGameBoard(const std::string filepath) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
             board-> attach(tracker);
+            board->attach(flowPrinter);
         }
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
@@ -132,6 +133,7 @@ VGMap* Setting::loadVillageMap(const std::string filepath) {
             cout << "LOADING SUCCESSFUL" << endl;
             VGMap *village = loader.generateVMap();
             village->attach(tracker);
+            village->attach(flowPrinter);
             return village;
         } else
             throw BoardConfigurationNotLoaded();
@@ -233,7 +235,11 @@ bool Setting::initSetting() {
 #endif // DEBUG
 
     int number_players{promptNumberPlayers()};
+
+
     try {
+        flowPrinter = new GameFlowPrinter();    //We declare the printer for the next initialized subject components to attach it
+
         switch (number_players) {
             case 2:
                 loadGameBoard(files[0]);
@@ -267,6 +273,9 @@ bool Setting::initSetting() {
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
+
+        flowPrinter->initialize();  //Once all subject components have been initialized, we can initialize the printer
+        
     }catch(const InvalidConfigurationException &ex){
         cerr << ex.what() << endl;
         return false;
