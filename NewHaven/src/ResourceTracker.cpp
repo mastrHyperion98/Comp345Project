@@ -404,3 +404,7 @@ bool ResourceTracker::isEmpty() {
 map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
     return *score;
 };
+
+void ResourceTracker::update(){
+    computeScore(*GameController::current->game_settings->board->RT);
+}

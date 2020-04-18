@@ -35,6 +35,7 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     delete playCounter;
+    delete RT;
     // set to nullptr since it is static and belongs to the class.
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
@@ -51,6 +52,9 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
+    delete RT;
+    ResourceTrails *RT = getResourcedGraph(NodeID);
+    this->notify();
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {

@@ -6,9 +6,12 @@
 #define NEWHAVEN_RESOURCETRACKER_H
 #include <map>
 #include "GBMap.h"
+#include "GameObservers.h"
+#include "GameController.h"
 #include "deque"
+
 using namespace std;
-class ResourceTracker {
+class ResourceTracker : public Observer {
 public:
 
     ResourceTracker();
@@ -22,6 +25,7 @@ public:
     bool isEmpty();
     void reset();
     map<ResourceTypes, std::uint_least16_t> getScore();
+    void update();
 private:
     struct Quad{
         Quad();
