@@ -24,6 +24,8 @@ GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new co
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     *playCounter = *map.playCounter;
+    // the pointers get destroy after notified probably always nullptr
+    RT = map.RT;
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -35,6 +37,7 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     delete playCounter;
+    delete RT;
     // set to nullptr since it is static and belongs to the class.
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
@@ -51,6 +54,11 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
+    // RT should be deleted and set to nullptr from the resourceTracker;
+    RT = getResourcedGraph(NodeID);
+    this->notify();
+    delete RT;
+    RT = nullptr;
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {

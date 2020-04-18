@@ -31,6 +31,8 @@ VGMap::~VGMap() {
     delete SIZE;
     delete playCounter;
     delete typePlayed;
+    delete status_cost;
+    delete status_type;
 }
 
 VGMap::VGMap(const VGMap &map) {
@@ -41,6 +43,10 @@ VGMap::VGMap(const VGMap &map) {
     name = new string(*map.name);
     else
         name = nullptr;
+    *status_cost = *map.status_cost;
+
+    if(map.status_type != nullptr)
+        status_type = new ResourceTypes(*map.status_type);
 
     *playCounter = *map.playCounter;
 }
@@ -54,6 +60,13 @@ VGMap & VGMap::operator=(const VGMap &map){
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
+        *status_cost = *map.status_cost;
+        // delete status type first
+        delete status_type;
+        if(map.status_type != nullptr)
+            status_type = new ResourceTypes(*map.status_type);
+        else
+            status_type=nullptr;
     }
 
     return *this;
@@ -298,6 +311,14 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        // set status variables
+        status_type = new ResourceTypes(type);
+        *status_cost = building->getBuildingNumber();
+        // notify our observers
+        notify();
+        *status_cost = 0;
+        delete status_type;
+        status_type = nullptr;
         return true;
     } else
         return false;
@@ -310,6 +331,15 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        // set status variables
+        status_type = new ResourceTypes(type);
+        *status_cost = *(*village_board)[position].vCost;
+        // notify our observers
+        notify();
+        //reset states
+        *status_cost = 0;
+        delete status_type;
+        status_type = nullptr;
         return true;
     } else
         return false;

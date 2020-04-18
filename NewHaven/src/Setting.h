@@ -7,7 +7,10 @@
 #include <vector>
 #include "Player.h"
 #include "GBMap.h"
+#include "ResourceTracker.h"
 #include <string>
+
+class ResourceTracker;
 class Setting {
 public:
     Setting();
@@ -30,7 +33,7 @@ private:
     inline void createBuildingDeck();
     void setupPlayers(const int numberOfPlayers);
     void loadGameBoard(const std::string filepath);
-    VGMap loadVillageMap(const std::string filepath);
+    VGMap* loadVillageMap(const std::string filepath);
     int promptNumberPlayers();
     const int *const ID_LENGTH = new const int(8);
     bool validateIDString(string id);

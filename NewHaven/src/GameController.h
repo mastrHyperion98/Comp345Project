@@ -5,6 +5,8 @@
 #ifndef NEWHAVEN_GAMECONTROLLER_H
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
+
+class Setting;
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
 class GameController {
@@ -17,6 +19,9 @@ public:
     void start();
     static GameController *current;
     Setting *game_settings;
+    int getCurrentPlayerTurn(){return *current_turn_player;};
+    bool *is_share_wealth{new bool{false}};
+    int  *sw_player{new int{0}};
 private:
     ResourceTypes *original_shipment{nullptr};
     int *current_turn_player;

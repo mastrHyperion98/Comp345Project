@@ -113,6 +113,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         if (loader.loadConfig(filepath) && board == nullptr) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
+            board-> attach(tracker);
         }
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
@@ -123,13 +124,15 @@ void Setting::loadGameBoard(const std::string filepath) {
     }
 }
 // use VGMap loader to load proper village board
-VGMap Setting::loadVillageMap(const std::string filepath) {
+VGMap* Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
     try {
         if (loader.loadVConfig(filepath)) {
             cout << "LOADING SUCCESSFUL" << endl;
-            return loader.generateVMap();
+            VGMap *village = loader.generateVMap();
+            village->attach(tracker);
+            return village;
         } else
             throw BoardConfigurationNotLoaded();
     }catch(const InvalidConfigurationException &ex){

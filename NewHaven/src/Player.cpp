@@ -112,7 +112,6 @@ bool Player::buildVillage(){
 //    ResourceTypes type=building.getBuildingType();
         if (GameController::current->game_settings->tracker->hasResources(type, cost)) {
             if (village->setBuilding(pos, building)) {
-                GameController::current->game_settings->tracker->consumeResources(type, cost);
                 my_hand->buildings->erase(my_hand->buildings->begin() + index);
 
                 int restart{0};
@@ -252,8 +251,10 @@ HarvestTile* Player::getShipmentTile() {
     return my_hand->shipment;
 }
 
-void Player::setVillage(VGMap v_map) {
-    village = new VGMap(v_map);
+void Player::setVillage(VGMap *v_map) {
+    // delete any previous villages if any
+    delete village;
+    village = v_map;
 }
 
 string Player::getID(){

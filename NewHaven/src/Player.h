@@ -2,7 +2,7 @@
 #include "VGMap.h"
 #include "Resources.h"
 #include "ScoreCalculator.h"
-#include "ResourceTracker.h"
+#include "GBMap.h"
 #include <string>
 struct Player
 {
@@ -24,7 +24,7 @@ public:
     // Returns the ResourceTracker object held by the player
     bool buildVillage();
     void calculateResources(ResourceTrails);
-    void setVillage(VGMap);
+    void setVillage(VGMap*);
     // Used to set the shipment tile in Player's hand
     void setShipmentTile(HarvestTile* shipmentTile);
     // Getter for shipment tile

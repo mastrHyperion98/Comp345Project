@@ -10,6 +10,7 @@
 #include <vector>
 #include "Resources.h"
 #include "Square.h"
+#include "GameObservers.h"
 #include <string>
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS, Square> GameBoard;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::bidirectionalS, Square> ResourceTrails;
@@ -17,7 +18,7 @@ typedef boost::graph_traits<GameBoard>::vertex_descriptor NodeID;
 
 
 using namespace std;
-class GBMap{
+class GBMap: public Observable{
     // declaring public methods and parameters
 public:
     GBMap();
@@ -32,6 +33,8 @@ public:
     void printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
+    ResourceTrails *RT{nullptr};
+
 private:
     GameBoard* board;
     std::vector<Building*>* buildings;
