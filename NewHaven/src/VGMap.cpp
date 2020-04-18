@@ -15,7 +15,8 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}{
+VGMap::VGMap(string v_name) : typePlayed(new map<ResourceTypes, bool>), name{ new string(v_name) }, village_board{ new C_Graph }, boardString{new string()}
+{
     CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
@@ -29,9 +30,10 @@ VGMap::~VGMap() {
     delete SIZE;
     delete playCounter;
     delete typePlayed;
+    delete boardString;
 }
 
-VGMap::VGMap(const VGMap &map) {
+VGMap::VGMap(const VGMap& map) : boardString{ new string(*map.boardString) } {
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
     // here we can use operator overload
@@ -52,6 +54,7 @@ VGMap & VGMap::operator=(const VGMap &map){
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
+        *boardString = *map.boardString;
     }
 
     return *this;
@@ -281,6 +284,9 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        //Notify observers of change
+        *boardString = PrintGraph();
+        notify();
         return true;
     } else
         return false;
@@ -293,6 +299,9 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        //Notify observers of change
+        *boardString = PrintGraph();
+        notify();
         return true;
     } else
         return false;

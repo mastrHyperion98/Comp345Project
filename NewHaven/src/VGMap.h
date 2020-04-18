@@ -10,6 +10,7 @@
 #include "Resources.h"
 #include <string>
 #include <map>
+#include "GameObservers.h"
 
 // Our vertex Data Circle that will contain all our needed information
 class Circle{
@@ -36,7 +37,8 @@ typedef boost::graph_traits<C_Graph>::vertex_descriptor vertex_v;
 typedef boost::adjacency_list <boost::vecS, boost::vecS, boost::directedS, Circle> ConnectedCircles;
 
 using namespace std;
-class VGMap {
+class VGMap : public Observable
+{
 public:
     // class constructor
     VGMap(string);
@@ -44,7 +46,6 @@ public:
     VGMap &operator=(const VGMap &map);
     ~VGMap();
     string PrintGraph();
-    void PrintConnectedGraph();
     bool isPlayed(int position);
     bool setBuilding(int position, Building *building);
     int getPositionCost(int position);
@@ -55,6 +56,7 @@ public:
     int getNumUnplayed();
 private:
     string *name;
+    string* boardString;
     void CreateVillageField();
     C_Graph *village_board;
     map<ResourceTypes, bool> *typePlayed;
