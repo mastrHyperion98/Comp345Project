@@ -43,6 +43,10 @@ VGMap::VGMap(const VGMap &map) {
     name = new string(*map.name);
     else
         name = nullptr;
+    *status_cost = *map.status_cost;
+
+    if(map.status_type != nullptr)
+        status_type = new ResourceTypes(*map.status_type);
 
     *playCounter = *map.playCounter;
 }
@@ -56,6 +60,13 @@ VGMap & VGMap::operator=(const VGMap &map){
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
+        *status_cost = *map.status_cost;
+        // delete status type first
+        delete status_type;
+        if(map.status_type != nullptr)
+            status_type = new ResourceTypes(*map.status_type);
+        else
+            status_type=nullptr;
     }
 
     return *this;

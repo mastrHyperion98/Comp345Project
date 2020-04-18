@@ -24,6 +24,8 @@ GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new co
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     *playCounter = *map.playCounter;
+    // the pointers get destroy after notified probably always nullptr
+    RT = map.RT;
 }
 GBMap::~GBMap(){
     delete CONFIG;
