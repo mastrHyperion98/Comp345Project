@@ -8,6 +8,7 @@ GameFlowPrinter::GameFlowPrinter()
 		throw UninitializedControllerException();
 	else
 	{
+		gameBoardConfig = new std::string(GameController::current->game_settings->board->printIndexConfiguration());
 		gameBoard = new string(GameController::current->game_settings->board->getBoardString());
 		villageBoards = new std::vector<std::string>(GameController::current->game_settings->players->size());
 		currentPlayer = new std::string((*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID());
@@ -19,10 +20,11 @@ GameFlowPrinter::GameFlowPrinter()
 	}
 }
 
-GameFlowPrinter::GameFlowPrinter(const GameFlowPrinter& copy):
-	gameBoard{new std::string(*copy.gameBoard)},
-	villageBoards{new std::vector<std::string>(*copy.villageBoards)},
-	currentPlayer{new std::string(*copy.currentPlayer)}
+GameFlowPrinter::GameFlowPrinter(const GameFlowPrinter& copy) :
+	gameBoardConfig{ new std::string(*copy.gameBoardConfig) },
+	gameBoard{ new std::string(*copy.gameBoard) },
+	villageBoards{ new std::vector<std::string>(*copy.villageBoards) },
+	currentPlayer{ new std::string(*copy.currentPlayer) }
 {}
 
 GameFlowPrinter& GameFlowPrinter::operator=(const GameFlowPrinter& copy)
@@ -59,6 +61,11 @@ void GameFlowPrinter::update()
 			break;
 		}
 	}
+}
+
+void GameFlowPrinter::printGameBoardConfig()
+{
+	cout << "\n* **GAME BOARD ID CONFIGURATION***\n" << gameBoardConfig << '\n';
 }
 
 void GameFlowPrinter::printGameBoard() const

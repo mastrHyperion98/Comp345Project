@@ -7,6 +7,7 @@
 class GameFlowPrinter :public Observer
 {
 private:
+	std::string* gameBoardConfig;
 	std::string* gameBoard;
 	std::vector<std::string>* villageBoards;
 	std::string* currentPlayer;
@@ -18,6 +19,7 @@ public:
 	~GameFlowPrinter();
 	
 	void update();
+	void printGameBoardConfig();
 	void printGameBoard() const;
 	void printVillageBoard(const size_t&) const;
 	void printCurrentPlayer() const;
