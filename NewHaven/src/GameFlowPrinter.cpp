@@ -65,12 +65,12 @@ void GameFlowPrinter::update()
 
 void GameFlowPrinter::printGameBoardConfig()
 {
-	cout << "\n* **GAME BOARD ID CONFIGURATION***\n" << gameBoardConfig << '\n';
+	cout << "\n* **GAME BOARD ID CONFIGURATION***\n" << *gameBoardConfig << '\n';
 }
 
 void GameFlowPrinter::printGameBoard() const
 {
-	cout << "\n***GAME BOARD CONTENT***\n" << gameBoard << '\n';
+	cout << "\n***GAME BOARD CONTENT***\n" << *gameBoard << '\n';
 }
 
 void GameFlowPrinter::printVillageBoard(const std::string& id) const
