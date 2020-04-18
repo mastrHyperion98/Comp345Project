@@ -54,6 +54,7 @@ public:
     void resetVisited();
     string getName();
     int getNumUnplayed();
+    string getBoardString() const;
 private:
     string *name;
     string* boardString;

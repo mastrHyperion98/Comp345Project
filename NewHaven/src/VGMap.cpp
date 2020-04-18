@@ -404,3 +404,8 @@ int VGMap::getNumUnplayed(){
     // essentially we loop through
     return (*SIZE - *playCounter);
 }
+
+string VGMap::getBoardString() const
+{
+    return *boardString;
+}
