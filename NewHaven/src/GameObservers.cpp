@@ -1,3 +1,4 @@
+#include <cstdint>
 #include "GameObservers.h"
 
 Observable::Observable() : observers{ new std::vector<Observer*> }

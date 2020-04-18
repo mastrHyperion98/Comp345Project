@@ -5,6 +5,8 @@
 #ifndef NEWHAVEN_GAMECONTROLLER_H
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
+
+class Setting;
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
 class GameController {

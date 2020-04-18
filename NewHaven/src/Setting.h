@@ -7,7 +7,10 @@
 #include <vector>
 #include "Player.h"
 #include "GBMap.h"
+#include "ResourceTracker.h"
 #include <string>
+
+class ResourceTracker;
 class Setting {
 public:
     Setting();

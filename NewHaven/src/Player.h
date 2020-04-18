@@ -2,7 +2,7 @@
 #include "VGMap.h"
 #include "Resources.h"
 #include "ScoreCalculator.h"
-#include "ResourceTracker.h"
+#include "GBMap.h"
 #include <string>
 struct Player
 {

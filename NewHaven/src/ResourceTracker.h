@@ -5,11 +5,11 @@
 #ifndef NEWHAVEN_RESOURCETRACKER_H
 #define NEWHAVEN_RESOURCETRACKER_H
 #include <map>
-#include "GBMap.h"
 #include "GameObservers.h"
 #include "GameController.h"
 #include "deque"
 
+class Setting;
 using namespace std;
 class ResourceTracker : public Observer {
 public:
