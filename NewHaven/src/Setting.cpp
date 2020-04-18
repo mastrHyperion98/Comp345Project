@@ -18,7 +18,7 @@ Setting::Setting():tracker{new ResourceTracker}{
     b_deck = nullptr;
     board = nullptr;
     players = nullptr;
-
+    flowPrinter = nullptr;
 }
 
 Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
@@ -264,6 +264,8 @@ bool Setting::initSetting() {
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
+        
+        flowPrinter = new GameFlowPrinter();
     }catch(const InvalidConfigurationException &ex){
         cerr << ex.what() << endl;
         return false;

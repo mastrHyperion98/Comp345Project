@@ -8,6 +8,8 @@
 #include "Player.h"
 #include "GBMap.h"
 #include <string>
+#include "GameFlowPrinter.h"
+
 class Setting {
 public:
     Setting();
@@ -20,6 +22,7 @@ public:
     ResourceTracker *tracker;
     GBMap *board;
     vector<Player*>* players;
+    GameFlowPrinter* flowPrinter;
     bool initSetting();
     void DrawBuilding(int);
 private:
