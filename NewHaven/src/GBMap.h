@@ -33,7 +33,7 @@ public:
     void printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
-    ResourceTrails *RT;
+    ResourceTrails *RT{nullptr};
 
 private:
     GameBoard* board;

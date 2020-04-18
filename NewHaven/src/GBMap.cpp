@@ -55,6 +55,8 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     // RT should be deleted and set to nullptr from the resourceTracker;
     RT = getResourcedGraph(NodeID);
     this->notify();
+    delete RT;
+    RT = nullptr;
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {

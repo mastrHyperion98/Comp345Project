@@ -305,6 +305,9 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *status_cost = building->getBuildingNumber();
         // notify our observers
         notify();
+        *status_cost = 0;
+        delete status_type;
+        status_type = nullptr;
         return true;
     } else
         return false;
@@ -322,6 +325,10 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *status_cost = *(*village_board)[position].vCost;
         // notify our observers
         notify();
+        //reset states
+        *status_cost = 0;
+        delete status_type;
+        status_type = nullptr;
         return true;
     } else
         return false;

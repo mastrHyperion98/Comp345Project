@@ -34,7 +34,7 @@ public:
     void printHarvestCards();
     void printBuildingCards();
     int calculateScore() const;
-    VGMap& getVillage() const;
+    VGMap getVillage() const;
     Hand getHand() const;
 private:
     VGMap *village;
