@@ -230,7 +230,11 @@ bool Setting::initSetting() {
 #endif // DEBUG
 
     int number_players{promptNumberPlayers()};
+
+
     try {
+        flowPrinter = new GameFlowPrinter();    //We declare the printer for the next initialized subject components to attach it
+
         switch (number_players) {
             case 2:
                 loadGameBoard(files[0]);
@@ -264,8 +268,9 @@ bool Setting::initSetting() {
 
             cout << "THE NEW PLAYER HAS FINISHED DRAWING THEIR HARVEST TILES AND BUILDINGS!" << endl;
         }
+
+        flowPrinter->initialize();  //Once all subject components have been initialized, we can initialize the printer
         
-        flowPrinter = new GameFlowPrinter();
     }catch(const InvalidConfigurationException &ex){
         cerr << ex.what() << endl;
         return false;

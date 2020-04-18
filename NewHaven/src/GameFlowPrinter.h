@@ -17,6 +17,8 @@ public:
 	GameFlowPrinter(const GameFlowPrinter&);
 	GameFlowPrinter& operator=(const GameFlowPrinter&);
 	~GameFlowPrinter();
+
+	bool initialize();
 	
 	void update();
 	void printGameBoardConfig();

@@ -6,6 +6,7 @@
 #include "boost/graph/adjacency_list.hpp"
 #include "boost/graph/graph_utility.hpp"
 #include "boost/graph/connected_components.hpp"
+#include "GameController.h"
 // include the string library
 #include <string>
 #include <deque>
@@ -22,6 +23,9 @@ VGMap::VGMap(string v_name) : typePlayed(new map<ResourceTypes, bool>), name{ ne
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::SHEEP, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WOOD, false));
+
+    attach(GameController::current->game_settings->flowPrinter);    //Attaching observers on creation
+    *boardString = PrintGraph();    //Have something to give the observer before notify is reached here
 }
 // Define the deconstructor of the GameBoard Map
 VGMap::~VGMap() {
@@ -43,6 +47,8 @@ VGMap::VGMap(const VGMap& map) : boardString{ new string(*map.boardString) } {
         name = nullptr;
 
     *playCounter = *map.playCounter;
+
+    attach(GameController::current->game_settings->flowPrinter);    //Attaching observers on creation
 }
 
 VGMap & VGMap::operator=(const VGMap &map){
