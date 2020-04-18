@@ -21,6 +21,6 @@ public:
 	void update();
 	void printGameBoardConfig();
 	void printGameBoard() const;
-	void printVillageBoard(const size_t&) const;
+	void printVillageBoard(const std::string&) const;
 	void printCurrentPlayer() const;
 };

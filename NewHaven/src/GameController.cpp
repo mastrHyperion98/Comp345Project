@@ -88,11 +88,10 @@ void GameController::playTurn(){
 
     if(game_settings == nullptr)
         throw UninitializedControllerException();
-    // Print board ID configuration
-    cout << "\n***GAME BOARD ID CONFIGURATION***" << endl;
-    game_settings->board->printIndexConfiguration();
-    cout << "\n***GAME BOARD CONTENT***" << endl;
-    game_settings->board->printBoard();
+
+    game_settings->flowPrinter->printGameBoardConfig();
+    game_settings->flowPrinter->printGameBoard();
+    
     cout << "Here are your building cards:";
     current->printBuildingCards();
     cout << "\nHere are your Harvest Tiles:";
@@ -123,8 +122,7 @@ void GameController::playTurn(){
         game_settings->tracker->computeScore(*trail);
     }
 
-    cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
-    game_settings->board->printBoard();
+    game_settings->flowPrinter->printGameBoard();
     // current player builds his village
     current->buildVillage();
     shareTheWealth();

@@ -73,9 +73,16 @@ void GameFlowPrinter::printGameBoard() const
 	cout << "\n***GAME BOARD CONTENT***\n" << gameBoard << '\n';
 }
 
-void GameFlowPrinter::printVillageBoard(const size_t& index) const
+void GameFlowPrinter::printVillageBoard(const std::string& id) const
 {
-	cout << '\n' << (*villageBoards)[index] << '\n';
+	for (size_t i = 0; i < villageBoards->size(); i++)
+	{
+		if (id == GameController::current->game_settings->players->operator[](i)->getID())
+		{
+			cout << '\n' << (*villageBoards)[i] << '\n';
+			break;
+		}
+	}
 }
 
 void GameFlowPrinter::printCurrentPlayer() const
