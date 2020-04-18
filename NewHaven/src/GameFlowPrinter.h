@@ -1,14 +1,15 @@
 #pragma once
 
-#include<string>
+#include <string>
+#include <vector>
+#include "GameObservers.h"
 
 class GameFlowPrinter :public Observer
 {
 private:
 	std::string* gameBoard;
-	std::string* villageBoard;
+	std::vector<std::string>* villageBoards;
 	std::string* currentPlayer;
-	std::string* latestPlayerAction;
 
 public:
 	GameFlowPrinter();
@@ -18,7 +19,6 @@ public:
 	
 	void update();
 	void printGameBoard() const;
-	void printVillageBoard() const;
+	void printVillageBoard(const size_t&) const;
 	void printCurrentPlayer() const;
-	void printPlayerAction() const;
 };
