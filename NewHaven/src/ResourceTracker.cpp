@@ -403,5 +403,10 @@ map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
 };
 
 void ResourceTracker::update(){
-    computeScore(*GameController::current->game_settings->board->RT);
+    if(GameController::current->game_settings->board->RT != nullptr) {
+        computeScore(*GameController::current->game_settings->board->RT);
+        // delete it when we are done
+        delete GameController::current->game_settings->board->RT;
+        GameController::current->game_settings->board->RT = nullptr;
+    }
 }

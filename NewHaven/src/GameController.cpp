@@ -97,12 +97,8 @@ void GameController::playTurn(){
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();
-        if(tile_option == 1) {
+        if(tile_option == 1)
             pos=current->placeHarvestTile();
-            ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
-            game_settings->tracker->computeScore(*trail);
-            delete trail;
-        }
             // play the shipmentTile
         else if(tile_option == 2){
             pos = playShipmentTile(selectResourceType(), current);
@@ -110,11 +106,9 @@ void GameController::playTurn(){
         }
     }
     else
-    {
         pos = current->placeHarvestTile();
-        ResourceTrails* trail = game_settings->board->getResourcedGraph(pos);
-        game_settings->tracker->computeScore(*trail);
-    }
+
+
 
     cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
     game_settings->board->printBoard();
@@ -237,13 +231,9 @@ int GameController::playShipmentTile(ResourceTypes type, Player *player){
     }
     // later this will be called from the singleton Game Controller
     if(game_settings->board!= nullptr) {
-        if(game_settings->board->placeHarvestTile(pos, player->getShipmentTile())){
-            // print new board config
+        if(game_settings->board->placeHarvestTile(pos, player->getShipmentTile()))
             player->setShipmentPlayed();
-            // compute resourceTracker using compies
-            game_settings->tracker->computeScore(*game_settings->board->getResourcedGraph(pos));
-            // once resource_score is calculated we flip the tile over
-        } else{
+        else{
             cout << "Position Index is invalid. It has already been played!"<<endl;
             goto POSITION;
         }

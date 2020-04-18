@@ -52,7 +52,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
-    delete RT;
+    // RT should be deleted and set to nullptr from the resourceTracker;
     RT = getResourcedGraph(NodeID);
     this->notify();
     return true;
