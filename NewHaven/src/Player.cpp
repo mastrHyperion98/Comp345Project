@@ -252,8 +252,8 @@ HarvestTile* Player::getShipmentTile() {
     return my_hand->shipment;
 }
 
-void Player::setVillage(VGMap v_map) {
-    village = new VGMap(v_map);
+void Player::setVillage(VGMap *v_map) {
+    village = v_map;
 }
 
 string Player::getID(){

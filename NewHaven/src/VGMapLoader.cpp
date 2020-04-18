@@ -71,9 +71,9 @@ bool VGMapLoader::loadVConfig(std::string filepath) {
     }
 }
 // create a GBMap, set its configuration and generate the graph before returning it.
-VGMap VGMapLoader::generateVMap() {
+VGMap* VGMapLoader::generateVMap() {
     if(*name != ""){
-            VGMap vg_map{VGMap(*name)};
+            VGMap *vg_map{new VGMap(*name)};
             return vg_map;
     }
     else{
