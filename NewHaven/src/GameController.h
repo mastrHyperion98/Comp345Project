@@ -22,7 +22,6 @@ public:
     int getCurrentPlayer();
     static GameController *current;
     Setting *game_settings;
-    int getCurrentPlayerTurn(){return *current_turn_player;};
     bool *is_share_wealth{new bool{false}};
     int  *sw_player{new int{0}};
 private:
