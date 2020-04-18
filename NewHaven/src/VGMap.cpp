@@ -300,6 +300,11 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        // set status variables
+        status_type = new ResourceTypes(type);
+        *status_cost = building->getBuildingNumber();
+        // notify our observers
+        notify();
         return true;
     } else
         return false;
@@ -312,6 +317,11 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        // set status variables
+        status_type = new ResourceTypes(type);
+        *status_cost = *(*village_board)[position].vCost;
+        // notify our observers
+        notify();
         return true;
     } else
         return false;
