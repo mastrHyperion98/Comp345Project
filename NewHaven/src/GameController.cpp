@@ -38,9 +38,10 @@ void GameController::start(){
     for(int i = 0; i < 25; i++){
         cout << "\n"; // clear screen
     }
-    cout << "STARTING PLAYER HAS ID: " << (*game_settings->players)[*current_turn_player]->getID() << endl;
+
     while(!hasGameEnded()){
         notify();   // We notify observers that the turn has changed
+        game_settings->flowPrinter->printCurrentPlayer();
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
@@ -52,6 +53,9 @@ bool GameController::initialize() {
     bool init = game_settings->initSetting();
     if(init)
         *current_turn_player = startingPlayer();
+
+    attach(game_settings->flowPrinter);
+
     return init;
 }
 // find the starting player by comparing their studentID
@@ -95,8 +99,6 @@ void GameController::playTurn(){
     current->printBuildingCards();
     cout << "\nHere are your Harvest Tiles:\n";
     current->printHarvestCards();
-
-    game_settings->flowPrinter->printCurrentPlayer();
 
     if (current->getShipmentTile() != nullptr)
     {

@@ -45,11 +45,9 @@ GameFlowPrinter::~GameFlowPrinter()
 
 void GameFlowPrinter::update()
 {
-	if (*gameBoard != GameController::current->game_settings->board->getBoardString())
-		*gameBoard = GameController::current->game_settings->board->getBoardString();
+	*gameBoard = GameController::current->game_settings->board->getBoardString();
 
-	if (*currentPlayer != (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID())
-		*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID();
+	*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID();
 
 	for (std::uint_fast8_t i{ 0 }; i < villageBoards->size(); ++i)
 	{
