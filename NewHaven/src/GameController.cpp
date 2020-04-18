@@ -40,7 +40,7 @@ void GameController::start(){
     }
     cout << "STARTING PLAYER HAS ID: " << (*game_settings->players)[*current_turn_player]->getID() << endl;
     while(!hasGameEnded()){
-        // PrintGameBoard
+        notify();   // We notify observers that the turn has changed
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
@@ -81,7 +81,6 @@ int GameController::getCurrentPlayer()
 //  playTurn function that executes the turn of the current player and all the user
 // interaction needed to complete it
 void GameController::playTurn(){
-    notify();   // We notify observers that the turn has changed
     int pos;
     Player *current = (*game_settings->players)[*current_turn_player];
     bool shipmentPlayed{false};
@@ -92,14 +91,16 @@ void GameController::playTurn(){
     game_settings->flowPrinter->printGameBoardConfig();
     game_settings->flowPrinter->printGameBoard();
     
-    cout << "Here are your building cards:";
+    cout << "Here are your building cards:\n";
     current->printBuildingCards();
-    cout << "\nHere are your Harvest Tiles:";
+    cout << "\nHere are your Harvest Tiles:\n";
     current->printHarvestCards();
+
+    game_settings->flowPrinter->printCurrentPlayer();
 
     if (current->getShipmentTile() != nullptr)
     {
-        cout << '\n' << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
+        cout << "What would you like to do? "
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();

@@ -22,6 +22,7 @@ GBMap::GBMap(int configuration) :CONFIG(new const int(configuration)), SIZE(new 
     // assign
     assignDefaultTiles();
     //We attach an observer to this class if the map wasn't created independently
+    *boardString = printBoard();
     if (GameController::current != nullptr)
         attach(GameController::current->game_settings->flowPrinter);
 }

@@ -87,5 +87,5 @@ void GameFlowPrinter::printVillageBoard(const std::string& id) const
 
 void GameFlowPrinter::printCurrentPlayer() const
 {
-	cout << "CURRENT PLAYER: " << currentPlayer << '\n';
+	cout << "\nCURRENT PLAYER: " << *currentPlayer << '\n';
 }
