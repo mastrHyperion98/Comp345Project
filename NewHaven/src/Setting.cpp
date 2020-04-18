@@ -113,6 +113,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         if (loader.loadConfig(filepath) && board == nullptr) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
+            board-> attach(tracker);
         }
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;

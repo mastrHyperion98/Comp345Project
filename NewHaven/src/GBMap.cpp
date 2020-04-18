@@ -53,7 +53,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
     delete RT;
-    ResourceTrails *RT = getResourcedGraph(NodeID);
+    RT = getResourcedGraph(NodeID);
     this->notify();
     return true;
 }
