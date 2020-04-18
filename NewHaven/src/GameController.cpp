@@ -77,7 +77,7 @@ for(int i = 0; i < game_settings->players->size(); i++){
     return current_index;
 }
 
-int GameController::getCurrentPlayer()
+int GameController::getCurrentPlayerTurn()
 {
     return *current_turn_player;
 }

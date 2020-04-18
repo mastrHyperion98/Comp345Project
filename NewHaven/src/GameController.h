@@ -19,7 +19,7 @@ public:
     ~GameController();
     bool initialize();
     void start();
-    int getCurrentPlayer();
+    int getCurrentPlayerTurn();
     static GameController *current;
     Setting *game_settings;
     bool *is_share_wealth{new bool{false}};
