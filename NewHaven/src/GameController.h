@@ -6,7 +6,7 @@
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
 #include "GameObservers.h"
-
+#include <map>
 class Setting;
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
@@ -24,6 +24,7 @@ public:
     Setting *game_settings;
     bool *is_share_wealth{new bool{false}};
     int  *sw_player{new int{0}};
+    map<string, bool> *controller_status{new map<string,bool>};
 private:
     ResourceTypes *original_shipment{nullptr};
     int *current_turn_player;

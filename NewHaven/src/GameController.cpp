@@ -28,6 +28,9 @@ GameController::GameController():current_turn_player{new int(0)}, game_settings{
 GameController::~GameController(){
     delete game_settings;
     delete current_turn_player;
+    delete controller_status;
+    delete is_share_wealth;
+    delete sw_player;
     current = nullptr;
 }
 // start
@@ -41,6 +44,7 @@ void GameController::start(){
 
     while(!hasGameEnded()){
         notify();   // We notify observers that the turn has changed
+        // print case here***********************************************************************************
         game_settings->flowPrinter->printCurrentPlayer();
         game_settings->flowPrinter->printPlayerBuildingCount(*current_turn_player);
         game_settings->flowPrinter->printPlayerScore(*current_turn_player);
