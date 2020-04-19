@@ -42,10 +42,9 @@ bool Player::buildVillage(){
 
     bool playAgain{true};
     while(playAgain) {
-        GameController::current->game_settings->flowPrinter->printVillageBoard(getID());
-
-
-        printBuildingCards();
+        // this uses composition no need to use print observer for this
+       cout << village->PrintGraph() << endl;
+       printBuildingCards();
 
         SELECT_BUILDING:
         int index;

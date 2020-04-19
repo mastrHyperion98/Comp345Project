@@ -405,11 +405,10 @@ map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
 void ResourceTracker::update(){
     if(GameController::current->game_settings->board->RT != nullptr) {
         computeScore(*GameController::current->game_settings->board->RT);
-        cout << "Available resources:" << endl;
+        cout << "\nAvailable resources:" << endl;
         printScore();
     }
         // delete it when we are done
-
     int c_player;
     if(*GameController::current->is_share_wealth)
        c_player=*GameController::current->sw_player;
