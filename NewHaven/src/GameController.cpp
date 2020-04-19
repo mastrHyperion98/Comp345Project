@@ -42,6 +42,8 @@ void GameController::start(){
     while(!hasGameEnded()){
         notify();   // We notify observers that the turn has changed
         game_settings->flowPrinter->printCurrentPlayer();
+        game_settings->flowPrinter->printPlayerBuildingCount(*current_turn_player);
+        game_settings->flowPrinter->printPlayerScore(*current_turn_player);
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }

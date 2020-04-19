@@ -9,8 +9,11 @@ class GameFlowPrinter :public Observer
 private:
 	std::string* gameBoardConfig;
 	std::string* gameBoard;
-	std::vector<std::string>* villageBoards;
 	std::string* currentPlayer;
+
+	std::vector<std::string>* villageBoards;
+	std::vector<int>* playerBuildingCount;
+	std::vector<int>* playerScore;
 
 public:
 	GameFlowPrinter();
@@ -25,4 +28,6 @@ public:
 	void printGameBoard() const;
 	void printVillageBoard(const std::string&) const;
 	void printCurrentPlayer() const;
+	void printPlayerBuildingCount(int& index) const;
+	void printPlayerScore(int&) const;
 };

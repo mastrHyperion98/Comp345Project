@@ -1,26 +1,35 @@
 #include "GameFlowPrinter.h"
+#include "GameFlowPrinter.h"
+#include "GameFlowPrinter.h"
 #include "GameController.h"
 #include "../Exceptions/UninitializedControllerException.h"
 
 GameFlowPrinter::GameFlowPrinter():
 	gameBoardConfig{ new std::string },
 	gameBoard{ new std::string },
+	currentPlayer{ new std::string },
 	villageBoards{ new std::vector<std::string> },
-	currentPlayer{ new std::string }
+	playerBuildingCount{ new std::vector<int> },
+	playerScore{ new std::vector<int> }
 {}
 
 GameFlowPrinter::GameFlowPrinter(const GameFlowPrinter& copy) :
 	gameBoardConfig{ new std::string(*copy.gameBoardConfig) },
 	gameBoard{ new std::string(*copy.gameBoard) },
 	villageBoards{ new std::vector<std::string>(*copy.villageBoards) },
-	currentPlayer{ new std::string(*copy.currentPlayer) }
+	currentPlayer{ new std::string(*copy.currentPlayer) },
+	playerBuildingCount{ new std::vector<int> },
+	playerScore{new std::vector<int>(*copy.playerScore)}
 {}
 
 GameFlowPrinter& GameFlowPrinter::operator=(const GameFlowPrinter& copy)
 {
+	*gameBoardConfig = *copy.gameBoardConfig;
 	*gameBoard = *copy.gameBoard;
 	*villageBoards = *copy.villageBoards;
 	*currentPlayer = *copy.currentPlayer;
+	*playerBuildingCount = *copy.playerBuildingCount;
+	*playerScore = *copy.playerScore;
 
 	return *this;
 }
@@ -31,6 +40,7 @@ GameFlowPrinter::~GameFlowPrinter()
 	delete gameBoard;
 	delete villageBoards;
 	delete currentPlayer;
+	delete playerScore;
 }
 
 bool GameFlowPrinter::initialize()
@@ -39,13 +49,16 @@ bool GameFlowPrinter::initialize()
 	{
 		*gameBoardConfig = GameController::current->game_settings->board->printIndexConfiguration();
 		*gameBoard = GameController::current->game_settings->board->getBoardString();
-		*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID();
+		*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
 
 		villageBoards->reserve(GameController::current->game_settings->players->size());
+		playerScore->reserve(GameController::current->game_settings->players->size());
 
 		for (std::uint_fast8_t i{ 0 }; i < GameController::current->game_settings->players->size(); ++i)
 		{
-			villageBoards->push_back(GameController::current->game_settings->players->operator[](i)->getVillage().PrintGraph());
+			villageBoards->push_back(GameController::current->game_settings->players->operator[](i)->getVillage().getBoardString());
+			playerBuildingCount->push_back(0);
+			playerScore->push_back(GameController::current->game_settings->players->operator[](i)->calculateScore());
 		}
 
 		return true;
@@ -60,10 +73,14 @@ void GameFlowPrinter::update()
 {
 	*gameBoard = GameController::current->game_settings->board->getBoardString();
 
-	*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayer()]->getID();
+	*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
 
 	for (std::uint_fast8_t i{ 0 }; i < villageBoards->size(); ++i)
+	{
 		villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](i)->getVillage().getBoardString();
+		playerBuildingCount->operator[](i) = GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed() - 30;
+		playerScore->operator[](i) = GameController::current->game_settings->players->operator[](i)->calculateScore();
+	}
 }
 
 void GameFlowPrinter::printGameBoardConfig()
@@ -91,4 +108,15 @@ void GameFlowPrinter::printVillageBoard(const std::string& id) const
 void GameFlowPrinter::printCurrentPlayer() const
 {
 	cout << "\nCURRENT PLAYER: " << *currentPlayer << '\n';
+}
+
+void GameFlowPrinter::printPlayerBuildingCount(int& index) const
+{
+	cout << "\nBuildings in village: " << playerBuildingCount->operator[](index) << " buildings\n";
+}
+
+
+void GameFlowPrinter::printPlayerScore(int& index) const
+{
+	cout << "\nVillage colonists number: " << playerScore->operator[](index) << " colonits\n";
 }
