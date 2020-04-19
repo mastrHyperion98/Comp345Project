@@ -78,7 +78,7 @@ void GameFlowPrinter::update()
 	for (std::uint_fast8_t i{ 0 }; i < villageBoards->size(); ++i)
 	{
 		villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](i)->getVillage().getBoardString();
-		playerBuildingCount->operator[](i) = GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed() - 30;
+		playerBuildingCount->operator[](i) = 30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
 		playerScore->operator[](i) = GameController::current->game_settings->players->operator[](i)->calculateScore();
 	}
 }
