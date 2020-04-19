@@ -48,7 +48,7 @@ void GameController::start(){
     while(!hasGameEnded()){
         (*controller_status)["new_turn"] = true;
         notify();   // We notify observers that the turn has changed
-        (*controller_status)["game_board"] = false;
+        (*controller_status)["start_turn"] = false;
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
@@ -100,14 +100,10 @@ void GameController::playTurn(){
         throw UninitializedControllerException();
 
 
-    (*controller_status)["game_board"] = true;
+    (*controller_status)["start_turn"] = true;
     notify();
-    (*controller_status)["game_board"] = false;
-    
-    cout << "Here are your building cards:\n";
-    current->printBuildingCards();
-    cout << "\nHere are your Harvest Tiles:\n";
-    current->printHarvestCards();
+    (*controller_status)["start_turn"] = false;
+
 
     if (current->getShipmentTile() != nullptr)
     {

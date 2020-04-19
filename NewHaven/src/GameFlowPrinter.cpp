@@ -74,9 +74,14 @@ void GameFlowPrinter::update()
 
     if((*GameController::current->controller_status)["new_turn"])
         printNewTurn();
-    if((*GameController::current->controller_status)["game_board"]){
+    if((*GameController::current->controller_status)["start_turn"]){
+        int play_turn{GameController::current->getCurrentPlayerTurn()};
        printGameBoardConfig();
        printGameBoard();
+       cout << "Here are your building cards:\n";
+       (*GameController::current->game_settings->players)[play_turn]->printBuildingCards();
+       cout << "\nHere are your Harvest Tiles:\n";
+       (*GameController::current->game_settings->players)[play_turn]->printHarvestCards();
     }
     else {
         *gameBoard = GameController::current->game_settings->board->getBoardString();
