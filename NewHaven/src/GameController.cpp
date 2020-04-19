@@ -22,7 +22,8 @@ typedef pair<string, bool> status;
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
     // singleton only one instance allowed
     controller_status->insert(status("new_turn", false));
-    controller_status->insert(status("board", false));
+    controller_status->insert(status("start_turn", false));
+
     delete current;
     current = this;
 }
@@ -48,7 +49,7 @@ void GameController::start(){
     while(!hasGameEnded()){
         (*controller_status)["new_turn"] = true;
         notify();   // We notify observers that the turn has changed
-        (*controller_status)["start_turn"] = false;
+        (*controller_status)["new_turn"] = false;
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
