@@ -82,10 +82,6 @@ void GameFlowPrinter::update() {
         cout << "\nHere are your Harvest Tiles:\n";
         (*GameController::current->game_settings->players)[play_turn]->printHarvestCards();
     }
-
-    else if (*GameController::current->is_share_wealth) {
-
-    }
     else if (GameController::current->game_settings->board->RT != nullptr){
         *gameBoard = GameController::current->game_settings->board->getBoardString();
         printGameBoard();
@@ -111,6 +107,9 @@ void GameFlowPrinter::printGameBoardConfig()
 void GameFlowPrinter::printGameBoard() const
 {
 	cout << "\n***GAME BOARD CONTENT***\n" << *gameBoard << '\n';
+	cout << "\nAvailable resources:" << endl;
+    GameController::current->game_settings->tracker->printScore();
+    cout << "\n";
 }
 
 void GameFlowPrinter::printVillageBoard(const std::string& id) const

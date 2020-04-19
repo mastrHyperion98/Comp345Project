@@ -407,6 +407,7 @@ void ResourceTracker::update(){
         computeScore(*GameController::current->game_settings->board->RT);
         cout << "\nAvailable resources:" << endl;
         printScore();
+        cout <<endl;
     }
         // delete it when we are done
     int c_player;
@@ -420,7 +421,8 @@ void ResourceTracker::update(){
     // check condition flag
     if(*ptr->getVillage().status_cost != 0 && ptr->getVillage().status_type != nullptr) {
         consumeResources(*ptr->getVillage().status_type, *ptr->getVillage().status_cost);
-        cout << "Remaining Resources: " << endl;
+        cout << "\nRemaining Resources: " << endl;
         printScore();
+        cout << endl;
     }
 }
