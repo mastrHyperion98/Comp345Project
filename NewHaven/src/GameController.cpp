@@ -23,6 +23,7 @@ GameController::GameController():current_turn_player{new int(0)}, game_settings{
     // singleton only one instance allowed
     controller_status->insert(status("new_turn", false));
     controller_status->insert(status("start_turn", false));
+    controller_status->insert(status("", false));
 
     delete current;
     current = this;
@@ -124,8 +125,7 @@ void GameController::playTurn(){
         pos = current->placeHarvestTile();
 
 
-
-    game_settings->flowPrinter->printGameBoard();
+// relocate to print after a tile was played game_settings->flowPrinter->printGameBoard();
     // current player builds his village
     current->buildVillage();
     shareTheWealth();

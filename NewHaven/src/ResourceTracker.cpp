@@ -403,8 +403,11 @@ map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
 };
 
 void ResourceTracker::update(){
-    if(GameController::current->game_settings->board->RT != nullptr)
+    if(GameController::current->game_settings->board->RT != nullptr) {
         computeScore(*GameController::current->game_settings->board->RT);
+        cout << "Available resources:" << endl;
+        printScore();
+    }
         // delete it when we are done
 
     int c_player;
@@ -416,6 +419,9 @@ void ResourceTracker::update(){
 
     Player *ptr = (*GameController::current->game_settings->players)[c_player];
     // check condition flag
-    if(*ptr->getVillage().status_cost != 0 && ptr->getVillage().status_type != nullptr)
+    if(*ptr->getVillage().status_cost != 0 && ptr->getVillage().status_type != nullptr) {
         consumeResources(*ptr->getVillage().status_type, *ptr->getVillage().status_cost);
+        cout << "Remaining Resources: " << endl;
+        printScore();
+    }
 }

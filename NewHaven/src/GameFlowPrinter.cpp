@@ -69,25 +69,29 @@ bool GameFlowPrinter::initialize()
 	return false;
 }
 
-void GameFlowPrinter::update()
-{
+void GameFlowPrinter::update() {
 
-    if((*GameController::current->controller_status)["new_turn"])
+    if ((*GameController::current->controller_status)["new_turn"])
         printNewTurn();
-    if((*GameController::current->controller_status)["start_turn"]){
+    else if ((*GameController::current->controller_status)["start_turn"]) {
         int play_turn{GameController::current->getCurrentPlayerTurn()};
-       printGameBoardConfig();
-       printGameBoard();
-       cout << "Here are your building cards:\n";
-       (*GameController::current->game_settings->players)[play_turn]->printBuildingCards();
-       cout << "\nHere are your Harvest Tiles:\n";
-       (*GameController::current->game_settings->players)[play_turn]->printHarvestCards();
+        printGameBoardConfig();
+        printGameBoard();
+        cout << "Here are your building cards:\n";
+        (*GameController::current->game_settings->players)[play_turn]->printBuildingCards();
+        cout << "\nHere are your Harvest Tiles:\n";
+        (*GameController::current->game_settings->players)[play_turn]->printHarvestCards();
+    }
+
+    else if (*GameController::current->is_share_wealth) {
+
+    }
+    else if (GameController::current->game_settings->board->RT != nullptr){
+        *gameBoard = GameController::current->game_settings->board->getBoardString();
+        printGameBoard();
     }
     else {
-        *gameBoard = GameController::current->game_settings->board->getBoardString();
-
         *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
-
         for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
             villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](
                     i)->getVillage().getBoardString();

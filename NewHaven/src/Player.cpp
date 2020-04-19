@@ -43,8 +43,8 @@ bool Player::buildVillage(){
     bool playAgain{true};
     while(playAgain) {
         GameController::current->game_settings->flowPrinter->printVillageBoard(getID());
-        cout << "Available resources:" << endl;
-        GameController::current->game_settings->tracker->printScore();
+
+
         printBuildingCards();
 
         SELECT_BUILDING:
