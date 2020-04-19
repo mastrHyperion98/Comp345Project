@@ -18,8 +18,10 @@
 // singleton instance
 GameController* GameController::current;
 // default constructor
+typedef pair<string, bool> status;
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
     // singleton only one instance allowed
+    controller_status->insert(status("new_turn", false));
     delete current;
     current = this;
 }
@@ -43,11 +45,9 @@ void GameController::start(){
     }
 
     while(!hasGameEnded()){
+        (*controller_status)["new_turn"] = true;
         notify();   // We notify observers that the turn has changed
-        // print case here***********************************************************************************
-        game_settings->flowPrinter->printCurrentPlayer();
-        game_settings->flowPrinter->printPlayerBuildingCount(*current_turn_player);
-        game_settings->flowPrinter->printPlayerScore(*current_turn_player);
+        (*controller_status)["new_turn"] = false;
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }

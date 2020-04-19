@@ -71,16 +71,23 @@ bool GameFlowPrinter::initialize()
 
 void GameFlowPrinter::update()
 {
-	*gameBoard = GameController::current->game_settings->board->getBoardString();
 
-	*currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
+    if((*GameController::current->controller_status)["new_turn"])
+        printNewTurn();
+    else {
+        *gameBoard = GameController::current->game_settings->board->getBoardString();
 
-	for (std::uint_fast8_t i{ 0 }; i < villageBoards->size(); ++i)
-	{
-		villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](i)->getVillage().getBoardString();
-		playerBuildingCount->operator[](i) = 30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
-		playerScore->operator[](i) = GameController::current->game_settings->players->operator[](i)->calculateScore();
-	}
+        *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
+
+        for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
+            villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](
+                    i)->getVillage().getBoardString();
+            playerBuildingCount->operator[](i) =
+                    30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
+            playerScore->operator[](i) = GameController::current->game_settings->players->operator[](
+                    i)->calculateScore();
+        }
+    }
 }
 
 void GameFlowPrinter::printGameBoardConfig()
@@ -119,4 +126,11 @@ void GameFlowPrinter::printPlayerBuildingCount(int& index) const
 void GameFlowPrinter::printPlayerScore(int& index) const
 {
 	cout << "\nVillage colonists number: " << playerScore->operator[](index) << " colonits\n";
+}
+
+void GameFlowPrinter::printNewTurn() const {
+    printCurrentPlayer();
+    int play_turn{GameController::current->getCurrentPlayerTurn()};
+    printPlayerBuildingCount(play_turn);
+    printPlayerScore(play_turn);
 }

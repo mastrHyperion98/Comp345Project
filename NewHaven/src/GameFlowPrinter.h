@@ -30,4 +30,5 @@ public:
 	void printCurrentPlayer() const;
 	void printPlayerBuildingCount(int& index) const;
 	void printPlayerScore(int&) const;
+	void printNewTurn() const;
 };
