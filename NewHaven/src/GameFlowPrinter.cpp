@@ -74,6 +74,10 @@ void GameFlowPrinter::update()
 
     if((*GameController::current->controller_status)["new_turn"])
         printNewTurn();
+    if((*GameController::current->controller_status)["game_board"]){
+       printGameBoardConfig();
+       printGameBoard();
+    }
     else {
         *gameBoard = GameController::current->game_settings->board->getBoardString();
 

@@ -22,6 +22,7 @@ typedef pair<string, bool> status;
 GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
     // singleton only one instance allowed
     controller_status->insert(status("new_turn", false));
+    controller_status->insert(status("board", false));
     delete current;
     current = this;
 }
@@ -47,7 +48,7 @@ void GameController::start(){
     while(!hasGameEnded()){
         (*controller_status)["new_turn"] = true;
         notify();   // We notify observers that the turn has changed
-        (*controller_status)["new_turn"] = false;
+        (*controller_status)["game_board"] = false;
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
     }
@@ -98,8 +99,10 @@ void GameController::playTurn(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
 
-    game_settings->flowPrinter->printGameBoardConfig();
-    game_settings->flowPrinter->printGameBoard();
+
+    (*controller_status)["game_board"] = true;
+    notify();
+    (*controller_status)["game_board"] = false;
     
     cout << "Here are your building cards:\n";
     current->printBuildingCards();
