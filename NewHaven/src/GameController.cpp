@@ -23,7 +23,7 @@ GameController::GameController():current_turn_player{new int(0)}, game_settings{
     // singleton only one instance allowed
     controller_status->insert(status("new_turn", false));
     controller_status->insert(status("start_turn", false));
-    controller_status->insert(status("", false));
+    controller_status->insert(status("begin_sw", false));
 
     delete current;
     current = this;
@@ -270,6 +270,9 @@ void GameController::shareTheWealth(){
         // print out the available resources
         // prompt user to action
         *is_share_wealth=true;
+        (*controller_status)["begin_sw"] = true;
+        notify();
+        (*controller_status)["begin_sw"] = false;
         cout << "\nLeftover resources:" << endl;
         game_settings->tracker->printScore();
         cout << "\nHere are your building cards:";

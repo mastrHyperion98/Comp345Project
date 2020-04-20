@@ -86,6 +86,8 @@ void GameFlowPrinter::update() {
         *gameBoard = GameController::current->game_settings->board->getBoardString();
         printGameBoard();
     }
+    else if((*GameController::current->controller_status)["begin_sw"]){
+    }
     else {
         *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
         for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
