@@ -4,9 +4,11 @@
 #include "ScoreCalculator.h"
 #include "ResourceTracker.h"
 #include <string>
+#include "GameObservers.h"
 
 
-class Player
+enum PStates{DRAWING_HARVEST, DRAWING_BUILDING, DRAWING_BPOOL, UNKNOWN};
+class Player: public Observable
 {
 public:
     Player(string id);
@@ -35,9 +37,12 @@ public:
     int calculateScore() const;
     VGMap getVillage() const;
     Hand getHand() const;
+    PStates getState(){return  *state;};
 private:
     VGMap *village;
+    PStates *state{new PStates{UNKNOWN}};
     ScoreCalculator *vb_score;
     Hand *my_hand;
     string *id;
+    void setState(PStates);
 };

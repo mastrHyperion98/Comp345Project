@@ -94,6 +94,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
             std::cout << "Invalid input; please re-enter.\n";
         }
         players->push_back(new Player(id));
+        (*players)[players->size()-1]->attach(t_observer);
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
@@ -367,7 +368,7 @@ void Setting::DrawBuilding(int player_index)
 
 
         (*players)[player_index]->drawBuilding(b_deck->draw());
-        std::cout << "\nA card was drawn from the deck!" << endl;
+        //std::cout << "\nA card was drawn from the deck!" << endl;
     }
 
     b_deck->fillBuildingPool();

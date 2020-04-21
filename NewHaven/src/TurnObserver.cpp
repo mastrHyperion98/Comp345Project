@@ -88,13 +88,31 @@ void TurnObserver::printEndTurn() {
     string msg = "\n" + current->getID() + " has ended their turn!";
     cout << msg << endl;
 }
+
+void TurnObserver::printDrawHarvest() {
+    string msg = "\n" + current->getID() + " has drawn a harvest tile from the deck!";
+    cout << msg << endl;
+}
+
+void TurnObserver::printDrawBuilding(bool in_pool) {
+    string msg;
+    if(in_pool)
+        msg = "\n" + current->getID() + " has drawn a building tile from the pool!";
+    else
+        msg = "\n" + current->getID() + " has drawn a building tile from the deck!";
+
+    cout << msg << endl;
+}
 void TurnObserver::update() {
     States gc_state = GameController::current->getState();
     VG_State vg_state{NILL};
     Player * sw_player = (*GameController::current->game_settings->players)[ GameController::current->getCurrentSharePlayer()];
     VG_State sw_vg_state{sw_player->getVillage().getState()};
-    if(current != nullptr)
+    PStates player_state{UNKNOWN};
+    if(current != nullptr){
         vg_state = current->getVillage().getState();
+        player_state = current->getState();
+    }
     switch(gc_state){
         case NEW_TURN:printTurnStart();break;
         case INITIAL:break;
@@ -121,5 +139,11 @@ void TurnObserver::update() {
                  printBV();
 
             break;
+    }
+    switch(player_state){
+        case DRAWING_BPOOL:printDrawBuilding(true);break;
+        case DRAWING_BUILDING:printDrawBuilding(false);break;
+        case DRAWING_HARVEST:printDrawHarvest();break;
+        case UNKNOWN:break;
     }
 }

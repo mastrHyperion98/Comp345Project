@@ -26,6 +26,8 @@ private:
     void printSW();
     void printBuildingPlayedSW(bool);
     void printEndTurn();
+    void printDrawHarvest();
+    void printDrawBuilding(bool);
 };
 
 
