@@ -28,8 +28,8 @@ void TurnObserver::printPlayingHarvestTile() {
 }
 
 void TurnObserver::printPlayedHT(){
-    string msg = "\n" + current->getID() + " has played a harvest tile!";
-    cout << msg << endl;
+    string msg = "\n" + current->getID() + " has played a harvest tile at position ";
+    cout << msg << *GameController::current->game_settings->board->last_played->position <<  "!" << endl;
     cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
     GameController::current->game_settings->board->printBoard();
     cout << "The resource marker has increased!" << endl;

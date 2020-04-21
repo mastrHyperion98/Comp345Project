@@ -32,6 +32,7 @@ public:
     void printIndexConfiguration();
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
+    Square *last_played;
 private:
     GameBoard* board;
     std::vector<Building*>* buildings;

@@ -11,7 +11,8 @@
 #include "../src/GBMap.h"
 #include <iomanip>
 
-GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>}{
+GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new const int(25 + (*CONFIG*10))), buildings{new std::vector<Building*>},
+last_played{nullptr}{
     board = new GameBoard();
     // populate board
     if(!createBoard())
@@ -20,10 +21,14 @@ GBMap::GBMap(int configuration):CONFIG(new const int(configuration)), SIZE(new c
     // assign
     assignDefaultTiles();
 }
-GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)} {
+GBMap::GBMap(const GBMap &map) : CONFIG(new const int(*map.CONFIG)), SIZE(new const int(25 + (*map.CONFIG*10))), buildings{new std::vector<Building*>(*map.buildings)},
+last_played{nullptr}{
     // call the copy constructor of the GameBoard
     board = new GameBoard(*map.board);
     *playCounter = *map.playCounter;
+
+    if(map.last_played!=nullptr)
+        last_played = new Square(*map.last_played);
 }
 GBMap::~GBMap(){
     delete CONFIG;
@@ -35,6 +40,7 @@ GBMap::~GBMap(){
     delete bl;
     delete br;
     delete playCounter;
+    delete last_played;
     // set to nullptr since it is static and belongs to the class.
 }
 GBMap::GBMap():CONFIG(new const int(0)), SIZE(new const int(25)),buildings{new std::vector<Building*>}{
@@ -51,6 +57,8 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     (*board)[NodeID].tile = tile;
     *(*board)[NodeID].isPlayed = true;
     *playCounter = *playCounter + 1;
+    delete last_played;
+    last_played = new Square((*board)[NodeID]);
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
