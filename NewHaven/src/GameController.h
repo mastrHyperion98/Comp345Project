@@ -22,10 +22,11 @@ public:
     int getCurrentPlayerTurn(){return *current_turn_player;};
     static GameController *current;
     Setting *game_settings;
-    States *game_state{new States(States::INITIAL)};
+    States getState();
 private:
     ResourceTypes *original_shipment{nullptr};
     int *current_turn_player;
+    States *game_state{new States(States::INITIAL)};
     void playTurn();
     int startingPlayer();
     bool hasGameEnded();
@@ -37,7 +38,7 @@ private:
     inline void setOriginalShipmentTile(Player *player);
     void shareTheWealth();
     void setState(States state);
-    States getState();
+
 
     scores findWinner();
 };

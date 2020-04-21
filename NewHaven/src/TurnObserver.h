@@ -7,6 +7,9 @@
 
 #include "GameObservers.h"
 #include <string>
+#include <map>
+#include "Player.h"
+
 class TurnObserver: public Observer {
 public:
     TurnObserver();
@@ -14,9 +17,12 @@ public:
     // update function override
     virtual void update();
 private:
+    Player *current;
+    std::map<ResourceTypes, std::uint_least16_t> *scores;
     void printTurnStart();
     void printPlayingHarvestTile();
     void printPlayedHT();
+    void printBV();
 };
 
 

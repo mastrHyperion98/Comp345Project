@@ -99,7 +99,7 @@ void GameController::playTurn(){
     current->printBuildingCards();
     cout << "\nHere are your Harvest Tiles:";
     current->printHarvestCards();
-    
+
     setState(PLAYING_HARVEST_TILE);
     if (current->getShipmentTile() != nullptr)
     {
@@ -127,7 +127,7 @@ void GameController::playTurn(){
     }
     setState(PLAYED_HARVEST_TILE);
 
-    setState()
+    setState(BUILDING_VILLAGE);
     current->buildVillage();
     shareTheWealth();
     game_settings->DrawBuilding(*current_turn_player);
