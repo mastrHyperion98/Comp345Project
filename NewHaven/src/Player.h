@@ -23,7 +23,7 @@ public:
     // Returns the ResourceTracker object held by the player
     bool buildVillage();
     void calculateResources(ResourceTrails);
-    void setVillage(VGMap);
+    void setVillage(VGMap*);
     // Used to set the shipment tile in Player's hand
     void setShipmentTile(HarvestTile* shipmentTile);
     // Getter for shipment tile

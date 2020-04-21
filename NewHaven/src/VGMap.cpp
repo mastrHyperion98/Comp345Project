@@ -17,7 +17,11 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}, state{new VG_State{NILL}}{
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>),
+name{new string(v_name)},
+village_board{new C_Graph},
+state{new VG_State{NILL}},
+last_played{nullptr}{
     CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
@@ -32,6 +36,7 @@ VGMap::~VGMap() {
     delete playCounter;
     delete typePlayed;
     delete state;
+    delete last_played;
 }
 
 
@@ -44,6 +49,10 @@ VGMap::VGMap(const VGMap &map): state{new VG_State{*map.state}}{
     else
         name = nullptr;
 
+    if(map.last_played != nullptr)
+        last_played = new Circle(*map.last_played);
+    else
+        last_played = nullptr;
     *playCounter = *map.playCounter;
 }
 
@@ -51,12 +60,15 @@ VGMap & VGMap::operator=(const VGMap &map){
     if(this == &map)
         return *this;
     else{
-        delete village_board;
         *village_board = *map.village_board;
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
         *state=*map.state;
+        if(map.last_played != nullptr)
+            *last_played =*map.last_played;
+        else
+            last_played = nullptr;
     }
 
     return *this;
@@ -290,6 +302,8 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        delete last_played;
+        last_played =  new Circle((*village_board)[position]);
         setState(BUILDING_PLAYED);
         return true;
     } else
@@ -303,6 +317,8 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        delete last_played;
+        last_played =  new Circle((*village_board)[position])  ;
         setState(BUILDING_PLAYED_FLIPPED);
         return true;
     } else

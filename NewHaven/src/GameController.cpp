@@ -18,7 +18,7 @@
 // singleton instance
 GameController* GameController::current;
 // default constructor
-GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}{
+GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}, current_share_player{new int(0)}{
     // singleton only one instance allowed
     delete current;
     current = this;
@@ -28,6 +28,7 @@ GameController::GameController():current_turn_player{new int(0)}, game_settings{
 GameController::~GameController(){
     delete game_settings;
     delete current_turn_player;
+    delete current_share_player;
     delete game_state;
     current = nullptr;
 }
@@ -130,6 +131,7 @@ void GameController::playTurn(){
     setState(BUILDING_VILLAGE);
     current->buildVillage();
     shareTheWealth();
+    // set to a temporary state
     game_settings->DrawBuilding(*current_turn_player);
 
     if(shipmentPlayed){
@@ -141,6 +143,8 @@ void GameController::playTurn(){
         // draw a harvest tile only if one from the players hand was consumed.
         current->drawHarvestTile(game_settings->drawHarvestTile());
     }
+
+    setState(END_TURN);
 }
 // end game function
 void GameController::endGame(){
@@ -261,8 +265,13 @@ int GameController::playShipmentTile(ResourceTypes type, Player *player){
 }
 
 void GameController::shareTheWealth(){
+
     int player_index{static_cast<int>((*current_turn_player + 1) % game_settings->players->size())};
+
     do{
+        *current_share_player = player_index;
+        setState(SHARE_THE_WEALTH);
+
         // print out the available resources
         // prompt user to action
         cout << "\nLeftover resources:" << endl;
@@ -281,7 +290,7 @@ void GameController::shareTheWealth(){
         if(choice == 1){
             (*game_settings->players)[player_index]->buildVillage();
         }
-
+        setState(STANDBY);
         player_index = ++player_index % game_settings->players->size();
 
     }while(player_index != *current_turn_player && !game_settings->tracker->isEmpty());

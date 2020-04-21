@@ -18,11 +18,14 @@ public:
     virtual void update();
 private:
     Player *current;
-    std::map<ResourceTypes, std::uint_least16_t> *scores;
     void printTurnStart();
     void printPlayingHarvestTile();
     void printPlayedHT();
     void printBV();
+    void printBuildingPlayed(bool);
+    void printSW();
+    void printBuildingPlayedSW(bool);
+    void printEndTurn();
 };
 
 

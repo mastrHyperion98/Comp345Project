@@ -7,8 +7,8 @@
 #include "Setting.h"
 #include "GameObservers.h"
 // create enum for the game state
-enum States{NEW_TURN, SHARE_THE_WEALTH, END_GAME, PLAYED_HARVEST_TILE,
-        PLAYING_HARVEST_TILE, BUILDING_VILLAGE, INITIAL};
+enum States{NEW_TURN, SHARE_THE_WEALTH, END_TURN, PLAYED_HARVEST_TILE,
+        PLAYING_HARVEST_TILE, BUILDING_VILLAGE, INITIAL, STANDBY, END_GAME};
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
 class GameController: public Observable {
@@ -20,6 +20,7 @@ public:
     bool initialize();
     void start();
     int getCurrentPlayerTurn(){return *current_turn_player;};
+    int getCurrentSharePlayer(){return *current_share_player;};
     static GameController *current;
     Setting *game_settings;
     States getState();
@@ -27,6 +28,7 @@ private:
     ResourceTypes *original_shipment{nullptr};
     int *current_turn_player;
     States *game_state{new States(States::INITIAL)};
+    int *current_share_player;
     void playTurn();
     int startingPlayer();
     bool hasGameEnded();

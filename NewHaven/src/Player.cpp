@@ -4,15 +4,13 @@
 Player::Player(string id): id{new string(id)},
     village{nullptr},
     vb_score{new ScoreCalculator()},
-    my_hand{new Hand()},
-    state{new Player_States{IDLE}}{
+    my_hand{new Hand()}{
 
 }
 
 Player::Player(const Player &player): id{new string(*player.id)},
     vb_score{new ScoreCalculator(*player.vb_score)},
-    my_hand{new Hand(*player.my_hand)},
-    state{{new Player_States{*player.state}};}
+    my_hand{new Hand(*player.my_hand)}
 {
     if (player.village != nullptr)
         village = new VGMap(*player.village);
@@ -24,7 +22,6 @@ Player::~Player(){
     delete village;
     delete vb_score;
     delete my_hand;
-    delete state;
     delete id;
 }
 
@@ -261,8 +258,9 @@ HarvestTile* Player::getShipmentTile() {
     return my_hand->shipment;
 }
 
-void Player::setVillage(VGMap v_map) {
-    village = new VGMap(v_map);
+void Player::setVillage(VGMap *v_map) {
+    delete village;
+    village = v_map;
 }
 
 string Player::getID(){

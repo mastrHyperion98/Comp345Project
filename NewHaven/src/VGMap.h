@@ -55,6 +55,7 @@ public:
     string getName();
     int getNumUnplayed();
     VG_State getState(){return *state;};
+    Circle *last_played;
 private:
     string *name;
     void CreateVillageField();
