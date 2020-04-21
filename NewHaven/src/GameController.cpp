@@ -87,15 +87,20 @@ void GameController::playTurn(){
     if(game_settings == nullptr)
         throw UninitializedControllerException();
     // Print board ID configuration
+
+
+    // neiter being done nor a statistic -- never changing
     cout << "\n***GAME BOARD ID CONFIGURATION***" << endl;
     game_settings->board->printIndexConfiguration();
+    // not caused as a result of a change, but a prompt
     cout << "\n***GAME BOARD CONTENT***" << endl;
     game_settings->board->printBoard();
     cout << "Here are your building cards:";
     current->printBuildingCards();
     cout << "\nHere are your Harvest Tiles:";
     current->printHarvestCards();
-
+    
+    setState(PLAYING_HARVEST_TILE);
     if (current->getShipmentTile() != nullptr)
     {
         cout << '\n' << (*game_settings->players)[*current_turn_player]->getID() << " Your turn! What would you like to do? "
@@ -120,10 +125,9 @@ void GameController::playTurn(){
         ResourceTrails* trail = game_settings->board->getResourcedGraph(pos);
         game_settings->tracker->computeScore(*trail);
     }
+    setState(PLAYED_HARVEST_TILE);
 
-    cout << "\n***UPDATED GAME BOARD CONTENT***" << endl;
-    game_settings->board->printBoard();
-    // current player builds his village
+    setState()
     current->buildVillage();
     shareTheWealth();
     game_settings->DrawBuilding(*current_turn_player);

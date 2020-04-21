@@ -15,6 +15,8 @@ public:
     virtual void update();
 private:
     void printTurnStart();
+    void printPlayingHarvestTile();
+    void printPlayedHT();
 };
 
 

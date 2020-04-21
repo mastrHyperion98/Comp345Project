@@ -7,7 +7,8 @@
 #include "Setting.h"
 #include "GameObservers.h"
 // create enum for the game state
-enum States{NEW_TURN, SHARE_THE_WEALTH, END_GAME, PLAYING_TURN, INITIAL};
+enum States{NEW_TURN, SHARE_THE_WEALTH, END_GAME, PLAYED_HARVEST_TILE,
+        PLAYING_HARVEST_TILE, BUILDING_VILLAGE, INITIAL};
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
 class GameController: public Observable {
