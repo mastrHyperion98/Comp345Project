@@ -13,7 +13,7 @@
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "iostream"
 
-Setting::Setting():tracker{new ResourceTracker}{
+Setting::Setting():tracker{new ResourceTracker}, t_observer{new TurnObserver}{
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
@@ -21,8 +21,9 @@ Setting::Setting():tracker{new ResourceTracker}{
 
 }
 
-Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
+Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}, t_observer{new TurnObserver(*setting.t_observer)}
 {
+
     if(setting.h_deck != nullptr)
         h_deck = new HarvestDeck(*setting.h_deck);
     else

@@ -7,7 +7,11 @@
 #include <vector>
 #include "Player.h"
 #include "GBMap.h"
+#include "TurnObserver.h"
 #include <string>
+
+// necessary as TurnObserver imports GameController which in turn imports Settings
+class TurnObserver;
 class Setting {
 public:
     Setting();
@@ -22,9 +26,11 @@ public:
     vector<Player*>* players;
     bool initSetting();
     void DrawBuilding(int);
+    TurnObserver *t_observer;
 private:
     HarvestDeck *h_deck;
     BuildingDeck *b_deck;
+
     void resourceTracker();
     inline void createHarvestDeck();
     inline void createBuildingDeck();

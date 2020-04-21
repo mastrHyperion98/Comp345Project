@@ -5,9 +5,12 @@
 #ifndef NEWHAVEN_GAMECONTROLLER_H
 #define NEWHAVEN_GAMECONTROLLER_H
 #include "Setting.h"
+#include "GameObservers.h"
+// create enum for the game state
+enum States{NEW_TURN, SHARE_THE_WEALTH, END_GAME, PLAYING_TURN, INITIAL};
 typedef pair<Player*, int> entry;
 typedef map<Player*, int> scores;
-class GameController {
+class GameController: public Observable {
 public:
     GameController();
     GameController(const GameController & controller) = delete;
@@ -15,8 +18,10 @@ public:
     ~GameController();
     bool initialize();
     void start();
+    int getCurrentPlayerTurn(){return *current_turn_player;};
     static GameController *current;
     Setting *game_settings;
+    States *game_state{new States(States::INITIAL)};
 private:
     ResourceTypes *original_shipment{nullptr};
     int *current_turn_player;
@@ -30,6 +35,8 @@ private:
     int playShipmentTile(ResourceTypes type, Player *player);
     inline void setOriginalShipmentTile(Player *player);
     void shareTheWealth();
+    void setState(States state);
+    States getState();
 
     scores findWinner();
 };
