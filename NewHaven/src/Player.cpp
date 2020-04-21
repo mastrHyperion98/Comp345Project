@@ -1,11 +1,19 @@
 #include "Setting.h"
 #include "GameController.h"
 
-Player::Player(string id): id{new string(id)}, village{nullptr}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+Player::Player(string id): id{new string(id)},
+    village{nullptr},
+    vb_score{new ScoreCalculator()},
+    my_hand{new Hand()},
+    state{new Player_States{IDLE}}{
 
 }
 
-Player::Player(const Player &player): id{new string(*player.id)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+Player::Player(const Player &player): id{new string(*player.id)},
+    vb_score{new ScoreCalculator(*player.vb_score)},
+    my_hand{new Hand(*player.my_hand)},
+    state{{new Player_States{*player.state}};}
+{
     if (player.village != nullptr)
         village = new VGMap(*player.village);
     else
@@ -16,6 +24,7 @@ Player::~Player(){
     delete village;
     delete vb_score;
     delete my_hand;
+    delete state;
     delete id;
 }
 

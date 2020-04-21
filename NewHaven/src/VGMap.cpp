@@ -17,7 +17,7 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}{
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}, state{new VG_State{NILL}}{
     CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
@@ -31,9 +31,11 @@ VGMap::~VGMap() {
     delete SIZE;
     delete playCounter;
     delete typePlayed;
+    delete state;
 }
 
-VGMap::VGMap(const VGMap &map) {
+
+VGMap::VGMap(const VGMap &map): state{new VG_State{*map.state}}{
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
     // here we can use operator overload
@@ -54,6 +56,7 @@ VGMap & VGMap::operator=(const VGMap &map){
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
+        *state=*map.state;
     }
 
     return *this;
@@ -159,23 +162,6 @@ void VGMap::PrintGraph() {
 
     cout << endl << endl;
 
-}
-// Taken from the Boost Connected Graph Example
-//https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
-// Prints the number of Connected Components and which vertex belongs to which component
-// A component is a set of one or more nodes in which a path exists.
-// In other words, if the graph is connected than there is only 1 component.
-// If component 2 exists then there does not exists a path linking nodes from Component 1 and 2.
-void VGMap::PrintConnectedGraph() {
-
-    std::vector<int> component(num_vertices(*village_board));
-    int num = connected_components(*village_board, &component[0]);
-
-    std::vector<int>::size_type i;
-    cout << "Total number of components: " << num << endl;
-    for (i = 0; i != component.size(); ++i)
-        cout << "Circle " << i <<" is in component " << component[i] << endl;
-    cout << endl;
 }
 
 // returns a graph with all the connected nodes in the selected column
@@ -291,6 +277,12 @@ void VGMap::resetVisited() {
          *(*village_board)[i].isVisited = false;
     }
 }
+
+void VGMap::setState(VG_State _state) {
+    *state = _state;
+    notify();
+    *state = NILL;
+}
 bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
     bool hasAdjacent{isAdjacentType(type, position)};
     if(building->getBuildingNumber() == *(*village_board)[position].vCost && (!(*typePlayed)[type] ||  hasAdjacent)) {
@@ -298,6 +290,7 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        setState(BUILDING_PLAYED);
         return true;
     } else
         return false;
@@ -310,6 +303,7 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        setState(BUILDING_PLAYED_FLIPPED);
         return true;
     } else
         return false;
