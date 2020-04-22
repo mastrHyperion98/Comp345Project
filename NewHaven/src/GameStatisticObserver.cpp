@@ -85,7 +85,12 @@ void GameStatisticObserver::update() {
         printPlayerScore(current_player);
     }
     else if(gc_state==END_GAME){
-
+        cout << "\n\nThe game has ended! Thank you for playing New Haven!" << endl;
+        for(int i = 0; i < playerScore->size(); i++){
+            string id = (*GameController::current->game_settings->players)[i]->getID();
+            int score =  (*GameController::current->game_settings->players)[i]->calculateScore();
+            cout << id << " has ended the game with " << score << " colonists!" << endl;
+        }
     }
     else if(gc_state == BUILDING_VILLAGE){
         if(vg_state == BUILDING_PLAYED || vg_state == BUILDING_PLAYED_FLIPPED) {

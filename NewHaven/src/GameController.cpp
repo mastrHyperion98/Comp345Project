@@ -179,10 +179,7 @@ void GameController::endGame(){
     if(choice == 1)
         restart();
 
-    else {
-        std::cout << "THANK YOU FOR PLAYING NEW HAVEN!" << endl;
-        return;
-    }
+    setState(END_GAME);
 }
 
 // Restart the game
