@@ -59,6 +59,7 @@ bool GBMap::placeHarvestTile(int NodeID, HarvestTile *tile) {
     *playCounter = *playCounter + 1;
     delete last_played;
     last_played = new Square((*board)[NodeID]);
+    notify();
     return true;
 }
 ResourceTrails * GBMap::getResourcedGraph(int position) {
@@ -445,7 +446,7 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 }
 
 bool GBMap::isGameOver(){
-    return (*SIZE - *playCounter) == 20;
+    return (*SIZE - *playCounter) == 1;
 }
 
 string GBMap::getBoardString() const {

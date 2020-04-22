@@ -123,9 +123,8 @@ void GameStatisticObserver::update() {
         }
     }
     else {
-        *gameBoard = GameController::current->game_settings->board->getBoardString();
         *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
-
+        *gameBoard = GameController::current->game_settings->board->getBoardString();
     }
 }
 

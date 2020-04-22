@@ -120,7 +120,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         if (loader.loadConfig(filepath) && board == nullptr) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
-            board->attach(gs_observer);
+            board->attach(tracker);
         }
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
@@ -257,6 +257,7 @@ bool Setting::initSetting() {
         int file_index = 0;
         for(int i = 0; i < players->size(); i++){
             (*players)[i]->setVillage(loadVillageMap(v_files[file_index]));
+            (*players)[i]->attachObserverToVillage(tracker);
             (*players)[i]->attachObserverToVillage(t_observer);
             (*players)[i]->attachObserverToVillage(gs_observer);
             file_index++;

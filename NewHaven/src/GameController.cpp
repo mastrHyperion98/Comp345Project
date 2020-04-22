@@ -120,7 +120,6 @@ void GameController::playTurn(){
     }
     else
         pos = current->placeHarvestTile();
-
     setState(PLAYED_HARVEST_TILE);
 
     setState(BUILDING_VILLAGE);
