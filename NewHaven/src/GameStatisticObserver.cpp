@@ -78,6 +78,7 @@ void GameStatisticObserver::update() {
         vg_state = current->getVillage().getState();
 
     if(gc_state==NEW_TURN){
+        *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
         printCurrentPlayer();
         cout << "***YOUR VILLAGE***\n";
         printVillageBoard(*currentPlayer);
@@ -121,11 +122,10 @@ void GameStatisticObserver::update() {
             cout << "\nREMAINING RESOURCE MARKERS" << endl;
             GameController::current->game_settings->tracker->printScore();
         }
-    }
+    }/*
     else {
-        *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
         *gameBoard = GameController::current->game_settings->board->getBoardString();
-    }
+    }*/
 }
 
 void GameStatisticObserver::printGameBoard() const
