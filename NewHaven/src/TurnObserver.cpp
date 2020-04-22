@@ -7,7 +7,7 @@
 #include "GameController.h"
 
 using namespace std;
-TurnObserver::TurnObserver(){};
+TurnObserver::TurnObserver():current{nullptr}{};
 TurnObserver::~TurnObserver() {
     delete current;
 };
