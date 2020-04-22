@@ -67,16 +67,61 @@ bool GameStatisticObserver::initialize()
 }
 
 void GameStatisticObserver::update() {
+    States gc_state = GameController::current->getState();
+    int current_player = GameController::current->getCurrentPlayerTurn();
+    VG_State vg_state{NILL};
+    Player * sw_player = (*GameController::current->game_settings->players)[ GameController::current->getCurrentSharePlayer()];
+    Player * current = (*GameController::current->game_settings->players)[current_player];
+    VG_State sw_vg_state = sw_player->getVillage().getState();
+
+    if(current != nullptr)
+        vg_state = current->getVillage().getState();
+
+    if(gc_state==NEW_TURN){
+        printCurrentPlayer();
+        cout << "***YOUR VILLAGE***\n";
+        printVillageBoard(*currentPlayer);
+        printPlayerBuildingCount(current_player);
+        printPlayerScore(current_player);
+    }
+    else if(gc_state==END_GAME){
+
+    }
+    else if(gc_state == BUILDING_VILLAGE){
+        if(vg_state == BUILDING_PLAYED || vg_state == BUILDING_PLAYED_FLIPPED) {
+            for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
+                villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](
+                        i)->getVillage().getBoardString();
+                playerBuildingCount->operator[](i) =
+                        30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
+                playerScore->operator[](i) = GameController::current->game_settings->players->operator[](
+                        i)->calculateScore();
+            }
+            //printVillageBoard(*currentPlayer);
+            cout << "\nREMAINING RESOURCE MARKERS" << endl;
+            GameController::current->game_settings->tracker->printScore();
+        }
+    }
+    else if(gc_state == SHARE_THE_WEALTH){
+        if(sw_vg_state == BUILDING_PLAYED || sw_vg_state == BUILDING_PLAYED_FLIPPED){
+            for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
+                villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](
+                        i)->getVillage().getBoardString();
+                playerBuildingCount->operator[](i) =
+                        30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
+                playerScore->operator[](i) = GameController::current->game_settings->players->operator[](
+                        i)->calculateScore();
+            }
+            //printVillageBoard(sw_player->getID());
+            cout << "\nREMAINING RESOURCE MARKERS" << endl;
+            GameController::current->game_settings->tracker->printScore();
+        }
+    }
+    else {
         *gameBoard = GameController::current->game_settings->board->getBoardString();
         *currentPlayer = (*GameController::current->game_settings->players)[GameController::current->getCurrentPlayerTurn()]->getID();
-        for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
-            villageBoards->operator[](i) = GameController::current->game_settings->players->operator[](
-                    i)->getVillage().getBoardString();
-            playerBuildingCount->operator[](i) =
-                    30 - GameController::current->game_settings->players->operator[](i)->getVillage().getNumUnplayed();
-            playerScore->operator[](i) = GameController::current->game_settings->players->operator[](
-                    i)->calculateScore();
-        }
+
+    }
 }
 
 void GameStatisticObserver::printGameBoard() const
@@ -112,5 +157,5 @@ void GameStatisticObserver::printPlayerBuildingCount(int& index) const
 
 void GameStatisticObserver::printPlayerScore(int& index) const
 {
-    cout << "\nVillage colonists number: " << playerScore->operator[](index) << " colonits\n";
+    cout << "\nVillage colonists number: " << playerScore->operator[](index) << " colonists\n";
 }

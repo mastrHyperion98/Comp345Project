@@ -3,7 +3,7 @@
 #define NEWHAVEN_GAMESTATISTICOBSERVER_H
 #include "GameObservers.h"
 #include <string>
-class GameStatisticObserver: Observer{
+class GameStatisticObserver: public Observer{
 public:
     GameStatisticObserver();
     ~GameStatisticObserver();
@@ -18,7 +18,6 @@ public:
     void printCurrentPlayer() const;
     void printPlayerBuildingCount(int& index) const;
     void printPlayerScore(int&) const;
-    void printNewTurn() const;
 private:
     std::string* gameBoard;
     std::string* currentPlayer;

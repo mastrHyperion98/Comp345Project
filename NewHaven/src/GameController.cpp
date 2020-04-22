@@ -59,6 +59,7 @@ bool GameController::initialize() {
         *current_turn_player = startingPlayer();
     // attach our observer
     attach(game_settings->t_observer);
+    attach(game_settings->gs_observer);
     return init;
 }
 // find the starting player by comparing their studentID
