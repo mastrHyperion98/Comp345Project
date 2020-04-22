@@ -110,12 +110,8 @@ void GameController::playTurn(){
                 "Enter the number for the move you'd like to make." << endl;
 
         int tile_option = selectTileOption();
-        if(tile_option == 1) {
+        if(tile_option == 1)
             pos=current->placeHarvestTile();
-            ResourceTrails *trail = game_settings->board->getResourcedGraph(pos);
-            game_settings->tracker->computeScore(*trail);
-            delete trail;
-        }
             // play the shipmentTile
         else if(tile_option == 2){
             pos = playShipmentTile(selectResourceType(), current);
@@ -123,11 +119,8 @@ void GameController::playTurn(){
         }
     }
     else
-    {
         pos = current->placeHarvestTile();
-        ResourceTrails* trail = game_settings->board->getResourcedGraph(pos);
-        game_settings->tracker->computeScore(*trail);
-    }
+
     setState(PLAYED_HARVEST_TILE);
 
     setState(BUILDING_VILLAGE);
