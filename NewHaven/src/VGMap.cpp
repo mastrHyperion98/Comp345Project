@@ -406,7 +406,7 @@ string VGMap::getName(){
 }
 
 
-string VGMap::castResourceTypesToString(ResourceTypes type){
+string VGMap::castResourceTypesToString(ResourceTypes type) const{
     if(type == ResourceTypes::SHEEP)
         return "SH";
     else if(type == ResourceTypes::WOOD)
@@ -422,4 +422,47 @@ string VGMap::castResourceTypesToString(ResourceTypes type){
 int VGMap::getNumUnplayed(){
     // essentially we loop through
     return (*SIZE - *playCounter);
+}
+
+string VGMap::getBoardString() const {
+    ostringstream vBoard;
+    const string spacer = "    ";
+    const string inner_spacer ="  ";
+    vBoard << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << '\n';
+    vBoard << "------------" << "-------------------------------------------------------------" << '\n';
+    int num_row{0};
+    for(int i{0}; i < 6; i++){
+        vBoard << spacer << spacer <<  (6 - i) << " |" << spacer;
+        for(int j{5*i}; j < 5*i + 5; j++){
+            if((*village_board)[j].building == nullptr){
+                vBoard << std::setfill('0') << std::setw(4)<<*(*village_board)[j].position << spacer;
+            }else{
+                if(!(*village_board)[j].building->isFlipped())
+                    vBoard << " "<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<" "<< spacer;
+                else
+                    vBoard << "-"<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<"-"<< spacer;
+            }
+        }
+        switch(num_row){
+            case 0: vBoard << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(4)<<6; break;
+            case 1: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<5; break;
+            case 2: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<4; break;
+            case 3: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<3; break;
+            case 4: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<2; break;
+            case 5: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<1; break;
+        }
+        num_row++;
+        vBoard << '\n';
+    }
+    vBoard << "------------" << "-------------------------------------------------------------" << '\n';
+    vBoard << "#Colonists|  " << inner_spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 5<< spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 3 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 5 << spacer;
+
+    vBoard << '\n' << '\n';
+
+    return vBoard.str();
 }

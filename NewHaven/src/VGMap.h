@@ -56,13 +56,14 @@ public:
     int getNumUnplayed();
     VG_State getState(){return *state;};
     Circle *last_played;
+    string getBoardString() const;
 private:
     string *name;
     void CreateVillageField();
     C_Graph *village_board;
     map<ResourceTypes, bool> *typePlayed;
     bool isAdjacentType(ResourceTypes type, int position);
-    string castResourceTypesToString(ResourceTypes);
+    string castResourceTypesToString(ResourceTypes) const;
     int *playCounter{new int(0)};
     const int *const SIZE{new const int{30}};
     bool playBuildingFlipped(Building* building, ResourceTypes type, int position);

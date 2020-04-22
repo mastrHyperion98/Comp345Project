@@ -33,6 +33,7 @@ public:
     HarvestTile* getHarvestTile(int);
     bool isGameOver();
     Square *last_played;
+    string getBoardString() const;
 private:
     GameBoard* board;
     std::vector<Building*>* buildings;
@@ -45,7 +46,7 @@ private:
     inline bool vertexContainedInQueue(deque<NodeID> queue, NodeID element) const;
     inline int getVertexPosition(ResourceTrails graph, int position) const;
     void assignDefaultTiles();
-    string castResourceTypesToString(ResourceTypes);
+    string castResourceTypesToString(ResourceTypes) const;
     int *playCounter{new int(0)};
 };
 
