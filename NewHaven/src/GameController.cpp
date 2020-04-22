@@ -18,7 +18,8 @@
 // singleton instance
 GameController* GameController::current;
 // default constructor
-GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr}, current_share_player{new int(0)}{
+GameController::GameController():current_turn_player{new int(0)}, game_settings{nullptr},
+ current_share_player{new int(0)}{
     // singleton only one instance allowed
     delete current;
     current = this;

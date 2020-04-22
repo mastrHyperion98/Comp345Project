@@ -125,15 +125,13 @@ void Setting::loadGameBoard(const std::string filepath) {
     }
 }
 // use VGMap loader to load proper village board
-VGMap* Setting::loadVillageMap(const std::string filepath) {
+VGMap Setting::loadVillageMap(const std::string filepath) {
     cout << "LOADING " << filepath << endl;
     VGMapLoader loader;
     try {
         if (loader.loadVConfig(filepath)) {
             cout << "LOADING SUCCESSFUL" << endl;
-            VGMap *map= loader.generateVMap();
-            map->attach(t_observer);
-            return map;
+            return loader.generateVMap();
         } else
             throw BoardConfigurationNotLoaded();
     }catch(const InvalidConfigurationException &ex){
@@ -253,6 +251,7 @@ bool Setting::initSetting() {
         int file_index = 0;
         for(int i = 0; i < players->size(); i++){
             (*players)[i]->setVillage(loadVillageMap(v_files[file_index]));
+            (*players)[i]->attachObserverToVillage(t_observer);
             file_index++;
         }
         resourceTracker();

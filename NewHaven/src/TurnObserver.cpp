@@ -107,7 +107,8 @@ void TurnObserver::update() {
     States gc_state = GameController::current->getState();
     VG_State vg_state{NILL};
     Player * sw_player = (*GameController::current->game_settings->players)[ GameController::current->getCurrentSharePlayer()];
-    VG_State sw_vg_state{sw_player->getVillage().getState()};
+
+    VG_State sw_vg_state = sw_player->getVillage().getState();
     PStates player_state{UNKNOWN};
     if(current != nullptr){
         vg_state = current->getVillage().getState();

@@ -25,7 +25,7 @@ public:
     // Returns the ResourceTracker object held by the player
     bool buildVillage();
     void calculateResources(ResourceTrails);
-    void setVillage(VGMap*);
+    void setVillage(VGMap);
     // Used to set the shipment tile in Player's hand
     void setShipmentTile(HarvestTile* shipmentTile);
     // Getter for shipment tile
@@ -38,6 +38,7 @@ public:
     VGMap getVillage() const;
     Hand getHand() const;
     PStates getState(){return  *state;};
+    void attachObserverToVillage(Observer*);
 private:
     VGMap *village;
     PStates *state{new PStates{UNKNOWN}};

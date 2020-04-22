@@ -254,9 +254,9 @@ HarvestTile* Player::getShipmentTile() {
     return my_hand->shipment;
 }
 
-void Player::setVillage(VGMap *v_map) {
+void Player::setVillage(VGMap v_map) {
     delete village;
-    village = v_map;
+    village = new VGMap(v_map);
 }
 
 string Player::getID(){
@@ -295,4 +295,8 @@ void Player::setState(PStates _state)  {
     *state =  _state;
     notify();
     *state = UNKNOWN;
+}
+
+void Player::attachObserverToVillage(Observer* observer) {
+    village->attach(observer);
 }

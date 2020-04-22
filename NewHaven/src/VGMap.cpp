@@ -53,6 +53,7 @@ VGMap::VGMap(const VGMap &map): state{new VG_State{*map.state}}{
         last_played = new Circle(*map.last_played);
     else
         last_played = nullptr;
+
     *playCounter = *map.playCounter;
 }
 
