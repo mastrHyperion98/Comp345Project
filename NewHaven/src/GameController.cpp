@@ -244,7 +244,9 @@ int GameController::playShipmentTile(ResourceTypes type, Player *player){
             // print new board config
             player->setShipmentPlayed();
             // compute resourceTracker using compies
-            game_settings->tracker->computeScore(*game_settings->board->getResourcedGraph(pos));
+            ResourceTrails* trail{ game_settings->board->getResourcedGraph(pos) };
+            game_settings->tracker->computeScore(*trail);
+            delete trail;
             // once resource_score is calculated we flip the tile over
         } else{
             cout << "Position Index is invalid. It has already been played!"<<endl;
