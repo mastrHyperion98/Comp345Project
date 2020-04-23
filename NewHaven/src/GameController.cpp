@@ -48,6 +48,7 @@ void GameController::start(){
         setState(States::NEW_TURN);
         playTurn();
         *current_turn_player = ((*current_turn_player)+1) % game_settings->players->size();
+        setState(END_TURN);
     }
     endGame();
 }
@@ -137,8 +138,6 @@ void GameController::playTurn(){
         // draw a harvest tile only if one from the players hand was consumed.
         current->drawHarvestTile(game_settings->drawHarvestTile());
     }
-
-    setState(END_TURN);
 }
 // end game function
 void GameController::endGame(){
