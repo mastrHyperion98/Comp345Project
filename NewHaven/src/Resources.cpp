@@ -166,6 +166,8 @@ HarvestDeck::~HarvestDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
+	for(int i = 0; i < deckContent->size(); i++)
+	    delete (*deckContent)[i];
 	delete deckContent;
 }
 
@@ -294,6 +296,8 @@ BuildingDeck::~BuildingDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
+    for(int i = 0; i < deckContent->size(); i++)
+        delete (*deckContent)[i];
 	delete deckContent;
 	delete buildingPoolContent;
 }

@@ -322,7 +322,7 @@ HarvestTile * GBMap::getHarvestTile(int position) {
 }
 
 bool GBMap::isGameOver(){
-    return (*SIZE - *playCounter) == 1;
+    return (*SIZE - *playCounter) == 20;
 }
 
 string GBMap::getBoardString() const {
