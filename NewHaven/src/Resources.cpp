@@ -166,6 +166,8 @@ HarvestDeck::~HarvestDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
+	for(int i = 0; i < deckContent->size(); i++)
+	    delete (*deckContent)[i];
 	delete deckContent;
 }
 
@@ -210,6 +212,7 @@ Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
+	delete faceUp;
 }
 
 Building& Building::operator=(const Building& building)
@@ -294,6 +297,8 @@ BuildingDeck::~BuildingDeck()
 {
 	delete MAX_DECK_SIZE;
 	delete deckSize;
+    for(int i = 0; i < deckContent->size(); i++)
+        delete (*deckContent)[i];
 	delete deckContent;
 	delete buildingPoolContent;
 }

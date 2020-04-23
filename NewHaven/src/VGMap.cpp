@@ -86,45 +86,45 @@ It will be created in a similar way as a 2D Matrix.
 void VGMap::CreateVillageField() {
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
-        (*village_board)[vPosition].position = new int(vPosition);
+        *(*village_board)[vPosition].position = vPosition;
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (vPosition > 0 && vPosition % 5 != 0)
             add_edge(vPosition, vPosition - 1, *village_board);
 
 
         if (vPosition>=0 && vPosition<5) {
-            (*village_board)[vPosition].vCost = new int(6);
-            (*village_board)[vPosition].row = new int(0);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost =6;
+            *(*village_board)[vPosition].row = 0;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=5 && vPosition<10) {
-            (*village_board)[vPosition].vCost = new int(5);
-            (*village_board)[vPosition].row = new int(1);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 5;
+            *(*village_board)[vPosition].row = 1;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=10 && vPosition<15) {
-            (*village_board)[vPosition].vCost = new int(4);
-            (*village_board)[vPosition].row = new int(2);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 4;
+            *(*village_board)[vPosition].row = 2;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=15 && vPosition<20) {
-            (*village_board)[vPosition].vCost = new int(3);
-            (*village_board)[vPosition].row = new int(3);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 3;
+            *(*village_board)[vPosition].row = 3;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
         else if (vPosition>=20 && vPosition<25) {
-            (*village_board)[vPosition].vCost = new int(2);
-            (*village_board)[vPosition].row = new int(4);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+           *(*village_board)[vPosition].vCost = 2;
+            *(*village_board)[vPosition].row = 4;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=25 && vPosition<30) {
-            (*village_board)[vPosition].vCost = new int(1);
-            (*village_board)[vPosition].row = new int(5);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 1;
+            *(*village_board)[vPosition].row = 5;
+            *(*village_board)[vPosition].column =vPosition % 5;
         }
     }
 
@@ -140,31 +140,30 @@ void VGMap::PrintGraph() {
 // returns a graph with all the connected nodes in the selected column
 // same logic as getConnectedRow
 ConnectedCircles VGMap::getConnectedColumn(int const column){
-    C_Graph *board = new C_Graph(*village_board);
     ConnectedCircles graph;
     deque<vertex_v> root_queue;
     int origin_index = column % 5;
-    auto vertex_set = board->vertex_set();
+    auto vertex_set = village_board->vertex_set();
     vertex_v vertex = vertex_set[origin_index];
     vertex_v origin_v = add_vertex(graph);
-    graph[origin_v] = Circle((*board)[vertex]);
+    graph[origin_v] = (*village_board)[vertex];
     root_queue.push_back(vertex);
 
     while (!root_queue.empty()) {
         vertex = root_queue.front();
-        *(*board)[vertex].isVisited = true;
+        *(*village_board)[vertex].isVisited = true;
         C_Graph::adjacency_iterator start, end;
-        tie(start, end) = adjacent_vertices(vertex, *board);
+        tie(start, end) = adjacent_vertices(vertex, *village_board);
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if (*(*board)[next_element].column == column && !*(*board)[next_element].isVisited) {
+            if (*(*village_board)[next_element].column == column && !*(*village_board)[next_element].isVisited) {
                 // if the next_element is in the same column then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = Circle((*board)[next_element]);
+                graph[v] =(*village_board)[next_element];
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
@@ -178,19 +177,17 @@ ConnectedCircles VGMap::getConnectedColumn(int const column){
     }
     resetVisited();
 // return the new graph
-    delete board;
     return graph;
 }
 
 // returns a graph with all the connected nodes in the selected row
 ConnectedCircles VGMap::getConnectedRow(int const row) {
-    C_Graph *board = new C_Graph(*village_board);
     ConnectedCircles graph;
     // create a queue to keep track of the next element to traverse
     deque<vertex_v> root_queue;
     int origin_index = 5 * row;
     // define the vertexSet of Village Board
-    auto vertex_set = board->vertex_set();
+    auto vertex_set = village_board->vertex_set();
     // get vertex from village board
     vertex_v vertex = vertex_set[origin_index];
     // create new vertex in ConnectedGraph graph
@@ -198,7 +195,7 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
 
 
     // assign the circle from vertex to origin_v
-    graph[origin_v] = Circle((*board)[vertex]);
+    graph[origin_v] = (*village_board)[vertex];
     // push origin into queue
     root_queue.push_back(vertex);
 
@@ -207,20 +204,20 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
     while (!root_queue.empty()) {
         // get the head of the queue
         vertex = root_queue.front();
-        *(*board)[vertex].isVisited = true;
+        *(*village_board)[vertex].isVisited = true;
         // define your adjacency iterator
         C_Graph::adjacency_iterator start, end;
-        tie(start, end) = adjacent_vertices(vertex, *board);
+        tie(start, end) = adjacent_vertices(vertex, *village_board);
         for (; start != end; ++start) {
             // create the next element
             vertex_v next_element = vertex_set[*start];
-            if (*(*board)[next_element].row == row && !*(*board)[next_element].isVisited) {
+            if (*(*village_board)[next_element].row == row && !*(*village_board)[next_element].isVisited) {
                 // if the next_element is in the same row then push to queue
                 root_queue.push_back(next_element);
                 // add a vertex to the connectedCircles graph
                 vertex_v v = add_vertex(graph);
                 // assign circle to the next element of the graph
-                graph[v] = Circle((*board)[next_element]);
+                graph[v] = (*village_board)[next_element];
                 // add an edge -- origin_v always in front
                 add_edge(origin_v, v, graph);
                 // before leaving set v as the new origin;
@@ -232,7 +229,6 @@ ConnectedCircles VGMap::getConnectedRow(int const row) {
         // remove the front of the queue when the for loop is over.
         root_queue.pop_front();
     }
-    delete board;
     resetVisited();
 // return the new graph
     return graph;
@@ -310,12 +306,11 @@ bool VGMap::isAdjacentType(ResourceTypes type, int position) {
     return false;
 }
 Circle::Circle(){
-    row = nullptr;
-    column = nullptr;
-    vCost = nullptr;
+    row = new int(0);
+    column = new int(0);
+    vCost = new int(0);
     building = nullptr;
-    position = nullptr;
-    isVisited = new bool(false);
+    position = new int(0);
     isPlayed = new bool(false);
 }
 
@@ -325,7 +320,7 @@ Circle::Circle(const Circle &circle){
     position = new int(*circle.position);
     column = new int(*circle.column);
     vCost = new int(*circle.vCost);
-    isVisited = new bool(*circle.isVisited);
+    *isVisited =*circle.isVisited;
     isPlayed = new bool(*circle.isPlayed);
 }
 
@@ -343,14 +338,15 @@ Circle & Circle::operator=(const Circle &circle){
     if (this == &circle)
         return *this;
     else {
-        row = new int(*circle.row);
-        column = new int(*circle.column);
-        vCost = new int(*circle.vCost);
-        *isVisited = *circle.isVisited;
-        *isPlayed = *circle.isPlayed;
-        // we dont create copies of buildings. We will clear it with the decks
-        building = circle.building;
-        position = new int(*circle.position);
+            *row = *circle.row;
+            *column = *circle.column;
+            *vCost = *circle.vCost;
+            *isVisited = *circle.isVisited;
+            *isPlayed = *circle.isPlayed;
+            // we dont create copies of buildings. We will clear it with the decks
+            building = circle.building;
+            *position = *circle.position;
+
     }
     return *this;
 }

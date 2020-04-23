@@ -8,9 +8,6 @@
  */
 
 #include "ResourceTracker.h"
-#include "../src/GBMap.h"
-#include "../src/Square.h"
-#include "../src/Resources.h"
 #include <map>
 #include <deque>
 #include "boost/graph/adjacency_list.hpp"
