@@ -4,7 +4,6 @@
 
 #include "VGMapLoader.h"
 #include <iostream>
-#include <boost/lexical_cast.hpp>
 #include <fstream>
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "../Exceptions/InvalidConfigurationException.h"
