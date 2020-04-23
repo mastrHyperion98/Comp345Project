@@ -13,7 +13,10 @@
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include <iostream>
 
-Setting::Setting():tracker{new ResourceTracker}, t_observer{new TurnObserver}, gs_observer(new GameStatisticObserver){
+Setting::Setting():
+tracker{new ResourceTracker},
+t_observer{new TurnObserver},
+gs_observer(new GameStatisticObserver){
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
@@ -21,7 +24,8 @@ Setting::Setting():tracker{new ResourceTracker}, t_observer{new TurnObserver}, g
 
 }
 
-Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)},
+Setting::Setting(const Setting& setting):
+tracker{new ResourceTracker(*setting.tracker)},
 t_observer{new TurnObserver(*setting.t_observer)},
 gs_observer(new GameStatisticObserver(*setting.gs_observer))
 {

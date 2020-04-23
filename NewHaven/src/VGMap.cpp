@@ -86,45 +86,45 @@ It will be created in a similar way as a 2D Matrix.
 void VGMap::CreateVillageField() {
     for (int vPosition = 0; vPosition < 30; vPosition++) {
         add_vertex(*village_board);
-        (*village_board)[vPosition].position = new int(vPosition);
+        *(*village_board)[vPosition].position = vPosition;
         // if it isnt the first element in a row then add the previous element as a neighbour to the undirected graph
         if (vPosition > 0 && vPosition % 5 != 0)
             add_edge(vPosition, vPosition - 1, *village_board);
 
 
         if (vPosition>=0 && vPosition<5) {
-            (*village_board)[vPosition].vCost = new int(6);
-            (*village_board)[vPosition].row = new int(0);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost =6;
+            *(*village_board)[vPosition].row = 0;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=5 && vPosition<10) {
-            (*village_board)[vPosition].vCost = new int(5);
-            (*village_board)[vPosition].row = new int(1);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 5;
+            *(*village_board)[vPosition].row = 1;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=10 && vPosition<15) {
-            (*village_board)[vPosition].vCost = new int(4);
-            (*village_board)[vPosition].row = new int(2);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 4;
+            *(*village_board)[vPosition].row = 2;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=15 && vPosition<20) {
-            (*village_board)[vPosition].vCost = new int(3);
-            (*village_board)[vPosition].row = new int(3);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 3;
+            *(*village_board)[vPosition].row = 3;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
         else if (vPosition>=20 && vPosition<25) {
-            (*village_board)[vPosition].vCost = new int(2);
-            (*village_board)[vPosition].row = new int(4);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+           *(*village_board)[vPosition].vCost = 2;
+            *(*village_board)[vPosition].row = 4;
+            *(*village_board)[vPosition].column = vPosition % 5;
         }
 
         else if (vPosition>=25 && vPosition<30) {
-            (*village_board)[vPosition].vCost = new int(1);
-            (*village_board)[vPosition].row = new int(5);
-            (*village_board)[vPosition].column = new int(vPosition % 5);
+            *(*village_board)[vPosition].vCost = 1;
+            *(*village_board)[vPosition].row = 5;
+            *(*village_board)[vPosition].column =vPosition % 5;
         }
     }
 
@@ -306,12 +306,11 @@ bool VGMap::isAdjacentType(ResourceTypes type, int position) {
     return false;
 }
 Circle::Circle(){
-    row = nullptr;
-    column = nullptr;
-    vCost = nullptr;
+    row = new int(0);
+    column = new int(0);
+    vCost = new int(0);
     building = nullptr;
-    position = nullptr;
-    isVisited = new bool(false);
+    position = new int(0);
     isPlayed = new bool(false);
 }
 
@@ -321,7 +320,7 @@ Circle::Circle(const Circle &circle){
     position = new int(*circle.position);
     column = new int(*circle.column);
     vCost = new int(*circle.vCost);
-    isVisited = new bool(*circle.isVisited);
+    *isVisited =*circle.isVisited;
     isPlayed = new bool(*circle.isPlayed);
 }
 
@@ -339,14 +338,15 @@ Circle & Circle::operator=(const Circle &circle){
     if (this == &circle)
         return *this;
     else {
-        row = new int(*circle.row);
-        column = new int(*circle.column);
-        vCost = new int(*circle.vCost);
-        *isVisited = *circle.isVisited;
-        *isPlayed = *circle.isPlayed;
-        // we dont create copies of buildings. We will clear it with the decks
-        building = circle.building;
-        position = new int(*circle.position);
+            *row = *circle.row;
+            *column = *circle.column;
+            *vCost = *circle.vCost;
+            *isVisited = *circle.isVisited;
+            *isPlayed = *circle.isPlayed;
+            // we dont create copies of buildings. We will clear it with the decks
+            building = circle.building;
+            *position = *circle.position;
+
     }
     return *this;
 }
