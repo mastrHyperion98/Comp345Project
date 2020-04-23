@@ -11,7 +11,7 @@
 #include "VGMapLoader.h"
 #include "../Exceptions/InvalidConfigurationException.h"
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
-#include "iostream"
+#include <iostream>
 
 Setting::Setting():tracker{new ResourceTracker}, t_observer{new TurnObserver}, gs_observer(new GameStatisticObserver){
     h_deck = nullptr;

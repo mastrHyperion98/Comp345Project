@@ -11,10 +11,10 @@
 
 #include "GameController.h"
 #include "../Exceptions/UninitializedControllerException.h"
-#include <boost/lexical_cast.hpp>
+#include "boost/lexical_cast.hpp"
 #include <iostream>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 // singleton instance
 GameController* GameController::current;
 // default constructor
