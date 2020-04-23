@@ -39,6 +39,7 @@ GameStatisticObserver::~GameStatisticObserver()
     delete villageBoards;
     delete currentPlayer;
     delete playerScore;
+    delete playerBuildingCount;
 }
 
 bool GameStatisticObserver::initialize()
@@ -85,14 +86,6 @@ void GameStatisticObserver::update() {
         printPlayerBuildingCount(current_player);
         printPlayerScore(current_player);
     }
-    else if(gc_state==END_GAME){
-        cout << "\n\nThe game has ended! Thank you for playing New Haven!" << endl;
-        for(int i = 0; i < playerScore->size(); i++){
-            string id = (*GameController::current->game_settings->players)[i]->getID();
-            int score =  (*GameController::current->game_settings->players)[i]->calculateScore();
-            cout << id << " has ended the game with " << score << " colonists!" << endl;
-        }
-    }
     else if(gc_state == BUILDING_VILLAGE){
         if(vg_state == BUILDING_PLAYED || vg_state == BUILDING_PLAYED_FLIPPED) {
             for (std::uint_fast8_t i{0}; i < villageBoards->size(); ++i) {
@@ -122,10 +115,15 @@ void GameStatisticObserver::update() {
             cout << "\nREMAINING RESOURCE MARKERS" << endl;
             GameController::current->game_settings->tracker->printScore();
         }
-    }/*
-    else {
-        *gameBoard = GameController::current->game_settings->board->getBoardString();
-    }*/
+    }
+    else if(gc_state==END_GAME){
+        cout << "\n\nThe game has ended! Thank you for playing New Haven!" << endl;
+        for(int i = 0; i < playerScore->size(); i++){
+            string id = (*GameController::current->game_settings->players)[i]->getID();
+            int score =  (*GameController::current->game_settings->players)[i]->calculateScore();
+            cout << id << " has ended the game with " << score << " colonists!" << endl;
+        }
+    }
 }
 
 void GameStatisticObserver::printGameBoard() const

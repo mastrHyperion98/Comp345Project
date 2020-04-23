@@ -9,12 +9,10 @@
 using namespace std;
 TurnObserver::TurnObserver():current{nullptr}{};
 TurnObserver::~TurnObserver() {
-    delete current;
 };
 void TurnObserver::printTurnStart() {
     // At the start of a turn we should print that the player is playing a new turn
     int player_index =  GameController::current->getCurrentPlayerTurn();
-    delete current;
     current = (*GameController::current->game_settings->players)[player_index];
 
     // use boost to cast our int to string
