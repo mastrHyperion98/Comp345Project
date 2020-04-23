@@ -13,7 +13,7 @@
 #include "../Exceptions/BoardConfigurationNotLoaded.h"
 #include "iostream"
 
-Setting::Setting():tracker{new ResourceTracker}{
+Setting::Setting():tracker{new ResourceTracker}, t_observer{new TurnObserver}, gs_observer(new GameStatisticObserver){
     h_deck = nullptr;
     b_deck = nullptr;
     board = nullptr;
@@ -21,8 +21,11 @@ Setting::Setting():tracker{new ResourceTracker}{
 
 }
 
-Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)}
+Setting::Setting(const Setting& setting):tracker{new ResourceTracker(*setting.tracker)},
+t_observer{new TurnObserver(*setting.t_observer)},
+gs_observer(new GameStatisticObserver(*setting.gs_observer))
 {
+
     if(setting.h_deck != nullptr)
         h_deck = new HarvestDeck(*setting.h_deck);
     else
@@ -62,6 +65,7 @@ Setting& Setting::operator=(const Setting& setting){
     else
         players = nullptr;
 
+    *gs_observer = *setting.gs_observer;
    *tracker = *setting.tracker;
 
    return *this;
@@ -72,6 +76,8 @@ Setting::~Setting() {
     delete board;
     delete players;
     delete tracker;
+    delete t_observer;
+    delete gs_observer;
 }
 /*2
  * Setup the players, takes in the number of players and creates the proper amount.
@@ -93,6 +99,7 @@ void Setting::setupPlayers(const int numberOfPlayers) {
             std::cout << "Invalid input; please re-enter.\n";
         }
         players->push_back(new Player(id));
+        (*players)[players->size()-1]->attach(t_observer);
     }
     std::cout << numberOfPlayers << " PLAYERS HAVE BEEN SUCCESSFULLY CREATED!" << endl;
 }
@@ -113,6 +120,7 @@ void Setting::loadGameBoard(const std::string filepath) {
         if (loader.loadConfig(filepath) && board == nullptr) {
             cout << "LOADING SUCCESSFUL" << endl;
             board = loader.generateMap();
+            board->attach(tracker);
         }
     }catch(const InvalidConfigurationException &ex){
         cout << "LOADING FAILED" << endl;
@@ -249,6 +257,9 @@ bool Setting::initSetting() {
         int file_index = 0;
         for(int i = 0; i < players->size(); i++){
             (*players)[i]->setVillage(loadVillageMap(v_files[file_index]));
+            (*players)[i]->attachObserverToVillage(tracker);
+            (*players)[i]->attachObserverToVillage(t_observer);
+            (*players)[i]->attachObserverToVillage(gs_observer);
             file_index++;
         }
         resourceTracker();
@@ -272,6 +283,8 @@ bool Setting::initSetting() {
         cerr << ex.what() << endl;
         return false;
     }
+
+    gs_observer->initialize();
     return true;
 }
 
@@ -364,7 +377,7 @@ void Setting::DrawBuilding(int player_index)
 
 
         (*players)[player_index]->drawBuilding(b_deck->draw());
-        std::cout << "\nA card was drawn from the deck!" << endl;
+        //std::cout << "\nA card was drawn from the deck!" << endl;
     }
 
     b_deck->fillBuildingPool();

@@ -17,7 +17,11 @@ using namespace std;
 using namespace boost;
 
 
-VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>), name{new string(v_name)},village_board{new C_Graph}{
+VGMap::VGMap(string v_name): typePlayed(new map<ResourceTypes, bool>),
+name{new string(v_name)},
+village_board{new C_Graph},
+state{new VG_State{NILL}},
+last_played{nullptr}{
     CreateVillageField();
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::WHEAT, false));
     typePlayed->insert(pair<ResourceTypes, bool>(ResourceTypes::STONE, false));
@@ -31,9 +35,12 @@ VGMap::~VGMap() {
     delete SIZE;
     delete playCounter;
     delete typePlayed;
+    delete state;
+    delete last_played;
 }
 
-VGMap::VGMap(const VGMap &map) {
+
+VGMap::VGMap(const VGMap &map): state{new VG_State{*map.state}}{
     village_board = new C_Graph(*map.village_board);
     typePlayed = new  std::map<ResourceTypes, bool>(*map.typePlayed);
     // here we can use operator overload
@@ -42,6 +49,11 @@ VGMap::VGMap(const VGMap &map) {
     else
         name = nullptr;
 
+    if(map.last_played != nullptr)
+        last_played = new Circle(*map.last_played);
+    else
+        last_played = nullptr;
+
     *playCounter = *map.playCounter;
 }
 
@@ -49,11 +61,15 @@ VGMap & VGMap::operator=(const VGMap &map){
     if(this == &map)
         return *this;
     else{
-        delete village_board;
         *village_board = *map.village_board;
         *typePlayed = *map.typePlayed;
         *name = *map.name;
         *playCounter = *map.playCounter;
+        *state=*map.state;
+        if(map.last_played != nullptr)
+            *last_played =*map.last_played;
+        else
+            last_played = nullptr;
     }
 
     return *this;
@@ -118,64 +134,7 @@ void VGMap::CreateVillageField() {
 
 }
 void VGMap::PrintGraph() {
-    // here we are going to print the graph
-    // content of row | row value
-    // column value|
-    const string spacer = "    ";
-    const string inner_spacer ="  ";
-    cout << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << endl;
-    cout << "------------" << "-------------------------------------------------------------" << endl;
-    int num_row{0};
-    for(int i{0}; i < 6; i++){
-        std::cout << spacer << spacer <<  (6 - i) << " |" << spacer;
-        for(int j{5*i}; j < 5*i + 5; j++){
-            if((*village_board)[j].building == nullptr){
-                cout << std::setfill('0') << std::setw(4)<<*(*village_board)[j].position << spacer;
-            }else{
-                if(!(*village_board)[j].building->isFlipped())
-                     cout << " "<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<" "<< spacer;
-                else
-                    cout << "-"<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<"-"<< spacer;
-            }
-        }
-        switch(num_row){
-            case 0: cout << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(4)<<6; break;
-            case 1: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<5; break;
-            case 2: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<4; break;
-            case 3: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<3; break;
-            case 4: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<2; break;
-            case 5: cout << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<1; break;
-        }
-        num_row++;
-        cout << endl;
-    }
-    cout << "------------" << "-------------------------------------------------------------" << endl;
-    cout << "#Colonists|  " << inner_spacer;
-    cout << std::setfill('0') << std::setw(4)<< 5<< spacer;
-    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
-    cout << std::setfill('0') << std::setw(4)<< 3 << spacer;
-    cout << std::setfill('0') << std::setw(4)<< 4 << spacer;
-    cout << std::setfill('0') << std::setw(4)<< 5 << spacer;
-
-    cout << endl << endl;
-
-}
-// Taken from the Boost Connected Graph Example
-//https://www.boost.org/doc/libs/1_65_0/libs/graph/example/connected_components.cpp
-// Prints the number of Connected Components and which vertex belongs to which component
-// A component is a set of one or more nodes in which a path exists.
-// In other words, if the graph is connected than there is only 1 component.
-// If component 2 exists then there does not exists a path linking nodes from Component 1 and 2.
-void VGMap::PrintConnectedGraph() {
-
-    std::vector<int> component(num_vertices(*village_board));
-    int num = connected_components(*village_board, &component[0]);
-
-    std::vector<int>::size_type i;
-    cout << "Total number of components: " << num << endl;
-    for (i = 0; i != component.size(); ++i)
-        cout << "Circle " << i <<" is in component " << component[i] << endl;
-    cout << endl;
+    cout << getBoardString();
 }
 
 // returns a graph with all the connected nodes in the selected column
@@ -291,6 +250,12 @@ void VGMap::resetVisited() {
          *(*village_board)[i].isVisited = false;
     }
 }
+
+void VGMap::setState(VG_State _state) {
+    *state = _state;
+    notify();
+    *state = NILL;
+}
 bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
     bool hasAdjacent{isAdjacentType(type, position)};
     if(building->getBuildingNumber() == *(*village_board)[position].vCost && (!(*typePlayed)[type] ||  hasAdjacent)) {
@@ -298,6 +263,9 @@ bool VGMap::playBuilding(Building *building, ResourceTypes type, int position) {
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        delete last_played;
+        last_played =  new Circle((*village_board)[position]);
+        setState(BUILDING_PLAYED);
         return true;
     } else
         return false;
@@ -310,6 +278,9 @@ bool VGMap::playBuildingFlipped(Building *building, ResourceTypes type, int posi
         *(*village_board)[position].isPlayed = true;
         (*typePlayed)[type] = true;
         *playCounter = *playCounter + 1;
+        delete last_played;
+        last_played =  new Circle((*village_board)[position])  ;
+        setState(BUILDING_PLAYED_FLIPPED);
         return true;
     } else
         return false;
@@ -395,7 +366,7 @@ string VGMap::getName(){
 }
 
 
-string VGMap::castResourceTypesToString(ResourceTypes type){
+string VGMap::castResourceTypesToString(ResourceTypes type) const{
     if(type == ResourceTypes::SHEEP)
         return "SH";
     else if(type == ResourceTypes::WOOD)
@@ -411,4 +382,47 @@ string VGMap::castResourceTypesToString(ResourceTypes type){
 int VGMap::getNumUnplayed(){
     // essentially we loop through
     return (*SIZE - *playCounter);
+}
+
+string VGMap::getBoardString() const {
+    ostringstream vBoard;
+    const string spacer = "    ";
+    const string inner_spacer ="  ";
+    vBoard << spacer << spacer << spacer << spacer << spacer << "***" << *name << "***" << spacer << spacer << '\n';
+    vBoard << "------------" << "-------------------------------------------------------------" << '\n';
+    int num_row{0};
+    for(int i{0}; i < 6; i++){
+        vBoard << spacer << spacer <<  (6 - i) << " |" << spacer;
+        for(int j{5*i}; j < 5*i + 5; j++){
+            if((*village_board)[j].building == nullptr){
+                vBoard << std::setfill('0') << std::setw(4)<<*(*village_board)[j].position << spacer;
+            }else{
+                if(!(*village_board)[j].building->isFlipped())
+                    vBoard << " "<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<" "<< spacer;
+                else
+                    vBoard << "-"<<castResourceTypesToString((*village_board)[j].building->getBuildingType())<<"-"<< spacer;
+            }
+        }
+        switch(num_row){
+            case 0: vBoard << spacer << " | #Colonists: " <<  std::setfill('0') << std::setw(4)<<6; break;
+            case 1: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<5; break;
+            case 2: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<4; break;
+            case 3: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<3; break;
+            case 4: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<2; break;
+            case 5: vBoard << spacer << " | #Colonists: " << std::setfill('0') << std::setw(4)<<1; break;
+        }
+        num_row++;
+        vBoard << '\n';
+    }
+    vBoard << "------------" << "-------------------------------------------------------------" << '\n';
+    vBoard << "#Colonists|  " << inner_spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 5<< spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 3 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 4 << spacer;
+    vBoard << std::setfill('0') << std::setw(4)<< 5 << spacer;
+
+    vBoard << '\n' << '\n';
+
+    return vBoard.str();
 }
