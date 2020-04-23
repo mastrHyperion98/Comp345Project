@@ -1,15 +1,22 @@
 #include "Setting.h"
 #include "GameController.h"
 
-Player::Player(string id): id{new string(id)}, village{nullptr}, vb_score{new ScoreCalculator()}, my_hand{new Hand()}{
+Player::Player(string id): id{new string(id)},
+    village{nullptr},
+    vb_score{new ScoreCalculator()},
+    my_hand{new Hand()}{
 
 }
 
-Player::Player(const Player &player): id{new string(*player.id)}, vb_score{new ScoreCalculator(*player.vb_score)},  my_hand{new Hand(*player.my_hand)}{
+Player::Player(const Player &player): id{new string(*player.id)},
+    vb_score{new ScoreCalculator(*player.vb_score)},
+    my_hand{new Hand(*player.my_hand)}
+{
     if (player.village != nullptr)
         village = new VGMap(*player.village);
     else
         village = nullptr;
+    *state = *player.state;
 }
 
 Player::~Player(){
@@ -17,6 +24,7 @@ Player::~Player(){
     delete vb_score;
     delete my_hand;
     delete id;
+    delete state;
 }
 
 Player& Player::operator=(const Player &player) {
@@ -29,6 +37,7 @@ Player& Player::operator=(const Player &player) {
         *vb_score = *player.vb_score;
         *my_hand = *player.my_hand;
         *id = *player.id;
+        *state =  * player.state;
     }
     return *this;
 }
@@ -112,7 +121,6 @@ bool Player::buildVillage(){
 //    ResourceTypes type=building.getBuildingType();
         if (GameController::current->game_settings->tracker->hasResources(type, cost)) {
             if (village->setBuilding(pos, building)) {
-                GameController::current->game_settings->tracker->consumeResources(type, cost);
                 my_hand->buildings->erase(my_hand->buildings->begin() + index);
 
                 int restart{0};
@@ -218,28 +226,21 @@ int Player::placeHarvestTile() {
     return -1;
 }
 
-/*
- * NON FINAL IMPLEMENTATION:
- *
- * For drawBuilding we need to draw for the number of Resource Marker on the 0 (zero) space of the Resource Track.
- * However, since we havent decided or discussed user inputs yet then for the moment I'm leaving this as it is.
- * Since we need to process whether the user will draw from the board or the deck, in the case where they draw more than
- * one.
- */
+
 void Player::drawBuilding(Building* building) {
     my_hand->buildings->push_back(building);
+    setState(DRAWING_BUILDING);
 }
-/*
- * NON FINAL IMPLEMENTATION -- IDEALLY WE WANT TO DRAW DIRECTLY FROM THE HARVEST DECK WITHOUT HAVING TO PASS ARGUMENTS
- * HarvestDeck has to be static within the Game Controller
- */
+
 void Player::drawHarvestTile(HarvestTile* tile) {
     my_hand->harvestTiles->push_back(tile);
+    setState(DRAWING_HARVEST);
 }
 
 void Player::drawBuildingPool(Building* building)
 {
     my_hand->buildings->push_back(building);
+    setState(DRAWING_BPOOL);
 }
 
 
@@ -253,6 +254,7 @@ HarvestTile* Player::getShipmentTile() {
 }
 
 void Player::setVillage(VGMap v_map) {
+    delete village;
     village = new VGMap(v_map);
 }
 
@@ -285,4 +287,15 @@ VGMap Player::getVillage() const {
 
 Hand Player::getHand() const{
     return *my_hand;
+}
+
+
+void Player::setState(PStates _state)  {
+    *state =  _state;
+    notify();
+    *state = UNKNOWN;
+}
+
+void Player::attachObserverToVillage(Observer* observer) {
+    village->attach(observer);
 }

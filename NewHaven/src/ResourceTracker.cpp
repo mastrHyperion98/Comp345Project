@@ -8,13 +8,11 @@
  */
 
 #include "ResourceTracker.h"
-#include "../src/GBMap.h"
-#include "../src/Square.h"
-#include "../src/Resources.h"
 #include <map>
 #include <deque>
 #include "boost/graph/adjacency_list.hpp"
 #include "boost/graph/graph_utility.hpp"
+#include "GameController.h"
 
 ResourceTracker::ResourceTracker(): score{new std::map<ResourceTypes, std::uint_least16_t> }{
 }
@@ -404,3 +402,28 @@ bool ResourceTracker::isEmpty() {
 map<ResourceTypes, std::uint_least16_t> ResourceTracker::getScore(){
     return *score;
 };
+
+
+void ResourceTracker::update(){
+    States gc_state = GameController::current->getState();
+        if(gc_state == PLAYING_HARVEST_TILE) {
+            ResourceTrails *trail = GameController::current->game_settings->board->getResourcedGraph(
+                    *GameController::current->game_settings->board->last_played->position);
+            computeScore(*trail);
+            delete trail;
+        }
+        else if(gc_state == BUILDING_VILLAGE) {
+            int current_player = GameController::current->getCurrentPlayerTurn();
+            Player *player = (*GameController::current->game_settings->players)[current_player];
+            ResourceTypes type = player->getVillage().last_played->building->getBuildingType();
+            int cost = *player->getVillage().last_played->vCost;
+            consumeResources(type, cost);
+        }
+        else if(gc_state ==SHARE_THE_WEALTH) {
+            int current_player = GameController::current->getCurrentSharePlayer();
+            Player *player = (*GameController::current->game_settings->players)[current_player];
+            ResourceTypes type = player->getVillage().last_played->building->getBuildingType();
+            int cost = *player->getVillage().last_played->vCost;
+            consumeResources(type, cost);
+        }
+}

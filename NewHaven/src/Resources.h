@@ -2,7 +2,6 @@
 #include <ostream>
 #include <cstdint>
 #include <vector>
-
 enum struct ResourceTypes:std::uint_least8_t { SHEEP, STONE, WHEAT, WOOD };	//These are the resources for the tiles
 
 std::ostream& operator<<(std::ostream& output, const ResourceTypes& resource); //Define what printing the resource enum do

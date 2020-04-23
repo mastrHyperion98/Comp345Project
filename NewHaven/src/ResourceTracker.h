@@ -7,8 +7,9 @@
 #include <map>
 #include "GBMap.h"
 #include "deque"
+#include "GameObservers.h"
 using namespace std;
-class ResourceTracker {
+class ResourceTracker: public Observer {
 public:
 
     ResourceTracker();
@@ -22,6 +23,7 @@ public:
     bool isEmpty();
     void reset();
     map<ResourceTypes, std::uint_least16_t> getScore();
+    void update();
 private:
     struct Quad{
         Quad();

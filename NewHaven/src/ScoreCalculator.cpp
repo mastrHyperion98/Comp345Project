@@ -77,7 +77,7 @@ for(int i = 0; i < *NUM_ROWS; i++){
                 isComplete = false;
                 break;
             }
-            else if(!graph[j].building->isFlipped())
+            else if(graph[j].building->isFlipped())
                 isFlippedDown = true;
         }
 
