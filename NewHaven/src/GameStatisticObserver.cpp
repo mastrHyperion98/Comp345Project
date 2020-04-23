@@ -18,7 +18,7 @@ GameStatisticObserver::GameStatisticObserver(const GameStatisticObserver& copy) 
         gameBoard{ new std::string(*copy.gameBoard) },
         villageBoards{ new std::vector<std::string>(*copy.villageBoards) },
         currentPlayer{ new std::string(*copy.currentPlayer) },
-        playerBuildingCount{ new std::vector<int> },
+        playerBuildingCount{ new std::vector<int>(*copy.playerBuildingCount)},
         playerScore{new std::vector<int>(*copy.playerScore)}
 {}
 
