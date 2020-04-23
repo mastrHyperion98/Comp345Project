@@ -212,6 +212,7 @@ Building::~Building()
 {
 	delete buildingType;
 	delete buildingNumber;
+	delete faceUp;
 }
 
 Building& Building::operator=(const Building& building)
