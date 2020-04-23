@@ -18,11 +18,11 @@
 
 int main(){
     // create the game controller
-    GameController controller;
-    if(controller.initialize()){
+    GameController* controller{ new GameController };
+    if(controller->initialize()){
         std::cout << "INITIALIZATION SUCCESSFUL!" << endl;
         try{
-            controller.start();
+            controller->start();
         }catch(const UninitializedControllerException &e){
             std::cout << e.what()<< std::endl;
         }catch(const std::exception& e){
@@ -33,6 +33,8 @@ int main(){
         std::cerr << "FAILED TO INITIALIZE CONTROLLER! EXITING SETUP" << endl;
         return 1;
     }
+
+    delete controller;
 
     return 0;
 }
