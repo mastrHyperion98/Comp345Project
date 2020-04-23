@@ -22,9 +22,8 @@ private:
     void printPlayingHarvestTile();
     void printPlayedHT();
     void printBV();
-    void printBuildingPlayed(bool);
+    void printBuildingPlayed(bool, bool);
     void printSW();
-    void printBuildingPlayedSW(bool);
     void printEndTurn();
     void printDrawHarvest();
     void printDrawBuilding(bool);

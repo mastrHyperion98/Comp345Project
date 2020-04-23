@@ -45,7 +45,10 @@ void TurnObserver::printSW() {
     string msg = "\n" + current->getID() + " is sharing their wealth with " + sw_player->getID();
     cout << msg << endl;
 }
-void TurnObserver::printBuildingPlayed(bool flipped){
+void TurnObserver::printBuildingPlayed(bool flipped, bool sw){
+    Player *tmp = current;
+    if(sw)
+        current = (*GameController::current->game_settings->players)[ GameController::current->getCurrentSharePlayer()];
     if(flipped)
        cout << "\n" + current->getID() << " has played a building of type " <<
                 current->getVillage().last_played->building->getBuildingType() << " flipped at position "
@@ -61,25 +64,7 @@ void TurnObserver::printBuildingPlayed(bool flipped){
              << current->getVillage().last_played->building->getBuildingType() << " has been consumed and removed from the resource tracker!"
              << endl;
 
-}
-void TurnObserver::printBuildingPlayedSW(bool flipped){
-
-    Player * sw_player = (*GameController::current->game_settings->players)[ GameController::current->getCurrentSharePlayer()];
-    if(flipped)
-        cout << "\n" + sw_player->getID() << " has played a building of type " <<
-        sw_player->getVillage().last_played->building->getBuildingType() << " flipped at position "
-             << *sw_player->getVillage().last_played->position
-             << "\n"  <<  *sw_player->getVillage().last_played->vCost << " "
-             << sw_player->getVillage().last_played->building->getBuildingType() << " has been consumed!"
-             << endl;
-    else
-        cout << "\n" + sw_player->getID() << " has played a building of type " <<
-        sw_player->getVillage().last_played->building->getBuildingType() << " at position "
-             << *sw_player->getVillage().last_played->position
-             << "\n"  <<  *sw_player->getVillage().last_played->vCost << " "
-             << sw_player->getVillage().last_played->building->getBuildingType() << " has been consumed and removed from the resource tracker!"
-             << endl;
-
+    current = tmp;
 }
 
 void TurnObserver::printEndTurn() {
@@ -118,9 +103,9 @@ void TurnObserver::update() {
         case SHARE_THE_WEALTH:
             // condition based on Player state
             if(sw_vg_state == BUILDING_PLAYED_FLIPPED)
-                printBuildingPlayedSW(true);
+                printBuildingPlayed(true, true);
             else if(sw_vg_state == BUILDING_PLAYED)
-                printBuildingPlayedSW(false);
+                printBuildingPlayed(false, true);
             else
                 printSW();
             break;
@@ -131,9 +116,9 @@ void TurnObserver::update() {
         case BUILDING_VILLAGE:
             // condition based on Player state
             if(vg_state == BUILDING_PLAYED_FLIPPED)
-                printBuildingPlayed(true);
+                printBuildingPlayed(true, false);
             else if(vg_state == BUILDING_PLAYED)
-                printBuildingPlayed(false);
+                printBuildingPlayed(false, false);
             else
                  printBV();
 
